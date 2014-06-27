@@ -22,5 +22,10 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('parameters.yml');
         $loader->load('services.yml');
+
+        $container->setAlias(
+            'cache_time_keeper.driver',
+            $container->getParameter('cache_time_keeper.driver')
+        );
     }
 }
