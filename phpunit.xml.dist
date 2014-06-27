@@ -13,7 +13,7 @@
 >
 
     <testsuites>
-        <testsuite name="CacheKeyKeeperBundle Test Suite">
+        <testsuite name="CacheTimeKeeperBundle Test Suite">
             <directory>./src/*/Bundle/*Bundle/Tests</directory>
         </testsuite>
     </testsuites>

@@ -8,16 +8,16 @@
  * @license   http://opensource.org/licenses/GPL-3.0 GPL v3
  */
 
-namespace AnimeDb\Bundle\CacheKeyKeeperBundle;
+namespace AnimeDb\Bundle\CacheTimeKeeperBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Bundle
  *
- * @package AnimeDb\Bundle\CacheKeyKeeperBundle
+ * @package AnimeDb\Bundle\CacheTimeKeeperBundle
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class AnimeDbCacheKeyKeeperBundle extends Bundle
+class AnimeDbCacheTimeKeeperBundle extends Bundle
 {
 }

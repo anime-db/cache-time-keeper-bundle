@@ -1,12 +1,12 @@
 {
-    "name": "anime-db/cache-key-keeper-bundle",
+    "name": "anime-db/cache-time-keeper-bundle",
     "license": "MIT",
     "type": "library",
-    "description": "CacheKeyKeeper",
-    "homepage": "http://github.com/anime-db/cache-key-keeper-bundle",
+    "description": "Cache time keeper",
+    "homepage": "http://github.com/anime-db/cache-time-keeper-bundle",
     "version": "0.1.0",
     "autoload": {
-        "psr-0": { "AnimeDb\\Bundle\\CacheKeyKeeperBundle": "src/" }
+        "psr-0": { "AnimeDb\\Bundle\\CacheTimeKeeperBundle": "src/" }
     },
     "require": {
         "php": ">=5.4.0"
