@@ -18,5 +18,31 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
  */
 interface Driver
 {
-    
+    /**
+     * Get time for key
+     *
+     * @param string $key
+     *
+     * @return \DateTime
+     */
+    public function get($key);
+
+    /**
+     * Set time for key
+     *
+     * @param string $key
+     * @param \DateTime $time
+     *
+     * @return boolean
+     */
+    public function set($key, \DateTime $time);
+
+    /**
+     * Get a list of keys or dates and chooses the max date
+     *
+     * @param array $params
+     *
+     * @return \DateTime
+     */
+    public function getMax(array $params);
 }

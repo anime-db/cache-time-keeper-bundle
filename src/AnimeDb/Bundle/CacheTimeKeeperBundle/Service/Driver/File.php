@@ -18,7 +18,42 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class File extends Driver
+class File implements Driver
 {
-    
+    /**
+     * Get time for key
+     *
+     * @param string $key
+     *
+     * @return \DateTime
+     */
+    public function get($key)
+    {
+        return new \DateTime();
+    }
+
+    /**
+     * Set time for key
+     *
+     * @param string $key
+     * @param \DateTime $time
+     *
+     * @return boolean
+     */
+    public function set($key, \DateTime $time)
+    {
+        return true;
+    }
+
+    /**
+     * Get a list of keys or dates and chooses the max date
+     *
+     * @param array $params
+     *
+     * @return \DateTime
+     */
+    public function getMax(array $params)
+    {
+        return new \DateTime();
+    }
 }
