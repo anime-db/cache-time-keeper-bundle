@@ -1,7 +1,10 @@
 services:
+    cache_time_keeper.driver.dummy:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy
+        public: false
+
     cache_time_keeper.driver.file:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File
-        arguments: [ @doctrine ]
         public: false
 
     cache_time_keeper:
