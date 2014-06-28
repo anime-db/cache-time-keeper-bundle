@@ -27,3 +27,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: onTerminate }
         public: false
+
+    cache_time_keeper.listener.request:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Request
+        arguments: [ @cache_time_keeper.driver ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.terminate, method: onTerminate }
+        public: false

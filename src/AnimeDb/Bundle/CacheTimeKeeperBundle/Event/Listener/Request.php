@@ -10,7 +10,7 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 
 /**
@@ -22,20 +22,20 @@ use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 class Request
 {
     /**
-     * Keeper
+     * Driver
      *
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
+     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
      */
-    protected $keeper;
+    protected $driver;
 
     /**
      * Construct
      *
-     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper $keeper
+     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver $driver
      */
-    public function __construct(Keeper $keeper)
+    public function __construct(Driver $driver)
     {
-        $this->keeper = $keeper;
+        $this->driver = $driver;
     }
 
     /**
@@ -45,6 +45,6 @@ class Request
      */
     public function onTerminate(PostResponseEvent $event)
     {
-        $this->keeper->save();
+        $this->driver->save();
     }
 }
