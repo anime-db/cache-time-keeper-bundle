@@ -21,6 +21,23 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 class Dummy implements Driver
 {
     /**
+     * Now time
+     *
+     * @var \DateTime
+     */
+    protected $time;
+
+    /**
+     * Construct
+     *
+     * @param \DateTime $time
+     */
+    public function __construct(\DateTime $time = null)
+    {
+        $this->time = $time ?: new \DateTime();
+    }
+
+    /**
      * Get time for key
      *
      * @param string $key
@@ -29,7 +46,7 @@ class Dummy implements Driver
      */
     public function get($key)
     {
-        return new \DateTime();
+        return clone $this->time;
     }
 
     /**
@@ -54,6 +71,6 @@ class Dummy implements Driver
      */
     public function getMax(array $params)
     {
-        return new \DateTime();
+        return clone $this->time;
     }
 }
