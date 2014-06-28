@@ -33,12 +33,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $driver_mock
             ->expects($this->once())
             ->method('save');
-        $event_mock = $this
-            ->getMockBuilder('\Symfony\Component\HttpKernel\Event\PostResponseEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $obj = new Request($driver_mock);
-        $obj->onTerminate($event_mock);
+        $obj->onTerminate();
     }
 }

@@ -28,16 +28,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testPostPersist()
     {
-        $keeper_mock = $this
-            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $keeper_mock
-            ->expects($this->once())
-            ->method('set')
-            ->with('foo', new \DateTime());
-
-        $obj = new Entity($keeper_mock);
+        $obj = new Entity($this->getKeeper());
         $obj->postPersist($this->getEventMock());
     }
 
@@ -50,16 +41,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testPostRemove()
     {
-        $keeper_mock = $this
-            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $keeper_mock
-            ->expects($this->once())
-            ->method('set')
-            ->with('foo', new \DateTime());
-
-        $obj = new Entity($keeper_mock);
+        $obj = new Entity($this->getKeeper());
         $obj->postRemove($this->getEventMock());
     }
 
@@ -72,16 +54,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testPostUpdate()
     {
-        $keeper_mock = $this
-            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $keeper_mock
-            ->expects($this->once())
-            ->method('set')
-            ->with('foo', new \DateTime());
-
-        $obj = new Entity($keeper_mock);
+        $obj = new Entity($this->getKeeper());
         $obj->postUpdate($this->getEventMock());
     }
 
@@ -124,5 +97,24 @@ class EntityTest extends \PHPUnit_Framework_TestCase
             ->method('getEntity')
             ->will($this->returnValue(new \stdClass()));
         return $args_mock;
+    }
+
+    /**
+     * Get keeper
+     *
+     * @return \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
+     */
+    protected function getKeeper()
+    {
+        $keeper_mock = $this
+            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $keeper_mock
+            ->expects($this->once())
+            ->method('set')
+            ->with('foo', new \DateTime());
+
+        return $keeper_mock;
     }
 }

@@ -11,7 +11,6 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
-use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 
 /**
  * Request listener
@@ -43,7 +42,7 @@ class Request
      *
      * @param \Symfony\Component\HttpKernel\Event\PostResponseEvent $event
      */
-    public function onTerminate(PostResponseEvent $event)
+    public function onTerminate()
     {
         $this->driver->save();
     }
