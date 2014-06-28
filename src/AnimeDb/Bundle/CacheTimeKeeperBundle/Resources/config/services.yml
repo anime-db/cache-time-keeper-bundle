@@ -23,7 +23,7 @@ services:
 
     cache_time_keeper.listener.console:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console
-        arguments: [ @cache_time_keeper ]
+        arguments: [ @cache_time_keeper, @cache_time_keeper.driver ]
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: onTerminate }
         public: false

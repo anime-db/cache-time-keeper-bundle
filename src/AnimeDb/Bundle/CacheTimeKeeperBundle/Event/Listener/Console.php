@@ -11,6 +11,7 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 
 /**
@@ -29,13 +30,22 @@ class Console
     protected $keeper;
 
     /**
+     * Driver
+     *
+     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
+     */
+    protected $driver;
+
+    /**
      * Construct
      *
      * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper $keeper
+     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver $driver
      */
-    public function __construct(Keeper $keeper)
+    public function __construct(Keeper $keeper, Driver $driver)
     {
         $this->keeper = $keeper;
+        $this->driver = $driver;
     }
 
     /**
@@ -48,5 +58,6 @@ class Console
         if ($event->getCommand()->getName() == 'cache:clear') {
             $this->keeper->set(Keeper::LAST_UPDATE_KEY, new \DateTime());
         }
+        $this->driver->save();
     }
 }
