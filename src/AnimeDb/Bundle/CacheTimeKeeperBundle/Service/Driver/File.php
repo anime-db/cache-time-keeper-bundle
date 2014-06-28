@@ -35,6 +35,13 @@ class File implements Driver
     protected $list = null;
 
     /**
+     * List is save
+     *
+     * @var boolean
+     */
+    protected $save = false;
+
+    /**
      * Construct
      *
      * @param string $filename
@@ -67,6 +74,7 @@ class File implements Driver
     public function set($key, \DateTime $time)
     {
         $this->getList()[$key] = clone $time;
+        $this->save = false;
         return true;
     }
 
@@ -88,6 +96,26 @@ class File implements Driver
             }
         }
         return max($params);
+    }
+
+    /**
+     * Save list times if need
+     *
+     * @return boolean
+     */
+    public function save()
+    {
+        if ($this->save) {
+            return true;
+        }
+        $list = [];
+        /* @var $time \DateTime */
+        foreach ($this->list as $key => $time) {
+            $list[$key] = $time->format(\DateTime::W3C);
+        }
+        $result = file_put_contents($this->filename, "<?php\nreturn ".var_export($list, true).';');
+        $this->save = $result !== false;
+        return $result !== false;
     }
 
     /**
@@ -116,19 +144,7 @@ class File implements Driver
         } else {
             $this->list = [];
         }
-    }
-
-    /**
-     * Save list
-     */
-    protected function save()
-    {
-        $list = [];
-        /* @var $time \DateTime */
-        foreach ($this->list as $key => $time) {
-            $list[$key] = $time->format(\DateTime::W3C);
-        }
-        file_put_contents($this->filename, "<?php\nreturn ".var_export($list, true).';');
+        $this->save = true;
     }
 
     /**
