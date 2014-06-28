@@ -11,3 +11,12 @@ services:
     cache_time_keeper:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
         arguments: [ @cache_time_keeper.driver ]
+
+    cache_time_keeper.listener.entity:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity
+        arguments: [ @cache_time_keeper ]
+        tags:
+            - { name: doctrine.event_listener, event: postRemove }
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postUpdate }
+        public: false
