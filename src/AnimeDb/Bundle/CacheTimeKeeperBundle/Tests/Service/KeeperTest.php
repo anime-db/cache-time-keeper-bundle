@@ -72,24 +72,24 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
      * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper::get
      */
     public function testGetEmpty()
-    {/* 
+    {
         $time = new \DateTime();
         $driver_mock = $this
             ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
         $driver_mock
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('get')
             ->with('foo')
             ->will($this->returnValue(null));
         $driver_mock
-            ->expects($this->once())
+            ->expects($this->at(1))
             ->method('get')
             ->with(Keeper::LAST_UPDATE_KEY)
             ->will($this->returnValue($time));
 
         $obj = new Keeper($driver_mock);
-        $this->assertEquals($time, $obj->get('foo')); */
+        $this->assertEquals($time, $obj->get('foo'));
     }
 
     /**
