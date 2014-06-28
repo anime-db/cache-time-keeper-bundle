@@ -21,6 +21,13 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 class Keeper implements Driver
 {
     /**
+     * Key for last update of the project
+     *
+     * @var string
+     */
+    const LAST_UPDATE_KEY = 'last-update';
+
+    /**
      * Driver
      *
      * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
@@ -46,7 +53,18 @@ class Keeper implements Driver
      */
     public function get($key)
     {
-        return $this->driver->get($key);
+        if ($key == self::LAST_UPDATE_KEY) {
+            if (!($time = $this->driver->get($key))) {
+                $time = new \DateTime();
+                $this->driver->set($key, $time);
+            }
+        } else {
+            if (!($time = $this->driver->get($key))) {
+                $time = $this->get(self::LAST_UPDATE_KEY);
+            }
+        }
+
+        return $time;
     }
 
     /**
@@ -71,6 +89,10 @@ class Keeper implements Driver
      */
     public function getMax(array $params)
     {
+        // always check the date of the last update of the project
+        if (!in_array(self::LAST_UPDATE_KEY, $params)) {
+            $params[] = self::LAST_UPDATE_KEY;
+        }
         return $this->driver->getMax($params);
     }
 }
