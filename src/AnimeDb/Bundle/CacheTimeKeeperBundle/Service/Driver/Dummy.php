@@ -34,7 +34,11 @@ class Dummy implements Driver
      */
     public function __construct(\DateTime $time = null)
     {
-        $this->time = $time ?: new \DateTime();
+        if ($time) {
+            $this->time = clone $time;
+        } else {
+            $this->time = new \DateTime();
+        }
     }
 
     /**
