@@ -5,6 +5,7 @@ services:
 
     cache_time_keeper.driver.file:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File
+        arguments: [ %cache_time_keeper.driver.file% ]
         public: false
 
     cache_time_keeper:

@@ -21,15 +21,39 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 class File implements Driver
 {
     /**
+     * Filename
+     *
+     * @var string
+     */
+    protected $filename;
+
+    /**
+     * List cache times
+     *
+     * @var array|null
+     */
+    protected $list = null;
+
+    /**
+     * Construct
+     *
+     * @param string $filename
+     */
+    public function __construct($filename)
+    {
+        $this->filename = $filename;
+    }
+
+    /**
      * Get time for key
      *
      * @param string $key
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function get($key)
     {
-        return new \DateTime();
+        return clone $this->getList()[$key];
     }
 
     /**
@@ -42,6 +66,7 @@ class File implements Driver
      */
     public function set($key, \DateTime $time)
     {
+        $this->getList()[$key] = clone $time;
         return true;
     }
 
@@ -54,6 +79,63 @@ class File implements Driver
      */
     public function getMax(array $params)
     {
-        return new \DateTime();
+        if (!$params) {
+            throw new \InvalidArgumentException('Unknown key list');
+        }
+        foreach ($params as $key => $value) {
+            if (!($value instanceof \DateTime)) {
+                $params[$key] = $this->get($value);
+            }
+        }
+        return max($params);
+    }
+
+    /**
+     * Get list
+     *
+     * @return array
+     */
+    protected function & getList()
+    {
+        if (is_null($this->list)) {
+            $this->load();
+        }
+        return $this->list;
+    }
+
+    /**
+     * Load list
+     */
+    protected function load()
+    {
+        if (file_exists($this->filename)) {
+            $this->list = include $this->filename;
+            foreach ($this->list as $key => $time) {
+                $this->list[$key] = new \DateTime($time);
+            }
+        } else {
+            $this->list = [];
+        }
+    }
+
+    /**
+     * Save list
+     */
+    protected function save()
+    {
+        $list = [];
+        /* @var $time \DateTime */
+        foreach ($this->list as $key => $time) {
+            $list[$key] = $time->format(\DateTime::W3C);
+        }
+        file_put_contents($this->filename, "<?php\nreturn ".var_export($list, true).';');
+    }
+
+    /**
+     * Destruct
+     */
+    public function __destruct()
+    {
+        $this->save();
     }
 }

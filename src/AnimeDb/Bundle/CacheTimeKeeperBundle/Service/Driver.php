@@ -23,7 +23,7 @@ interface Driver
      *
      * @param string $key
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function get($key);
 
