@@ -13,12 +13,12 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
 /**
- * Manager
+ * Keeper
  *
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class Manager implements Driver
+class Keeper implements Driver
 {
     /**
      * Driver

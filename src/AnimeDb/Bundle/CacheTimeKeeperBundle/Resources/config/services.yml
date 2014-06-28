@@ -9,5 +9,5 @@ services:
         public: false
 
     cache_time_keeper:
-        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Manager
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
         arguments: [ @cache_time_keeper.driver ]
