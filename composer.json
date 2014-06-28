@@ -9,7 +9,10 @@
         "psr-0": { "AnimeDb\\Bundle\\CacheTimeKeeperBundle": "src/" }
     },
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "symfony/http-kernel": "2.6.*",
+        "symfony/console": "2.6.*",
+        "doctrine/orm": ">=2.2.3,<2.4-dev"
     },
     "minimum-stability": "dev"
 }
