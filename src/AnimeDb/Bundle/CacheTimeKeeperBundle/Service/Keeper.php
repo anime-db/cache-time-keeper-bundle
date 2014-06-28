@@ -18,7 +18,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class Keeper implements Driver
+class Keeper
 {
     /**
      * Key for last update of the project
