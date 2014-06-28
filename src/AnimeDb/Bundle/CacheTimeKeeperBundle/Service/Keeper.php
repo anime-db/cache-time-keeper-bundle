@@ -53,13 +53,11 @@ class Keeper
      */
     public function get($key)
     {
-        if ($key == self::LAST_UPDATE_KEY) {
-            if (!($time = $this->driver->get($key))) {
+        if (!($time = $this->driver->get($key))) {
+            if ($key == self::LAST_UPDATE_KEY) {
                 $time = new \DateTime();
                 $this->driver->set($key, $time);
-            }
-        } else {
-            if (!($time = $this->driver->get($key))) {
+            } else {
                 $time = $this->get(self::LAST_UPDATE_KEY);
             }
         }
