@@ -29,14 +29,14 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     {
         $time = new \DateTime();
         $driver_mock = $this
-            ->getMockBuilder('AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
+            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
         $driver_mock
             ->expects($this->once())
             ->method('get')
             ->with('foo')
             ->will($this->returnValue($time));
-    
+
         $obj = new Keeper($driver_mock);
         $this->assertEquals($time, $obj->get('foo'));
     }
@@ -50,7 +50,7 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     {
         $time = new \DateTime();
         $driver_mock = $this
-            ->getMockBuilder('AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
+            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
         $driver_mock
             ->expects($this->once())
@@ -75,7 +75,7 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     {/* 
         $time = new \DateTime();
         $driver_mock = $this
-            ->getMockBuilder('AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
+            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
         $driver_mock
             ->expects($this->once())
@@ -101,7 +101,7 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     {
         $time = new \DateTime();
         $driver_mock = $this
-            ->getMockBuilder('AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
+            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
         $driver_mock
             ->expects($this->once())
@@ -122,7 +122,7 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     {
         $time = new \DateTime();
         $driver_mock = $this
-            ->getMockBuilder('AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
+            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
         $driver_mock
             ->expects($this->exactly(2))
