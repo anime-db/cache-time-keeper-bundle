@@ -60,7 +60,11 @@ class File implements Driver
      */
     public function get($key)
     {
-        return clone $this->getList()[$key];
+        $this->load();
+        if (isset($this->list[$key])) {
+            return clone $this->list[$key];
+        }
+        return null;
     }
 
     /**
@@ -73,13 +77,16 @@ class File implements Driver
      */
     public function set($key, \DateTime $time)
     {
-        $this->getList()[$key] = clone $time;
+        $this->load();
+        $this->list[$key] = clone $time;
         $this->save = false;
         return true;
     }
 
     /**
      * Get a list of keys or dates and chooses the max date
+     *
+     * @throws \InvalidArgumentException
      *
      * @param array $params
      *
@@ -91,8 +98,10 @@ class File implements Driver
             throw new \InvalidArgumentException('Unknown key list');
         }
         foreach ($params as $key => $value) {
-            if (!($value instanceof \DateTime)) {
+            if (is_scalar($value)) {
                 $params[$key] = $this->get($value);
+            } elseif (!($value instanceof \DateTime)) {
+                throw new \InvalidArgumentException('No supported ('.gettype($value).')');
             }
         }
         return max($params);
@@ -105,30 +114,12 @@ class File implements Driver
      */
     public function save()
     {
-        if ($this->save) {
+        if ($this->save || is_null($this->list)) {
             return true;
         }
-        $list = [];
-        /* @var $time \DateTime */
-        foreach ($this->list as $key => $time) {
-            $list[$key] = $time->format(\DateTime::W3C);
-        }
-        $result = file_put_contents($this->filename, "<?php\nreturn ".var_export($list, true).';');
+        $result = file_put_contents($this->filename, "<?php\nreturn ".var_export($this->list, true).';');
         $this->save = $result !== false;
         return $result !== false;
-    }
-
-    /**
-     * Get list
-     *
-     * @return array
-     */
-    protected function & getList()
-    {
-        if (is_null($this->list)) {
-            $this->load();
-        }
-        return $this->list;
     }
 
     /**
@@ -136,15 +127,14 @@ class File implements Driver
      */
     protected function load()
     {
-        if (file_exists($this->filename)) {
-            $this->list = include $this->filename;
-            foreach ($this->list as $key => $time) {
-                $this->list[$key] = new \DateTime($time);
+        if (is_null($this->list)) {
+            if (file_exists($this->filename)) {
+                $this->list = include $this->filename;
+            } else {
+                $this->list = [];
             }
-        } else {
-            $this->list = [];
+            $this->save = true;
         }
-        $this->save = true;
     }
 
     /**
