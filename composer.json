@@ -12,11 +12,13 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
+        "ext-shmop": "*",
         "symfony/dependency-injection": "2.3.*",
         "symfony/config": "2.6.*",
         "symfony/http-kernel": "2.6.*",
         "symfony/console": "2.6.*",
-        "doctrine/orm": ">=2.2.3,<2.4-dev"
+        "doctrine/orm": ">=2.2.3,<2.4-dev",
+        "klaussilveira/simple-shm": "1.0.*"
     },
     "minimum-stability": "dev"
 }

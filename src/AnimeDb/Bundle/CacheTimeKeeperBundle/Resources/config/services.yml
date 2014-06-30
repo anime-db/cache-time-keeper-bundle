@@ -8,6 +8,10 @@ services:
         arguments: [ %cache_time_keeper.driver.dir% ]
         public: false
 
+    cache_time_keeper.driver.shmop:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop
+        public: false
+
     cache_time_keeper:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
         arguments: [ @cache_time_keeper.driver ]
