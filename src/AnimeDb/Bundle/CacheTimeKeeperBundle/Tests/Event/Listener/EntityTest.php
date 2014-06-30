@@ -113,7 +113,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
         $keeper_mock
             ->expects($this->once())
             ->method('set')
-            ->with('foo', new \DateTime());
+            ->with('foo', $this->isInstanceOf('DateTime'));
 
         return $keeper_mock;
     }
