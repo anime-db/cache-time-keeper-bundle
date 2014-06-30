@@ -77,14 +77,4 @@ class Dummy implements Driver
     {
         return clone $this->time;
     }
-
-    /**
-     * Save list times if need
-     *
-     * @return boolean
-     */
-    public function save()
-    {
-        return true;
-    }
 }

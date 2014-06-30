@@ -21,8 +21,6 @@ class DummyTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test init
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy::__construct
      */
     public function testInit()
     {
@@ -32,9 +30,6 @@ class DummyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy::get
      */
     public function testGet()
     {
@@ -47,8 +42,6 @@ class DummyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test modify get
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy::get
      */
     public function testModifyGet()
     {
@@ -61,8 +54,6 @@ class DummyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test set
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy::set
      */
     public function testSet()
     {
@@ -72,8 +63,6 @@ class DummyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get max
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy::getMax
      */
     public function testGetMax()
     {
@@ -82,16 +71,5 @@ class DummyTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($time, $obj->getMax([]));
         $this->assertNotEquals($time, $obj->getMax([])->modify('+1 day'));
-    }
-
-    /**
-     * Test save
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy::save
-     */
-    public function testSave()
-    {
-        $obj = new Dummy();
-        $this->assertTrue($obj->save());
     }
 }

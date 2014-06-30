@@ -76,23 +76,11 @@ class Shmop
     /**
      * Writes on a shared memory block
      *
-     * First we check for the block existance, and if it doesn't, we'll create it. Now, if the
-     * block already exists, we need to delete it and create it again with a new byte allocation that
-     * matches the size of the data that we want to write there. We mark for deletion,  close the semaphore
-     * and create it again.
-     *
      * @param string $data
      */
     public function write($data)
     {
-        if ($this->exists($this->id)) {
-            shmop_delete($this->shmid);
-            shmop_close($this->shmid);
-            $this->shmid = shmop_open($this->id, "c", $this->perms, 10);
-            shmop_write($this->shmid, pack('L', $data), 0);
-        } else {
-            shmop_write($this->shmid, pack('L', $data), 0);
-        }
+        shmop_write($this->shmid, pack('L', $data), 0);
     }
 
     /**

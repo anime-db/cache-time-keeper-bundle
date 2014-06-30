@@ -77,16 +77,6 @@ class Shmop implements Driver
     }
 
     /**
-     * Save list times if need
-     *
-     * @return boolean
-     */
-    public function save()
-    {
-        return true;
-    }
-
-    /**
      * Get id
      *
      * @param string $key

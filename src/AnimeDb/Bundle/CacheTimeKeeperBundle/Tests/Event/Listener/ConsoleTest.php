@@ -32,12 +32,6 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
             ->disableOriginalConstructor()
             ->getMock();
-        $driver_mock = $this
-            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
-            ->getMock();
-        $driver_mock
-            ->expects($this->once())
-            ->method('save');
 
         $command_mock = $this
             ->getMockBuilder('\Symfony\Component\Console\Command\Command')
@@ -57,7 +51,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             ->method('getCommand')
             ->will($this->returnValue($command_mock));
 
-        $obj = new Console($keeper_mock, $driver_mock);
+        $obj = new Console($keeper_mock);
         $obj->onTerminate($event_mock);
     }
 
@@ -77,12 +71,6 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('set')
             ->with(Keeper::LAST_UPDATE_KEY, new \DateTime());
-        $driver_mock = $this
-            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
-            ->getMock();
-        $driver_mock
-            ->expects($this->once())
-            ->method('save');
 
         $command_mock = $this
             ->getMockBuilder('\Symfony\Component\Console\Command\Command')
@@ -102,7 +90,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             ->method('getCommand')
             ->will($this->returnValue($command_mock));
 
-        $obj = new Console($keeper_mock, $driver_mock);
+        $obj = new Console($keeper_mock);
         $obj->onTerminate($event_mock);
     }
 }

@@ -55,10 +55,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get null
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::getFilename
      */
     public function testGetNull()
     {
@@ -68,10 +64,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::set
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::getFilename
      */
     public function testGet()
     {
@@ -84,10 +76,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test set
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::set
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::getFilename
      */
     public function testSet()
     {
@@ -98,21 +86,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test save
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::save
-     */
-    public function testSave()
-    {
-        $obj = new File($this->dir);
-        $this->assertTrue($obj->save());
-    }
-
-    /**
      * Test sync list times
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::set
      */
     public function testSync()
     {
@@ -129,20 +103,17 @@ class FileTest extends \PHPUnit_Framework_TestCase
      * Test get max empty params
      *
      * @expectedException InvalidArgumentException
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::getMax
      */
     public function testGetMaxEmpty()
     {
         $obj = new File($this->dir);
         $obj->getMax([]);
-        $obj->getMax([null]);
     }
 
     /**
      * Test get max not scalar params
      *
      * @expectedException InvalidArgumentException
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::getMax
      */
     public function testGetMaxNotScalar()
     {
@@ -152,10 +123,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get max
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::set
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::getMax
      */
     public function testGetMax()
     {

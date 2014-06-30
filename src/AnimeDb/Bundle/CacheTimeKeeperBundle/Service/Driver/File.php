@@ -103,16 +103,6 @@ class File implements Driver
     }
 
     /**
-     * Save list times if need
-     *
-     * @return boolean
-     */
-    public function save()
-    {
-        return true;
-    }
-
-    /**
      * Get filename from key
      *
      * @param string $key

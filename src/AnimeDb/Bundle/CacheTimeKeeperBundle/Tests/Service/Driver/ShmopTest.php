@@ -32,9 +32,6 @@ class ShmopTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get null
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::getIdBykey
      */
     public function testGetNull()
     {
@@ -44,10 +41,6 @@ class ShmopTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::set
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::getIdBykey
      */
     public function testGet()
     {
@@ -60,10 +53,6 @@ class ShmopTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test set
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::set
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::getIdBykey
      */
     public function testSet()
     {
@@ -75,9 +64,6 @@ class ShmopTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test sync list times
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::set
      */
     public function testSync()
     {
@@ -91,34 +77,20 @@ class ShmopTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test save
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::save
-     */
-    public function testSave()
-    {
-        $obj = new Shmop();
-        $this->assertTrue($obj->save());
-    }
-
-    /**
      * Test get max empty params
      *
      * @expectedException InvalidArgumentException
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::getMax
      */
     public function testGetMaxEmpty()
     {
         $obj = new Shmop();
         $obj->getMax([]);
-        $obj->getMax([null]);
     }
 
     /**
      * Test get max not scalar params
      *
      * @expectedException InvalidArgumentException
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::getMax
      */
     public function testGetMaxNotScalar()
     {
@@ -128,10 +100,6 @@ class ShmopTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get max
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::set
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop::getMax
      */
     public function testGetMax()
     {
