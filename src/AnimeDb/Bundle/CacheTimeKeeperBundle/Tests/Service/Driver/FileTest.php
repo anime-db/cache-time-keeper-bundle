@@ -116,6 +116,25 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test sync list
+     *
+     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
+     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::set
+     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::load
+     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::save
+     */
+    public function testSync()
+    {
+        $time = new \DateTime();
+        $first = new File($this->filename);
+        $first->set('foo', $time);
+
+        // new object
+        $second = new File($this->filename);
+        $this->assertEquals($time, $second->get('foo'));
+    }
+
+    /**
      * Test get max empty params
      *
      * @expectedException InvalidArgumentException
