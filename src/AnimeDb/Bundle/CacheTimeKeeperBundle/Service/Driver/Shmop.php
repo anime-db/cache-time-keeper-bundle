@@ -11,7 +11,7 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
-use Simple\SHM\Block;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Utility\Shmop as ShmopUtility;
 
 /**
  * Shmop driver
@@ -30,9 +30,9 @@ class Shmop implements Driver
      */
     public function get($key)
     {
-        $block = new Block($this->getId($key));
-        if ($time = $block->read()) {
-            return new \DateTime($time);
+        $sh = new ShmopUtility(self::getIdBykey($key));
+        if ($time = $sh->read()) {
+            return new \DateTime(date('Y-m-d H:i:s', $time));
         }
         return null;
     }
@@ -47,9 +47,9 @@ class Shmop implements Driver
      */
     public function set($key, \DateTime $time)
     {
-        $block = new Block($this->getId($key));
-        if ($old_time = $block->read() && strtotime($old_time) < $time->getTimestamp()) {
-            $block->write($time->format('Y-m-d H:i:s'));
+        $sh = new ShmopUtility(self::getIdBykey($key));
+        if (!($old_time = $sh->read()) || $old_time < $time->getTimestamp()) {
+            $sh->write($time->getTimestamp());
         }
         return true;
     }
@@ -93,7 +93,7 @@ class Shmop implements Driver
      *
      * @return integer
      */
-    protected function getId($key)
+    public static function getIdBykey($key)
     {
         return (int)sprintf('%u', crc32($key));
     }
