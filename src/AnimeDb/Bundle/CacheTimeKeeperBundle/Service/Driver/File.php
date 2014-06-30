@@ -21,34 +21,27 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 class File implements Driver
 {
     /**
-     * Filename
+     * Filename suffix
      *
      * @var string
      */
-    protected $filename;
+    const FILENAME_SUFFIX = '.key';
 
     /**
-     * List cache times
+     * Dir
      *
-     * @var array|null
+     * @var string
      */
-    protected $list = null;
-
-    /**
-     * List is save
-     *
-     * @var boolean
-     */
-    protected $save = false;
+    protected $dir;
 
     /**
      * Construct
      *
-     * @param string $filename
+     * @param string $dir
      */
-    public function __construct($filename)
+    public function __construct($dir)
     {
-        $this->filename = $filename;
+        $this->dir = $dir;
     }
 
     /**
@@ -60,9 +53,9 @@ class File implements Driver
      */
     public function get($key)
     {
-        $this->load();
-        if (isset($this->list[$key])) {
-            return clone $this->list[$key];
+        $file = $this->getFilename($key);
+        if (file_exists($file)) {
+            return new \DateTime(date('Y-m-d H:i:s', filemtime($file)));
         }
         return null;
     }
@@ -77,9 +70,11 @@ class File implements Driver
      */
     public function set($key, \DateTime $time)
     {
-        $this->load();
-        $this->list[$key] = clone $time;
-        $this->save = false;
+        $time = $time->getTimestamp();
+        $file = $this->getFilename($key);
+        if (!file_exists($file) || $time > filemtime($file)) {
+            return touch($file, $time);
+        }
         return true;
     }
 
@@ -114,34 +109,18 @@ class File implements Driver
      */
     public function save()
     {
-        if ($this->save || is_null($this->list)) {
-            return true;
-        }
-        $result = file_put_contents($this->filename, "<?php\nreturn ".var_export($this->list, true).';');
-        $this->save = $result !== false;
-        return $result !== false;
+        return true;
     }
 
     /**
-     * Load list
+     * Get filename from key
+     *
+     * @param string $key
+     *
+     * @return string
      */
-    protected function load()
+    protected function getFilename($key)
     {
-        if (is_null($this->list)) {
-            if (file_exists($this->filename)) {
-                $this->list = include $this->filename;
-            } else {
-                $this->list = [];
-            }
-            $this->save = true;
-        }
-    }
-
-    /**
-     * Destruct
-     */
-    public function __destruct()
-    {
-        $this->save();
+        return $this->dir.'/'.md5($key).self::FILENAME_SUFFIX;
     }
 }
