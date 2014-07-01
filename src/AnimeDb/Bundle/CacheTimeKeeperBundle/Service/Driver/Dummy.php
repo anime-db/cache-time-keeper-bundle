@@ -10,7 +10,7 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Base;
 
 /**
  * Dummy driver
@@ -18,39 +18,28 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class Dummy implements Driver
+class Dummy extends Base
 {
     /**
-     * Now time
+     * List times
      *
-     * @var \DateTime
+     * @var array
      */
-    protected $time;
-
-    /**
-     * Construct
-     *
-     * @param \DateTime $time
-     */
-    public function __construct(\DateTime $time = null)
-    {
-        if ($time) {
-            $this->time = clone $time;
-        } else {
-            $this->time = new \DateTime();
-        }
-    }
+    protected $list = [];
 
     /**
      * Get time for key
      *
      * @param string $key
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function get($key)
     {
-        return clone $this->time;
+        if (isset($this->list[$key])) {
+            return clone $this->time;
+        }
+        return null;
     }
 
     /**
@@ -63,18 +52,7 @@ class Dummy implements Driver
      */
     public function set($key, \DateTime $time)
     {
+        $this->list[$key] = clone $time;
         return true;
-    }
-
-    /**
-     * Get a list of keys or dates and chooses the max date
-     *
-     * @param array $params
-     *
-     * @return \DateTime
-     */
-    public function getMax(array $params)
-    {
-        return clone $this->time;
     }
 }
