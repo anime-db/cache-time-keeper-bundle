@@ -44,11 +44,10 @@ class Shmop
      */
     public function __construct($id, $size, $perms = self::DEFAULT_PERMISSION)
     {
-        $this->id = $id;
-        if ($this->exists($this->id)) {
-            $this->shmid = shmop_open($this->id, 'w', $perms, $size);
+        if ($this->exists($id)) {
+            $this->shmid = shmop_open($id, 'w', $perms, $size);
         } else {
-            $this->shmid = shmop_open($this->id, 'c', $perms, $size);
+            $this->shmid = shmop_open($id, 'c', $perms, $size);
         }
     }
 
