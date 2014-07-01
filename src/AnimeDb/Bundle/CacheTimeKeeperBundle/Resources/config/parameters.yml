@@ -1,3 +1,3 @@
 parameters:
     cache_time_keeper.driver.dir: %kernel.cache_dir%/cache-time-keeper/
-    cache_time_keeper.driver: cache_time_keeper.driver.shmop
+    cache_time_keeper.driver: cache_time_keeper.driver.multi
