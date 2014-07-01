@@ -30,7 +30,7 @@ class FileTest extends DriverTest
     /**
      * Construct
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->dir = sys_get_temp_dir().'/unit-test.meta/';
         if (!is_dir($this->dir)) {

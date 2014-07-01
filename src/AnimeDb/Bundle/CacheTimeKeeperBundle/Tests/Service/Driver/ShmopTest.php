@@ -25,7 +25,7 @@ class ShmopTest extends DriverTest
      * (non-PHPdoc)
      * @see PHPUnit_Framework_TestCase::tearDown()
      */
-    public function setUp()
+    protected function setUp()
     {
         $sh = new ShmopUtility(Shmop::getIdBykey('foo'));
         $sh->delete();
