@@ -30,7 +30,7 @@ class Shmop extends Base
      */
     public function get($key)
     {
-        $sh = new ShmopUtility(self::getIdBykey($key));
+        $sh = new ShmopUtility(self::getIdBykey($key), 10);
         if ($time = $sh->read()) {
             return new \DateTime(date('Y-m-d H:i:s', $time));
         }
@@ -47,7 +47,7 @@ class Shmop extends Base
      */
     public function set($key, \DateTime $time)
     {
-        $sh = new ShmopUtility(self::getIdBykey($key));
+        $sh = new ShmopUtility(self::getIdBykey($key), 10);
         if (!($old_time = $sh->read()) || $old_time < $time->getTimestamp()) {
             $sh->write($time->getTimestamp());
         }

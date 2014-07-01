@@ -19,25 +19,18 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Utility;
 class Shmop
 {
     /**
-     * Holds the system id for the shared memory block
+     * Default permission (octal) that will be used in created memory blocks
      *
      * @var integer
      */
-    protected $id;
+    const DEFAULT_PERMISSION = 0644;
 
     /**
-     * Holds the shared memory block id returned by shmop_open
+     * Shared memory block id returned by shmop_open
      *
      * @var integer
      */
     protected $shmid;
-
-    /**
-     * Holds the default permission (octal) that will be used in created memory blocks
-     *
-     * @var integer
-     */
-    protected $perms = 0644;
 
     /**
      * Shared memory block instantiation
@@ -46,23 +39,21 @@ class Shmop
      * already exists or needs to be created. If it exists, let's open it.
      *
      * @param string $id
+     * @param integer $size
+     * @param integer $perms
      */
-    public function __construct($id)
+    public function __construct($id, $size, $perms = self::DEFAULT_PERMISSION)
     {
         $this->id = $id;
         if ($this->exists($this->id)) {
-            $this->shmid = shmop_open($this->id, 'w', $this->perms, 10);
+            $this->shmid = shmop_open($this->id, 'w', $perms, $size);
         } else {
-            $this->shmid = shmop_open($this->id, 'c', $this->perms, 10);
+            $this->shmid = shmop_open($this->id, 'c', $perms, $size);
         }
     }
 
     /**
      * Checks if a shared memory block with the provided id exists or not
-     *
-     * In order to check for shared memory existance, we have to open it with
-     * reading access. If it doesn't exist, warnings will be cast, therefore we
-     * suppress those with the @ operator.
      *
      * @param string $id
      *
@@ -80,7 +71,7 @@ class Shmop
      */
     public function write($data)
     {
-        shmop_write($this->shmid, pack('L', $data), 0);
+        shmop_write($this->shmid, $data, 0);
     }
 
     /**
@@ -90,8 +81,7 @@ class Shmop
      */
     public function read()
     {
-        $data = unpack('L', shmop_read($this->shmid, 0, 10));
-        return reset($data);
+        return trim(shmop_read($this->shmid, 0, shmop_size($this->shmid)));
     }
 
     /**
@@ -100,36 +90,6 @@ class Shmop
     public function delete()
     {
         shmop_delete($this->shmid);
-    }
-
-    /**
-     * Gets the current shared memory block id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Gets the current shared memory block permissions
-     *
-     * @return integer
-     */
-    public function getPermissions()
-    {
-        return $this->perms;
-    }
-
-    /**
-     * Sets the default permission (octal) that will be used in created memory blocks
-     *
-     * @param string $perms
-     */
-    public function setPermissions($perms)
-    {
-        $this->perms = $perms;
     }
 
     /**
