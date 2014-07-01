@@ -58,7 +58,6 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testSet()
     {
-        $this->time = new \DateTime();
         $driver = $this->getDriver();
         $this->assertTrue($driver->set('foo', $this->time));
         $this->assertTrue($driver->set('foo', $this->time->modify('-1 day')));
@@ -69,7 +68,6 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testSync()
     {
-        $this->time = new \DateTime();
         $first = $this->getDriver();
         $first->set('foo', $this->time);
 
@@ -93,7 +91,6 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMax()
     {
-        $this->time = new \DateTime();
         $driver = $this->getDriver();
         $this->assertEquals($this->time, $driver->getMax([$this->time]));
 
