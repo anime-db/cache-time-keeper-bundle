@@ -7,7 +7,7 @@
  * @copyright Copyright (c) 2011, Peter Gribanov
  * @license   http://opensource.org/licenses/GPL-3.0 GPL v3
  */
-namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Event\Listener;
+namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
@@ -15,16 +15,13 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 /**
  * Test console event listener
  *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Event\Listener
+ * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
 class ConsoleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test on terminate
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console::onTerminate
      */
     public function testOnTerminate()
     {
@@ -32,12 +29,6 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
             ->disableOriginalConstructor()
             ->getMock();
-        $driver_mock = $this
-            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
-            ->getMock();
-        $driver_mock
-            ->expects($this->once())
-            ->method('save');
 
         $command_mock = $this
             ->getMockBuilder('\Symfony\Component\Console\Command\Command')
@@ -57,15 +48,12 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             ->method('getCommand')
             ->will($this->returnValue($command_mock));
 
-        $obj = new Console($keeper_mock, $driver_mock);
+        $obj = new Console($keeper_mock);
         $obj->onTerminate($event_mock);
     }
 
     /**
      * Test on terminate cache
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console::onTerminate
      */
     public function testOnTerminateCache()
     {
@@ -77,12 +65,6 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('set')
             ->with(Keeper::LAST_UPDATE_KEY, new \DateTime());
-        $driver_mock = $this
-            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
-            ->getMock();
-        $driver_mock
-            ->expects($this->once())
-            ->method('save');
 
         $command_mock = $this
             ->getMockBuilder('\Symfony\Component\Console\Command\Command')
@@ -102,7 +84,7 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
             ->method('getCommand')
             ->will($this->returnValue($command_mock));
 
-        $obj = new Console($keeper_mock, $driver_mock);
+        $obj = new Console($keeper_mock);
         $obj->onTerminate($event_mock);
     }
 }

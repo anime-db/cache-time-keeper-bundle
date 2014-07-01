@@ -5,7 +5,16 @@ services:
 
     cache_time_keeper.driver.file:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File
-        arguments: [ %cache_time_keeper.driver.file% ]
+        arguments: [ %cache_time_keeper.driver.dir% ]
+        public: false
+
+    cache_time_keeper.driver.shmop:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop
+        public: false
+
+    cache_time_keeper.driver.multi:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Multi
+        arguments: [ @cache_time_keeper.driver.shmop, @cache_time_keeper.driver.file ]
         public: false
 
     cache_time_keeper:
@@ -23,14 +32,7 @@ services:
 
     cache_time_keeper.listener.console:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console
-        arguments: [ @cache_time_keeper, @cache_time_keeper.driver ]
+        arguments: [ @cache_time_keeper ]
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: onTerminate }
-        public: false
-
-    cache_time_keeper.listener.request:
-        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Request
-        arguments: [ @cache_time_keeper.driver ]
-        tags:
-            - { name: kernel.event_listener, event: kernel.terminate, method: onTerminate }
         public: false

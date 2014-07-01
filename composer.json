@@ -12,6 +12,7 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
+        "ext-shmop": "*",
         "symfony/dependency-injection": "2.3.*",
         "symfony/config": "2.6.*",
         "symfony/http-kernel": "2.6.*",

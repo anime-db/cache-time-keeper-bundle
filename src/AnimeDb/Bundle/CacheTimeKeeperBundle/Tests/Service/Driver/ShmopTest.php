@@ -10,30 +10,33 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\DriverTest;
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Utility\Shmop as ShmopUtility;
 
 /**
- * Test dummy driver
+ * Test shmop driver
  *
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
-class DummyTest extends DriverTest
+class ShmopTest extends DriverTest
 {
+    /**
+     * (non-PHPdoc)
+     * @see PHPUnit_Framework_TestCase::tearDown()
+     */
+    public function setUp()
+    {
+        $sh = new ShmopUtility(Shmop::getIdBykey('foo'));
+        $sh->delete();
+    }
+
     /**
      * (non-PHPdoc)
      * @see \AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service\DriverTest::getDriver()
      */
     protected function getDriver()
     {
-        return new Dummy();
-    }
-
-    /**
-     * Test sync list times
-     */
-    public function testSync()
-    {
-        // in dummy driver a sync does not work
+        return new Shmop();
     }
 }

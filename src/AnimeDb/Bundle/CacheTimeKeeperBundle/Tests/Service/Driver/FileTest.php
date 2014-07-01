@@ -7,32 +7,35 @@
  * @copyright Copyright (c) 2011, Peter Gribanov
  * @license   http://opensource.org/licenses/GPL-3.0 GPL v3
  */
-namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service\Driver;
+namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\DriverTest;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File;
 
 /**
  * Test file driver
  *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service\Driver
+ * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
-class FileTest extends \PHPUnit_Framework_TestCase
+class FileTest extends DriverTest
 {
     /**
-     * Metadata file
+     * Metadata dir
      *
      * @var string
      */
-    protected $filename;
+    protected $dir;
 
     /**
      * Construct
      */
     public function setUp()
     {
-        $this->filename = tempnam(sys_get_temp_dir(), 'unit-test.meta');
-        unlink($this->filename);
+        $this->dir = sys_get_temp_dir().'/unit-test.meta/';
+        if (!is_dir($this->dir)) {
+            mkdir($this->dir, 0755);
+        }
     }
 
     /**
@@ -41,120 +44,22 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        @unlink($this->filename);
+        if (is_dir($this->dir)) {
+            foreach (scandir($this->dir) as $value) {
+                if ($value[0] != '.') {
+                    @unlink($this->dir.'/'.$value);
+                }
+            }
+            rmdir($this->dir);
+        }
     }
 
     /**
-     * Test get null
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::__destruct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::load
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::save
+     * (non-PHPdoc)
+     * @see \AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service\DriverTest::getDriver()
      */
-    public function testGetNull()
+    protected function getDriver()
     {
-        $obj = new File($this->filename);
-        $this->assertNull($obj->get('foo'));
-    }
-
-    /**
-     * Test get
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::set
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::load
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::save
-     */
-    public function testGet()
-    {
-        $time = new \DateTime();
-        $obj = new File($this->filename);
-        $this->assertTrue($obj->set('foo', $time));
-        $this->assertEquals($time, $obj->get('foo'));
-        $this->assertNotEquals($time, $obj->get('foo')->modify('+1 day'));
-    }
-
-    /**
-     * Test save
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::set
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::load
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::save
-     */
-    public function testSave()
-    {
-        $time = new \DateTime();
-        $obj = new File($this->filename);
-        $this->assertTrue($obj->save());
-        $obj->set('foo', $time);
-        $this->assertTrue($obj->save());
-        $this->assertEquals($time, $obj->get('foo'));
-    }
-
-    /**
-     * Test load
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::set
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::load
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::save
-     */
-    public function testLoad()
-    {
-        $time = new \DateTime();
-        $obj = new File($this->filename);
-        $obj->set('foo', $time);
-        $obj->save();
-        unset($obj);
-
-        // new object
-        $obj = new File($this->filename);
-        $this->assertEquals($time, $obj->get('foo'));
-    }
-
-    /**
-     * Test get max empty params
-     *
-     * @expectedException InvalidArgumentException
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::getMax
-     */
-    public function testGetMaxEmpty()
-    {
-        $obj = new File($this->filename);
-        $obj->getMax([]);
-        $obj->getMax([null]);
-    }
-
-    /**
-     * Test get max not scalar params
-     *
-     * @expectedException InvalidArgumentException
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::getMax
-     */
-    public function testGetMaxNotScalar()
-    {
-        $obj = new File($this->filename);
-        $obj->getMax([null]);
-    }
-
-    /**
-     * Test get max
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::get
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File::getMax
-     */
-    public function testGetMax()
-    {
-        $time = new \DateTime();
-        $obj = new File($this->filename);
-        $this->assertEquals($time, $obj->getMax([$time]));
-
-        $foo_time = new \DateTime();
-        $foo_time->modify('+1 day');
-        $obj->set('foo', $foo_time);
-        $this->assertEquals($foo_time, $obj->getMax(['foo', $time]));
+        return new File($this->dir);
     }
 }

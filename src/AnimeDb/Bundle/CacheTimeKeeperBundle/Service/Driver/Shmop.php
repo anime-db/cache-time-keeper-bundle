@@ -11,22 +11,16 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Base;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Utility\Shmop as ShmopUtility;
 
 /**
- * Dummy driver
+ * Shmop driver
  *
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class Dummy extends Base
+class Shmop extends Base
 {
-    /**
-     * List times
-     *
-     * @var array
-     */
-    protected $list = [];
-
     /**
      * Get time for key
      *
@@ -36,8 +30,9 @@ class Dummy extends Base
      */
     public function get($key)
     {
-        if (isset($this->list[$key])) {
-            return clone $this->list[$key];
+        $sh = new ShmopUtility(self::getIdBykey($key));
+        if ($time = $sh->read()) {
+            return new \DateTime(date('Y-m-d H:i:s', $time));
         }
         return null;
     }
@@ -52,7 +47,22 @@ class Dummy extends Base
      */
     public function set($key, \DateTime $time)
     {
-        $this->list[$key] = clone $time;
+        $sh = new ShmopUtility(self::getIdBykey($key));
+        if (!($old_time = $sh->read()) || $old_time < $time->getTimestamp()) {
+            $sh->write($time->getTimestamp());
+        }
         return true;
+    }
+
+    /**
+     * Get id
+     *
+     * @param string $key
+     *
+     * @return integer
+     */
+    public static function getIdBykey($key)
+    {
+        return (int)sprintf('%u', crc32($key));
     }
 }

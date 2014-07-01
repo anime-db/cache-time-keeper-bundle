@@ -45,11 +45,4 @@ interface Driver
      * @return \DateTime
      */
     public function getMax(array $params);
-
-    /**
-     * Save list times if need
-     *
-     * @return boolean
-     */
-    public function save();
 }
