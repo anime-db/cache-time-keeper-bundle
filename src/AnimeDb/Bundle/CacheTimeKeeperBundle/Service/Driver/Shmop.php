@@ -10,7 +10,7 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Base;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Utility\Shmop as ShmopUtility;
 
 /**
@@ -19,7 +19,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Utility\Shmop as ShmopUtility;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class Shmop implements Driver
+class Shmop extends Base
 {
     /**
      * Get time for key
@@ -52,28 +52,6 @@ class Shmop implements Driver
             $sh->write($time->getTimestamp());
         }
         return true;
-    }
-
-    /**
-     * Get a list of keys or dates and chooses the max date
-     *
-     * @param array $params
-     *
-     * @return \DateTime
-     */
-    public function getMax(array $params)
-    {
-        if (!$params) {
-            throw new \InvalidArgumentException('Unknown key list');
-        }
-        foreach ($params as $key => $value) {
-            if (is_scalar($value)) {
-                $params[$key] = $this->get($value);
-            } elseif (!($value instanceof \DateTime)) {
-                throw new \InvalidArgumentException('No supported ('.gettype($value).')');
-            }
-        }
-        return max($params);
     }
 
     /**

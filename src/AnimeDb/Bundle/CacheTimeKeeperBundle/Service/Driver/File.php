@@ -10,7 +10,7 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Base;
 
 /**
  * File driver
@@ -18,7 +18,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class File implements Driver
+class File extends Base
 {
     /**
      * Filename suffix
@@ -76,30 +76,6 @@ class File implements Driver
             return touch($file, $time);
         }
         return true;
-    }
-
-    /**
-     * Get a list of keys or dates and chooses the max date
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @param array $params
-     *
-     * @return \DateTime
-     */
-    public function getMax(array $params)
-    {
-        if (!$params) {
-            throw new \InvalidArgumentException('Unknown key list');
-        }
-        foreach ($params as $key => $value) {
-            if (is_scalar($value)) {
-                $params[$key] = $this->get($value);
-            } elseif (!($value instanceof \DateTime)) {
-                throw new \InvalidArgumentException('No supported ('.gettype($value).')');
-            }
-        }
-        return max($params);
     }
 
     /**
