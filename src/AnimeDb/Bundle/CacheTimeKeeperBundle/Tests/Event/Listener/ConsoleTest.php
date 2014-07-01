@@ -22,9 +22,6 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test on terminate
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console::onTerminate
      */
     public function testOnTerminate()
     {
@@ -57,9 +54,6 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test on terminate cache
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console::onTerminate
      */
     public function testOnTerminateCache()
     {

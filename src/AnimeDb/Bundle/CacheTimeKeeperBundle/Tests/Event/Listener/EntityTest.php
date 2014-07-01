@@ -21,10 +21,6 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test post persist
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity::postPersist
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity::getKeyFromEntity
      */
     public function testPostPersist()
     {
@@ -34,10 +30,6 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test post remove
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity::postRemove
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity::getKeyFromEntity
      */
     public function testPostRemove()
     {
@@ -47,10 +39,6 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test post update
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity::postUpdate
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity::getKeyFromEntity
      */
     public function testPostUpdate()
     {

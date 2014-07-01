@@ -21,9 +21,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test get
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper::__construct
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper::get
      */
     public function testGet()
     {
@@ -43,8 +40,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get empty last update
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper::get
      */
     public function testGetEmptyLastUpdate()
     {
@@ -68,8 +63,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get empty
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper::get
      */
     public function testGetEmpty()
     {
@@ -94,8 +87,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test set
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper::set
      */
     public function testSet()
     {
@@ -115,8 +106,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test get max
-     *
-     * @covers \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper::getMax
      */
     public function testGetMax()
     {
