@@ -22,8 +22,7 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetNull()
     {
-        $driver = $this->getDriver();
-        $this->assertNull($driver->get('foo'));
+        $this->assertNull($this->getDriver()->get('foo'));
     }
 
     /**
@@ -70,19 +69,7 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMaxEmpty()
     {
-        $driver = $this->getDriver();
-        $driver->getMax([]);
-    }
-
-    /**
-     * Test get max not scalar params
-     *
-     * @expectedException InvalidArgumentException
-     */
-    public function testGetMaxNotScalar()
-    {
-        $driver = $this->getDriver();
-        $driver->getMax([null]);
+        $this->getDriver()->getMax([]);
     }
 
     /**

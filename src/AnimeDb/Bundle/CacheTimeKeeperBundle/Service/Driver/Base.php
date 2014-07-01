@@ -33,10 +33,8 @@ abstract class Base implements Driver
             throw new \InvalidArgumentException('Unknown key list');
         }
         foreach ($params as $key => $value) {
-            if (is_scalar($value)) {
+            if (!($value instanceof \DateTime)) {
                 $params[$key] = $this->get($value);
-            } elseif (!($value instanceof \DateTime)) {
-                throw new \InvalidArgumentException('No supported ('.gettype($value).')');
             }
         }
         return max($params);
