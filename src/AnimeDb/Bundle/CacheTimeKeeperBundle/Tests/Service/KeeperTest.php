@@ -7,14 +7,14 @@
  * @copyright Copyright (c) 2011, Peter Gribanov
  * @license   http://opensource.org/licenses/GPL-3.0 GPL v3
  */
-namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service;
+namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 
 /**
  * Test keeper
  *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service
+ * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
 class KeeperTest extends \PHPUnit_Framework_TestCase

@@ -7,14 +7,14 @@
  * @copyright Copyright (c) 2011, Peter Gribanov
  * @license   http://opensource.org/licenses/GPL-3.0 GPL v3
  */
-namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Event\Listener;
+namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity;
 
 /**
  * Test entity event listener
  *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Event\Listener
+ * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
 class EntityTest extends \PHPUnit_Framework_TestCase
