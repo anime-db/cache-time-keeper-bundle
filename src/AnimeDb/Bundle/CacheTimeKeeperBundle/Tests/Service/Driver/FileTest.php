@@ -32,6 +32,7 @@ class FileTest extends DriverTest
      */
     protected function setUp()
     {
+        parent::setUp();
         $this->dir = sys_get_temp_dir().'/unit-test.meta/';
         if (!is_dir($this->dir)) {
             mkdir($this->dir, 0755);
@@ -44,6 +45,7 @@ class FileTest extends DriverTest
      */
     public function tearDown()
     {
+        parent::tearDown();
         if (is_dir($this->dir)) {
             foreach (scandir($this->dir) as $value) {
                 if ($value[0] != '.') {

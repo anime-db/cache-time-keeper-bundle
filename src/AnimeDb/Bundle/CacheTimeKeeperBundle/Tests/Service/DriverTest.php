@@ -18,6 +18,23 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
 abstract class DriverTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Time
+     *
+     * @var \DateTime
+     */
+    protected $time;
+
+    /**
+     * (non-PHPdoc)
+     * @see PHPUnit_Framework_TestCase::setUp()
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->time = new \DateTime();
+    }
+
+    /**
      * Test get null
      */
     public function testGetNull()
@@ -30,11 +47,10 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet()
     {
-        $time = new \DateTime();
         $driver = $this->getDriver();
-        $this->assertTrue($driver->set('foo', $time));
-        $this->assertEquals($time, $driver->get('foo'));
-        $this->assertNotEquals($time, $driver->get('foo')->modify('+1 day'));
+        $this->assertTrue($driver->set('foo', $this->time));
+        $this->assertEquals($this->time, $driver->get('foo'));
+        $this->assertNotEquals($this->time, $driver->get('foo')->modify('+1 day'));
     }
 
     /**
@@ -42,10 +58,10 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testSet()
     {
-        $time = new \DateTime();
+        $this->time = new \DateTime();
         $driver = $this->getDriver();
-        $this->assertTrue($driver->set('foo', $time));
-        $this->assertTrue($driver->set('foo', $time->modify('-1 day')));
+        $this->assertTrue($driver->set('foo', $this->time));
+        $this->assertTrue($driver->set('foo', $this->time->modify('-1 day')));
     }
 
     /**
@@ -53,13 +69,13 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testSync()
     {
-        $time = new \DateTime();
+        $this->time = new \DateTime();
         $first = $this->getDriver();
-        $first->set('foo', $time);
+        $first->set('foo', $this->time);
 
         // new object
         $second = $this->getDriver();
-        $this->assertEquals($time, $second->get('foo'));
+        $this->assertEquals($this->time, $second->get('foo'));
     }
 
     /**
@@ -77,14 +93,14 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMax()
     {
-        $time = new \DateTime();
+        $this->time = new \DateTime();
         $driver = $this->getDriver();
-        $this->assertEquals($time, $driver->getMax([$time]));
+        $this->assertEquals($this->time, $driver->getMax([$this->time]));
 
         $foo_time = new \DateTime();
         $foo_time->modify('+1 day');
         $driver->set('foo', $foo_time);
-        $this->assertEquals($foo_time, $driver->getMax(['foo', $time]));
+        $this->assertEquals($foo_time, $driver->getMax(['foo', $this->time]));
     }
 
     /**

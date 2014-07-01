@@ -27,6 +27,7 @@ class ShmopTest extends DriverTest
      */
     protected function setUp()
     {
+        parent::setUp();
         $sh = new ShmopUtility(Shmop::getIdBykey('foo'));
         $sh->delete();
     }

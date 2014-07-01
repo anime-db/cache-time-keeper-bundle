@@ -34,11 +34,20 @@ class MultiTest extends \PHPUnit_Framework_TestCase
     protected $slow_mock;
 
     /**
+     * Time
+     *
+     * @var \DateTime
+     */
+    protected $time;
+
+    /**
      * (non-PHPdoc)
      * @see PHPUnit_Framework_TestCase::setUp()
      */
     protected function setUp()
     {
+        parent::setUp();
+        $this->time = new \DateTime();
         $this->fast_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver');
         $this->slow_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver');
     }
@@ -48,17 +57,16 @@ class MultiTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFast()
     {
-        $time = new \DateTime();
         $this->fast_mock
             ->expects($this->once())
             ->method('get')
             ->with('foo')
-            ->will($this->returnValue($time));
+            ->will($this->returnValue($this->time));
         $this->slow_mock
             ->expects($this->never())
             ->method('get');
 
-        $this->assertEquals($time, $this->getDriver()->get('foo'));
+        $this->assertEquals($this->time, $this->getDriver()->get('foo'));
     }
 
     /**
@@ -66,7 +74,6 @@ class MultiTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSlow()
     {
-        $time = new \DateTime();
         $this->fast_mock
             ->expects($this->once())
             ->method('get')
@@ -75,9 +82,9 @@ class MultiTest extends \PHPUnit_Framework_TestCase
         $this->slow_mock
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($time));
+            ->will($this->returnValue($this->time));
 
-        $this->assertEquals($time, $this->getDriver()->get('foo'));
+        $this->assertEquals($this->time, $this->getDriver()->get('foo'));
     }
 
     /**
@@ -85,19 +92,18 @@ class MultiTest extends \PHPUnit_Framework_TestCase
      */
     public function testSet()
     {
-        $time = new \DateTime();
         $this->fast_mock
             ->expects($this->once())
             ->method('set')
-            ->with('foo', $time)
+            ->with('foo', $this->time)
             ->will($this->returnValue(true));
         $this->slow_mock
             ->expects($this->once())
             ->method('set')
-            ->with('foo', $time)
+            ->with('foo', $this->time)
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->getDriver()->set('foo', $time));
+        $this->assertTrue($this->getDriver()->set('foo', $this->time));
     }
 
     /**
@@ -105,17 +111,16 @@ class MultiTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetFail()
     {
-        $time = new \DateTime();
         $this->fast_mock
             ->expects($this->once())
             ->method('set')
-            ->with('foo', $time)
+            ->with('foo', $this->time)
             ->will($this->returnValue(false));
         $this->slow_mock
             ->expects($this->never())
             ->method('set');
 
-        $this->assertFalse($this->getDriver()->set('foo', $time));
+        $this->assertFalse($this->getDriver()->set('foo', $this->time));
     }
 
     /**

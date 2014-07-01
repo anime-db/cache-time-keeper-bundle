@@ -20,11 +20,27 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 class KeeperTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Time
+     *
+     * @var \DateTime
+     */
+    protected $time;
+
+    /**
+     * (non-PHPdoc)
+     * @see PHPUnit_Framework_TestCase::setUp()
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->time = new \DateTime();
+    }
+
+    /**
      * Test get
      */
     public function testGet()
     {
-        $time = new \DateTime();
         $driver_mock = $this
             ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
@@ -32,10 +48,10 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('get')
             ->with('foo')
-            ->will($this->returnValue($time));
+            ->will($this->returnValue($this->time));
 
         $obj = new Keeper($driver_mock);
-        $this->assertEquals($time, $obj->get('foo'));
+        $this->assertEquals($this->time, $obj->get('foo'));
     }
 
     /**
@@ -43,7 +59,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEmptyLastUpdate()
     {
-        $time = new \DateTime();
         $driver_mock = $this
             ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
@@ -55,10 +70,10 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
         $driver_mock
             ->expects($this->once())
             ->method('set')
-            ->with(Keeper::LAST_UPDATE_KEY, $time);
+            ->with(Keeper::LAST_UPDATE_KEY, $this->time);
 
         $obj = new Keeper($driver_mock);
-        $this->assertEquals($time, $obj->get(Keeper::LAST_UPDATE_KEY));
+        $this->assertEquals($this->time, $obj->get(Keeper::LAST_UPDATE_KEY));
     }
 
     /**
@@ -66,7 +81,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEmpty()
     {
-        $time = new \DateTime();
         $driver_mock = $this
             ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
@@ -79,10 +93,10 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('get')
             ->with(Keeper::LAST_UPDATE_KEY)
-            ->will($this->returnValue($time));
+            ->will($this->returnValue($this->time));
 
         $obj = new Keeper($driver_mock);
-        $this->assertEquals($time, $obj->get('foo'));
+        $this->assertEquals($this->time, $obj->get('foo'));
     }
 
     /**
@@ -90,18 +104,17 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
      */
     public function testSet()
     {
-        $time = new \DateTime();
         $driver_mock = $this
             ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
         $driver_mock
             ->expects($this->once())
             ->method('set')
-            ->with('foo', $time)
+            ->with('foo', $this->time)
             ->will($this->returnValue(true));
 
         $obj = new Keeper($driver_mock);
-        $this->assertTrue($obj->set('foo', $time));
+        $this->assertTrue($obj->set('foo', $this->time));
     }
 
     /**
@@ -109,7 +122,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMax()
     {
-        $time = new \DateTime();
         $driver_mock = $this
             ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver')
             ->getMock();
@@ -117,10 +129,10 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->exactly(2))
             ->method('getMax')
             ->with(['foo', Keeper::LAST_UPDATE_KEY])
-            ->will($this->returnValue($time));
+            ->will($this->returnValue($this->time));
 
         $obj = new Keeper($driver_mock);
-        $this->assertEquals($time, $obj->getMax(['foo']));
-        $this->assertEquals($time, $obj->getMax(['foo', Keeper::LAST_UPDATE_KEY]));
+        $this->assertEquals($this->time, $obj->getMax(['foo']));
+        $this->assertEquals($this->time, $obj->getMax(['foo', Keeper::LAST_UPDATE_KEY]));
     }
 }
