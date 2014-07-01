@@ -37,7 +37,7 @@ class Dummy extends Base
     public function get($key)
     {
         if (isset($this->list[$key])) {
-            return clone $this->time;
+            return clone $this->list[$key];
         }
         return null;
     }
