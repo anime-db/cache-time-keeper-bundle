@@ -4,8 +4,8 @@
  *
  * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
- * @copyright Copyright (c) 2011, Peter Gribanov
- * @license   http://opensource.org/licenses/GPL-3.0 GPL v3
+ * @copyright Copyright (c) 2014, Peter Gribanov
+ * @license   http://opensource.org/licenses/MIT
  */
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener;
