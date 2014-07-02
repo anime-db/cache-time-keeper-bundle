@@ -11,7 +11,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\DriverTest;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop;
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Utility\Shmop as ShmopUtility;
+use AnimeDb\Shmop\FixedBlock as BlockShmop;
 
 /**
  * Test shmop driver
@@ -28,7 +28,7 @@ class ShmopTest extends DriverTest
     protected function setUp()
     {
         parent::setUp();
-        $sh = new ShmopUtility(Shmop::getIdBykey('foo'), 3);
+        $sh = new BlockShmop(Shmop::getIdBykey('foo'), 3);
         $sh->delete();
     }
 
