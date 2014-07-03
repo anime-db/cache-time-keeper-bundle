@@ -85,7 +85,7 @@ class Keeper
      *
      * @return \DateTime
      */
-    public function getMax(array $params)
+    public function getMax(array $params = [])
     {
         // always check the date of the last update of the project
         if (!in_array(self::LAST_UPDATE_KEY, $params)) {
