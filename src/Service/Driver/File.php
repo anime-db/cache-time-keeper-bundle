@@ -87,6 +87,9 @@ class File extends Base
      */
     protected function getFilename($key)
     {
+        if (!is_dir($this->dir)) {
+            mkdir($this->dir, 0644, true);
+        }
         return $this->dir.'/'.md5($key).self::FILENAME_SUFFIX;
     }
 }
