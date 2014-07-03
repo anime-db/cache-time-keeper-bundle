@@ -28,11 +28,9 @@ services:
             - { name: doctrine.event_listener, event: postRemove }
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: postUpdate }
-        public: false
 
     cache_time_keeper.listener.console:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console
         arguments: [ @cache_time_keeper ]
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: onTerminate }
-        public: false
