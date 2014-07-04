@@ -75,7 +75,7 @@ Remove value:
 $this->get('cache_time_keeper')->remove('foo');
 ```
 
-Use in controllers
+Use in controllers:
 
 ```php
 namespace Acme\Bundle\DemoBundle\Controller;
