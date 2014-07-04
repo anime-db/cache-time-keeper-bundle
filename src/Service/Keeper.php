@@ -79,14 +79,27 @@ class Keeper
     }
 
     /**
+     * Remove time for key
+     *
+     * @param string $key
+     *
+     * @return boolean
+     */
+    public function remove($key)
+    {
+        return $this->driver->remove($key);
+    }
+
+    /**
      * Get a list of keys or dates and chooses the max date
      *
-     * @param array $params
+     * @param mixed $params
      *
      * @return \DateTime
      */
-    public function getMax(array $params = [])
+    public function getMax($params = [])
     {
+        $params = (array)$params;
         // always check the date of the last update of the project
         if (!in_array(self::LAST_UPDATE_KEY, $params)) {
             $params[] = self::LAST_UPDATE_KEY;

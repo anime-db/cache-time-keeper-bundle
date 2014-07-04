@@ -38,6 +38,15 @@ interface Driver
     public function set($key, \DateTime $time);
 
     /**
+     * Remove time for key
+     *
+     * @param string $key
+     *
+     * @return boolean
+     */
+    public function remove($key);
+
+    /**
      * Get a list of keys or dates and chooses the max date
      *
      * @param array $params
