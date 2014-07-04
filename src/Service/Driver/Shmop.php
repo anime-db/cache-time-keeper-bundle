@@ -64,8 +64,7 @@ class Shmop extends Base
     public function remove($key)
     {
         $sh = new BlockShmop(self::getIdBykey($key), 10);
-        $sh->delete();
-        return true;
+        return $sh->delete();
     }
 
     /**

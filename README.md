@@ -17,7 +17,7 @@ _**Warning:** library tracks only changing patterns in general, not each one sep
 
 ### Step 1: Download the CacheTimeKeeperBundle
 
-Add the following to the "require" section of your composer.json file:
+Add the following to the `require` section of your composer.json file:
 
 ```
 "anime-db/cache-time-keeper-bundle": ">=1.0"
