@@ -69,6 +69,12 @@ Getting the oldest date for a set of keys, taking into account the date of the c
 $this->get('cache_time_keeper')->getMax('foo');
 ```
 
+Remove value:
+
+```php
+$this->get('cache_time_keeper')->remove('foo');
+```
+
 Use in controllers
 
 ```php
