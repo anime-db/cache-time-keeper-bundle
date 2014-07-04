@@ -124,6 +124,61 @@ class MultiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test remove time
+     */
+    public function testRemove()
+    {
+        $this->fast_mock
+            ->expects($this->once())
+            ->method('remove')
+            ->with('foo')
+            ->will($this->returnValue(true));
+        $this->slow_mock
+            ->expects($this->once())
+            ->method('remove')
+            ->with('foo')
+            ->will($this->returnValue(true));
+
+        $this->assertTrue($this->getDriver()->remove('foo'));
+    }
+
+    /**
+     * Test remove the time by fast driver is failed
+     */
+    public function testRemoveFromFastFail()
+    {
+        $this->fast_mock
+            ->expects($this->once())
+            ->method('remove')
+            ->with('foo')
+            ->will($this->returnValue(false));
+        $this->slow_mock
+            ->expects($this->never())
+            ->method('remove');
+
+        $this->assertFalse($this->getDriver()->remove('foo'));
+    }
+
+    /**
+     * Test remove the time by slow driver is failed
+     */
+    public function testRemoveFromSlowFail()
+    {
+        $this->fast_mock
+            ->expects($this->once())
+            ->method('remove')
+            ->with('foo')
+            ->will($this->returnValue(true));
+        $this->slow_mock
+            ->expects($this->once())
+            ->method('remove')
+            ->with('foo')
+            ->will($this->returnValue(false));
+
+        $this->assertFalse($this->getDriver()->remove('foo'));
+    }
+
+    /**
      * Get driver
      *
      * @return \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Multi
