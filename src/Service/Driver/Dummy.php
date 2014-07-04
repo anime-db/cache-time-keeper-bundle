@@ -55,4 +55,20 @@ class Dummy extends Base
         $this->list[$key] = clone $time;
         return true;
     }
+
+    /**
+     * Remove time for key
+     *
+     * @param string $key
+     *
+     * @return boolean
+     */
+    public function remove($key)
+    {
+        if (isset($this->list[$key])) {
+            unset($this->list[$key]);
+            return true;
+        }
+        return false;
+    }
 }

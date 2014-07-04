@@ -82,4 +82,19 @@ class Multi extends Base
         }
         return false;
     }
+
+    /**
+     * Remove time for key
+     *
+     * @param string $key
+     *
+     * @return boolean
+     */
+    public function remove($key)
+    {
+        if ($this->fast->remove($key)) {
+            return $this->slow->remove($key);
+        }
+        return false;
+    }
 }

@@ -79,6 +79,22 @@ class File extends Base
     }
 
     /**
+     * Remove time for key
+     *
+     * @param string $key
+     *
+     * @return boolean
+     */
+    public function remove($key)
+    {
+        $file = $this->getFilename($key);
+        if (file_exists($file)) {
+            return unlink($file);
+        }
+        return false;
+    }
+
+    /**
      * Get filename from key
      *
      * @param string $key

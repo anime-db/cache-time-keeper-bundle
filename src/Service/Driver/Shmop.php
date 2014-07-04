@@ -55,6 +55,20 @@ class Shmop extends Base
     }
 
     /**
+     * Remove time for key
+     *
+     * @param string $key
+     *
+     * @return boolean
+     */
+    public function remove($key)
+    {
+        $sh = new BlockShmop(self::getIdBykey($key), 10);
+        $sh->delete();
+        return true;
+    }
+
+    /**
      * Get id
      *
      * @param string $key
