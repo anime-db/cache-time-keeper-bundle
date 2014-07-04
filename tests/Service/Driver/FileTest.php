@@ -57,6 +57,18 @@ class FileTest extends DriverTest
     }
 
     /**
+     * Test make dir for story cache if not exists
+     */
+    public function testMakeDir()
+    {
+        $obj = new File($this->dir.'test/');
+        $this->assertTrue($obj->set('foo', $this->time));
+        $this->assertTrue(is_dir($this->dir.'test/'));
+        $this->assertTrue($obj->remove('foo'));
+        rmdir($this->dir.'test/');
+    }
+
+    /**
      * (non-PHPdoc)
      * @see \AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service\DriverTest::getDriver()
      */
