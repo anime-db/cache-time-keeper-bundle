@@ -87,6 +87,25 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test remove time
+     */
+    public function testRemove()
+    {
+        $driver = $this->getDriver();
+        $driver->set('foo', $this->time);
+        $this->assertTrue($driver->remove('foo'));
+        $this->assertEmpty($driver->get('foo'));
+    }
+
+    /**
+     * Test remove time fail
+     */
+    public function testRemoveFail()
+    {
+        $this->assertFalse($this->getDriver()->remove('foo'));
+    }
+
+    /**
      * Test get max
      */
     public function testGetMax()

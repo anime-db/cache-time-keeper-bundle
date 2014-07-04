@@ -33,6 +33,14 @@ class ShmopTest extends DriverTest
     }
 
     /**
+     * Test remove time fail
+     */
+    public function testRemoveFail()
+    {
+        // empty memory block can always remove
+    }
+
+    /**
      * (non-PHPdoc)
      * @see \AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service\DriverTest::getDriver()
      */
