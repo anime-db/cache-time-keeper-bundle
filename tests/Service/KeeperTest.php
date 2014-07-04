@@ -114,6 +114,36 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test remove time
+     */
+    public function testRemove()
+    {
+        $this->driver_mock
+            ->expects($this->once())
+            ->method('remove')
+            ->with('foo')
+            ->will($this->returnValue(true));
+
+        $obj = new Keeper($this->driver_mock);
+        $this->assertTrue($obj->remove('foo'));
+    }
+
+    /**
+     * Test remove time fail
+     */
+    public function testRemoveFail()
+    {
+        $this->driver_mock
+            ->expects($this->once())
+            ->method('remove')
+            ->with('foo')
+            ->will($this->returnValue(false));
+
+        $obj = new Keeper($this->driver_mock);
+        $this->assertFalse($obj->remove('foo'));
+    }
+
+    /**
      * Test get max
      */
     public function testGetMax()
