@@ -119,12 +119,13 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     public function testGetMax()
     {
         $this->driver_mock
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('getMax')
             ->with(['foo', Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue($this->time));
 
         $obj = new Keeper($this->driver_mock);
+        $this->assertEquals($this->time, $obj->getMax('foo'));
         $this->assertEquals($this->time, $obj->getMax(['foo']));
         $this->assertEquals($this->time, $obj->getMax(['foo', Keeper::LAST_UPDATE_KEY]));
     }
