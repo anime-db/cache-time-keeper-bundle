@@ -5,7 +5,7 @@
     "description": "Cache time keeper",
     "keywords": ["php", "cache", "shmop"],
     "homepage": "http://github.com/anime-db/cache-time-keeper-bundle",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "autoload": {
         "psr-4": {
             "AnimeDb\\Bundle\\CacheTimeKeeperBundle\\": "src/"
@@ -18,7 +18,9 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "anime-db/shmop": ">=1.0",
+        "anime-db/shmop": ">=1.0"
+    },
+    "require-dev": {
         "symfony/dependency-injection": "2.3.*",
         "symfony/config": "2.6.*",
         "symfony/http-kernel": "2.6.*",
