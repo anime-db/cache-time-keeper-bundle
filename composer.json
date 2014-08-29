@@ -16,15 +16,18 @@
         }
     },
     "require": {
-        "php": ">=5.4.0",
-        "anime-db/shmop": ">=1.0"
+        "php": ">=5.4.0"
     },
     "require-dev": {
         "symfony/dependency-injection": "2.3.*",
         "symfony/config": "2.6.*",
         "symfony/http-kernel": "2.6.*",
         "symfony/console": "2.6.*",
-        "doctrine/orm": ">=2.2.3,<2.4-dev"
+        "doctrine/orm": ">=2.2.3,<2.4-dev",
+        "anime-db/shmop": "1.0.*"
+    },
+    "suggest": {
+        "anime-db/shmop": "Allows use a shmop cache driver"
     },
     "minimum-stability": "dev"
 }
