@@ -3,8 +3,9 @@
     "license": "MIT",
     "type": "library",
     "description": "Cache time keeper",
+    "keywords": ["php", "cache", "shmop"],
     "homepage": "http://github.com/anime-db/cache-time-keeper-bundle",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "autoload": {
         "psr-4": {
             "AnimeDb\\Bundle\\CacheTimeKeeperBundle\\": "src/"

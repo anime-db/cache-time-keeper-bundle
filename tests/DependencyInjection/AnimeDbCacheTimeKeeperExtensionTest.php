@@ -15,7 +15,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\DependencyInjection\AnimeDbCacheTimeKee
 /**
  * Test DependencyInjection
  *
- * @package AnimeDb\Bundle\AniDbBrowserBundle\Tests\DependencyInjection
+ * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\DependencyInjection
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
 class AnimeDbCacheTimeKeeperExtensionTest extends \PHPUnit_Framework_TestCase
