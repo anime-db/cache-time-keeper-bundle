@@ -22,13 +22,20 @@ use AnimeDb\Shmop\FixedBlock as BlockShmop;
 class ShmopTest extends DriverTest
 {
     /**
+     * Cache key salt
+     *
+     * @var string
+     */
+    protected $salt = 'salt';
+
+    /**
      * (non-PHPdoc)
      * @see PHPUnit_Framework_TestCase::tearDown()
      */
     protected function setUp()
     {
         parent::setUp();
-        $sh = new BlockShmop(Shmop::getIdBykey('foo'), 3);
+        $sh = new BlockShmop($this->getDriver()->getIdBykey('foo'), 3);
         $sh->delete();
     }
 
@@ -46,6 +53,6 @@ class ShmopTest extends DriverTest
      */
     protected function getDriver()
     {
-        return new Shmop();
+        return new Shmop($this->salt);
     }
 }

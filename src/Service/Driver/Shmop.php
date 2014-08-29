@@ -22,6 +22,29 @@ use AnimeDb\Shmop\FixedBlock as BlockShmop;
 class Shmop extends Base
 {
     /**
+     * Cache key salt
+     *
+     * @var string
+     */
+    protected $salt;
+
+    /**
+     * Construct
+     *
+     * @param string $salt
+     */
+    public function __construct($salt)
+    {
+        // can't test it
+        // @codeCoverageIgnoreStart
+        if (!extension_loaded('shmop')) {
+            throw new \RuntimeException('Extension "shmop" is not loaded');
+        }
+        // @codeCoverageIgnoreEnd
+        $this->salt = $salt;
+    }
+
+    /**
      * Get time for key
      *
      * @param string $key
@@ -30,7 +53,7 @@ class Shmop extends Base
      */
     public function get($key)
     {
-        $sh = new BlockShmop(self::getIdBykey($key), 10);
+        $sh = new BlockShmop($this->getIdBykey($key), 10);
         if ($time = $sh->read()) {
             return new \DateTime(date('Y-m-d H:i:s', $time));
         }
@@ -47,7 +70,7 @@ class Shmop extends Base
      */
     public function set($key, \DateTime $time)
     {
-        $sh = new BlockShmop(self::getIdBykey($key), 10);
+        $sh = new BlockShmop($this->getIdBykey($key), 10);
         if (!($old_time = $sh->read()) || $old_time < $time->getTimestamp()) {
             $sh->write($time->getTimestamp());
         }
@@ -63,7 +86,7 @@ class Shmop extends Base
      */
     public function remove($key)
     {
-        $sh = new BlockShmop(self::getIdBykey($key), 10);
+        $sh = new BlockShmop($this->getIdBykey($key), 10);
         return $sh->delete();
     }
 
@@ -74,8 +97,8 @@ class Shmop extends Base
      *
      * @return integer
      */
-    public static function getIdBykey($key)
+    public function getIdBykey($key)
     {
-        return (int)sprintf('%u', crc32($key));
+        return (int)sprintf('%u', crc32($key.$this->salt));
     }
 }
