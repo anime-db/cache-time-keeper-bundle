@@ -10,6 +10,7 @@ services:
 
     cache_time_keeper.driver.shmop:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop
+        arguments: [ %cache_time_keeper.salt% ]
         public: false
 
     cache_time_keeper.driver.multi:
