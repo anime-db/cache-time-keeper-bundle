@@ -41,7 +41,7 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->time = new \DateTime();
-        $this->driver_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver');
+        $this->driver_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
     }
 
     /**

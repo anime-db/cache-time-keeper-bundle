@@ -10,7 +10,7 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
 
 /**
  * Base driver
@@ -18,7 +18,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-abstract class Base implements Driver
+abstract class Base implements DriverInterface
 {
     /**
      * Get a list of keys or dates and chooses the max date

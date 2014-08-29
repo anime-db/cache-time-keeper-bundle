@@ -10,7 +10,7 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
 
 /**
  * Keeper
@@ -30,16 +30,16 @@ class Keeper
     /**
      * Driver
      *
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
+     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface
      */
     protected $driver;
 
     /**
      * Construct
      *
-     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver $driver
+     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface $driver
      */
-    public function __construct(Driver $driver)
+    public function __construct(DriverInterface $driver)
     {
         $this->driver = $driver;
     }
