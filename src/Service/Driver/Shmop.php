@@ -35,6 +35,12 @@ class Shmop extends Base
      */
     public function __construct($salt)
     {
+        // can't test it
+        // @codeCoverageIgnoreStart
+        if (!extension_loaded('shmop')) {
+            throw new \RuntimeException('Extension "shmop" is not loaded');
+        }
+        // @codeCoverageIgnoreEnd
         $this->salt = $salt;
     }
 
