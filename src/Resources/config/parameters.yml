@@ -1,6 +1,6 @@
 parameters:
     cache_time_keeper.salt: %secret%
-    cache_time_keeper.driver.dir: %kernel.cache_dir%/cache-time-keeper/
+    cache_time_keeper.dir: %kernel.cache_dir%/cache-time-keeper/
     cache_time_keeper.driver: cache_time_keeper.driver.file
     cache_time_keeper.driver.multi.fast: cache_time_keeper.driver.shmop
     cache_time_keeper.driver.multi.slow: cache_time_keeper.driver.file

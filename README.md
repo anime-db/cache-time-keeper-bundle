@@ -11,7 +11,7 @@ The library is intended for quick get a date change entities or entire project, 
 
 Library tracks changes in entities and stores date modified.
 
-_**Warning:** library tracks only changing patterns in general, not each one separately._
+_**Notice:** library tracks only changing patterns in general, not each one separately._
 
 ## Installation
 
@@ -46,7 +46,7 @@ public function registerBundles()
 Getting a last modified date of the project:
 
 ```php
-$this->get('cache_time_keeper')->getMax();
+$date = $this->get('cache_time_keeper')->getMax();
 ```
 
 or
@@ -54,7 +54,7 @@ or
 ```php
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 
-$this->get('cache_time_keeper')->get(Keeper::LAST_UPDATE_KEY);
+$date = $this->get('cache_time_keeper')->get(Keeper::LAST_UPDATE_KEY);
 ```
 
 Adding a new value:
@@ -66,7 +66,7 @@ $this->get('cache_time_keeper')->set('foo', new \DateTime());
 Getting the oldest date for a set of keys, taking into account the date of the change project:
 
 ```php
-$this->get('cache_time_keeper')->getMax('foo');
+$date = $this->get('cache_time_keeper')->getMax('foo');
 ```
 
 Remove value:
@@ -115,6 +115,72 @@ class HomeController extends Controller
     }
 }
 ```
+
+You can use a simplified method of configuring a response.
+
+Getting the default  response object:
+
+```php
+$response = $this->get('cache_time_keeper')->getResponse();
+```
+
+Getting json response limited lifetime:
+
+```php
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+$response = $this->get('cache_time_keeper')->getResponse('foo', 3600, new JsonResponse());
+```
+
+Use in controllers:
+
+```php
+namespace Acme\Bundle\DemoBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class HomeController extends Controller
+{
+    public function indexAction(Request $request, $id)
+    {
+        // cache becomes invalid if changing at least one of the pages, the catalog or the updated project
+        $response = $this->get('cache_time_keeper')->getResponse(['AcmeDemoBundle:Page', 'AcmeDemoBundle:Catalog']);
+
+        // response was not modified for this request
+        if ($response->isNotModified($request)) {
+            return $response;
+        }
+
+        // get entities
+        $page = $this->getDoctrine()->getManager()->find('AcmeDemoBundle:Page', $id);
+        $catalogs = $this->getDoctrine()->getManager()->getRepository('AcmeDemoBundle:Catalog')->findAll();
+
+        return $this->render(
+            'AcmeDemoBundle:Home:index.html.twig',
+            [
+                'page' => $page,
+                'catalogs' => $catalogs
+            ],
+            $response
+        );
+    }
+}
+```
+
+## Drivers
+
+In the bundle there are several the data storage drivers.
+
+- **Dummy** - stores data in a temporary variable, within the current thread of execution program.
+- **File** - stores data in a file cache.
+    Directory for storing files can be overridden by changing the parameter `cache_time_keeper.dir`.
+- **Shmop** - stores the data in memory using PHP extension [shmop](http://php.net/manual/en/book.shmop.php).
+    For work of this driver, you must install `anime-db/shmop`.
+- **Multi** - driver is a wrapper for multiple drivers.
+    Takes the driver with quick access to the data (stored in memory) and slow (stored on the hard drive), and receives data on the possibility of fast drivers and if not luck reads data from slow.
+    To change the drivers of fast and slow access to override the `cache_time_keeper.driver.multi.fast` and `cache_time_keeper.driver.multi.slow` respectively.
 
 ## License
 
