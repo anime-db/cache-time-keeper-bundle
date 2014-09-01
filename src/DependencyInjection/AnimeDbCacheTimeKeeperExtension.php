@@ -1,4 +1,12 @@
 <?php
+/**
+ * AnimeDb package
+ *
+ * @package   AnimeDb
+ * @author    Peter Gribanov <info@peter-gribanov.ru>
+ * @copyright Copyright (c) 2014, Peter Gribanov
+ * @license   http://opensource.org/licenses/MIT
+ */
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\DependencyInjection;
 
@@ -8,14 +16,16 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * DependencyInjection
  *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
+ * @package AnimeDb\Bundle\CacheTimeKeeperBundle\DependencyInjection
+ * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
 class AnimeDbCacheTimeKeeperExtension extends Extension
 {
     /**
-     * {@inheritDoc}
+     * (non-PHPdoc)
+     * @see \Symfony\Component\DependencyInjection\Extension\ExtensionInterface::load()
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -26,6 +36,14 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
         $container->setAlias(
             'cache_time_keeper.driver',
             $container->getParameter('cache_time_keeper.driver')
+        );
+        $container->setAlias(
+            'cache_time_keeper.driver.multi.fast',
+            $container->getParameter('cache_time_keeper.driver.multi.fast')
+        );
+        $container->setAlias(
+            'cache_time_keeper.driver.multi.slow',
+            $container->getParameter('cache_time_keeper.driver.multi.slow')
         );
     }
 }

@@ -8,15 +8,15 @@
  * @license   http://opensource.org/licenses/MIT
  */
 
-namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
+namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
 /**
  * Driver
  *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service
+ * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-interface Driver
+interface DriverInterface
 {
     /**
      * Get time for key

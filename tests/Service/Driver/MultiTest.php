@@ -48,8 +48,8 @@ class MultiTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->time = new \DateTime();
-        $this->fast_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver');
-        $this->slow_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver');
+        $this->fast_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
+        $this->slow_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
     }
 
     /**

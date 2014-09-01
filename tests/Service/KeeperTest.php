@@ -10,6 +10,7 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Test keeper
@@ -41,7 +42,7 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->time = new \DateTime();
-        $this->driver_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver');
+        $this->driver_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
     }
 
     /**
@@ -158,5 +159,63 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->time, $obj->getMax('foo'));
         $this->assertEquals($this->time, $obj->getMax(['foo']));
         $this->assertEquals($this->time, $obj->getMax(['foo', Keeper::LAST_UPDATE_KEY]));
+    }
+
+    /**
+     * Test get response
+     */
+    public function testGetResponse()
+    {
+        $this->driver_mock
+            ->expects($this->once())
+            ->method('getMax')
+            ->with(['foo', Keeper::LAST_UPDATE_KEY])
+            ->will($this->returnValue($this->time));
+        $lifetime = 3600;
+        $response = $this->getMock('\Symfony\Component\HttpFoundation\Response');
+        $response
+            ->expects($this->once())
+            ->method('setPublic')
+            ->will($this->returnSelf());
+        $response
+            ->expects($this->once())
+            ->method('setMaxAge')
+            ->with($lifetime)
+            ->will($this->returnSelf());
+        $response
+            ->expects($this->once())
+            ->method('setSharedMaxAge')
+            ->with($lifetime)
+            ->will($this->returnSelf());
+        $response
+            ->expects($this->once())
+            ->method('setExpires')
+            ->with((new \DateTime())->modify('+'.$lifetime.' seconds'))
+            ->will($this->returnSelf());
+        $response
+            ->expects($this->once())
+            ->method('setLastModified')
+            ->with($this->time)
+            ->will($this->returnSelf());
+
+        $obj = new Keeper($this->driver_mock);
+        $this->assertEquals($response, $obj->getResponse(['foo'], $lifetime, $response));
+    }
+
+    /**
+     * Test get response
+     */
+    public function testGetResponseEmpty()
+    {
+        $this->driver_mock
+            ->expects($this->once())
+            ->method('getMax')
+            ->with([Keeper::LAST_UPDATE_KEY])
+            ->will($this->returnValue($this->time));
+        $response = new Response();
+        $response->setPublic()->setLastModified($this->time);
+
+        $obj = new Keeper($this->driver_mock);
+        $this->assertEquals($response, $obj->getResponse());
     }
 }

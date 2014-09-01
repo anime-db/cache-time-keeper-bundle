@@ -11,7 +11,7 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Base;
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
 
 /**
  * Multi drivers
@@ -29,24 +29,24 @@ class Multi extends Base
     /**
      * Fast driver
      * 
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
+     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface
      */
     protected $fast;
 
     /**
      * Slow driver
      *
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
+     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface
      */
     protected $slow;
 
     /**
      * Construct
      *
-     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver $fast
-     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver $slow
+     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface $fast
+     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface $slow
      */
-    public function __construct(Driver $fast, Driver $slow)
+    public function __construct(DriverInterface $fast, DriverInterface $slow)
     {
         $this->fast = $fast;
         $this->slow = $slow;

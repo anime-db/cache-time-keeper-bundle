@@ -10,7 +10,8 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Keeper
@@ -30,16 +31,16 @@ class Keeper
     /**
      * Driver
      *
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
+     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface
      */
     protected $driver;
 
     /**
      * Construct
      *
-     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver $driver
+     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface $driver
      */
-    public function __construct(Driver $driver)
+    public function __construct(DriverInterface $driver)
     {
         $this->driver = $driver;
     }
@@ -105,5 +106,34 @@ class Keeper
             $params[] = self::LAST_UPDATE_KEY;
         }
         return $this->driver->getMax($params);
+    }
+
+    /**
+     * Get cache response
+     *
+     * Set $lifetime as < 0 for not set max-age
+     *
+     * @param mixed $params
+     * @param integer $lifetime
+     * @param \Symfony\Component\HttpFoundation\Response|null $response
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getResponse($params = [], $lifetime = -1, Response $response = null)
+    {
+        if (!$response) {
+            $response = new Response();
+        }
+
+        if ($lifetime > 0) {
+            $response
+                ->setMaxAge($lifetime)
+                ->setSharedMaxAge($lifetime)
+                ->setExpires((new \DateTime())->modify('+'.$lifetime.' seconds'));
+        }
+
+        return $response
+            ->setPublic()
+            ->setLastModified($this->getMax($params));
     }
 }
