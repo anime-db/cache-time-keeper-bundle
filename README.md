@@ -169,6 +169,19 @@ class HomeController extends Controller
 }
 ```
 
+## Drivers
+
+In the bundle there are several the data storage drivers.
+
+- **Dummy** - stores data in a temporary variable, within the current thread of execution program.
+- **File** - stores data in a file cache.
+    Directory for storing files can be overridden by changing the parameter `cache_time_keeper.dir`.
+- **Shmop** - stores the data in memory using PHP extension [shmop](http://php.net/manual/en/book.shmop.php).
+    For work of this driver, you must install `anime-db/shmop`.
+- **Multi** - driver is a wrapper for multiple drivers.
+    Takes the driver with quick access to the data (stored in memory) and slow (stored on the hard drive), and receives data on the possibility of fast drivers and if not luck reads data from slow.
+    To change the drivers of fast and slow access to override the `cache_time_keeper.driver.multi.fast` and `cache_time_keeper.driver.multi.slow` respectively.
+
 ## License
 
 This bundle is under the [MIT license](http://opensource.org/licenses/MIT). See the complete license in the bundle: LICENSE
