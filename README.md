@@ -4,6 +4,7 @@
 [![Total Downloads](https://poser.pugx.org/anime-db/cache-time-keeper-bundle/downloads.png)](https://packagist.org/packages/anime-db/cache-time-keeper-bundle)
 [![License](https://poser.pugx.org/anime-db/cache-time-keeper-bundle/license.png)](https://packagist.org/packages/anime-db/cache-time-keeper-bundle)
 [![Code Coverage](https://scrutinizer-ci.com/g/anime-db/cache-time-keeper-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/anime-db/cache-time-keeper-bundle/?branch=master)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/5a0b2639-19e0-480c-a7f6-9978c5248a85/mini.png)](https://insight.sensiolabs.com/projects/5a0b2639-19e0-480c-a7f6-9978c5248a85)
 
 # Cache time keeper bundle
 
