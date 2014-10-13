@@ -145,20 +145,64 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get max
+     * Get max time by keys
+     *
+     * @return array
      */
-    public function testGetMax()
+    public function getMax()
+    {
+        return [
+            [null],
+            ['foo'],
+            [['foo']],
+            [['foo', Keeper::LAST_UPDATE_KEY]]
+        ];
+    }
+
+    /**
+     * Test get max
+     *
+     * @dataProvider getMax
+     *
+     * @param mixed $params
+     */
+    public function testGetMax($params)
     {
         $this->driver_mock
-            ->expects($this->exactly(3))
+            ->expects($this->once())
             ->method('getMax')
-            ->with(['foo', Keeper::LAST_UPDATE_KEY])
+            ->with($params ? ['foo', Keeper::LAST_UPDATE_KEY] : [Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue($this->time));
 
         $obj = new Keeper($this->driver_mock);
-        $this->assertEquals($this->time, $obj->getMax('foo'));
-        $this->assertEquals($this->time, $obj->getMax(['foo']));
-        $this->assertEquals($this->time, $obj->getMax(['foo', Keeper::LAST_UPDATE_KEY]));
+        $this->assertEquals($this->time, $params ? $obj->getMax($params) : $obj->getMax());
+    }
+
+    /**
+     * Test get max from empty list
+     *
+     * @dataProvider getMax
+     *
+     * @param mixed $params
+     */
+    public function testGetMaxEmptyList($params)
+    {
+        $that = $this;
+        $this->driver_mock
+            ->expects($this->once())
+            ->method('getMax')
+            ->with($params ? ['foo', Keeper::LAST_UPDATE_KEY] : [Keeper::LAST_UPDATE_KEY])
+            ->will($this->returnValue(null));
+        $this->driver_mock
+            ->expects($this->once())
+            ->method('set')
+            ->willReturnCallback(function ($key, $time) use ($that) {
+                $that->assertEquals(Keeper::LAST_UPDATE_KEY, $key);
+                $this->assertInstanceOf('\DateTime', $time);
+            });
+
+        $obj = new Keeper($this->driver_mock);
+        $this->assertInstanceOf('\DateTime', $params ? $obj->getMax($params) : $obj->getMax());
     }
 
     /**
