@@ -105,7 +105,11 @@ class Keeper
         if (!in_array(self::LAST_UPDATE_KEY, $params)) {
             $params[] = self::LAST_UPDATE_KEY;
         }
-        return $this->driver->getMax($params);
+        if (!($time = $this->driver->getMax($params))) {
+            $time = new \DateTime();
+            $this->driver->set(self::LAST_UPDATE_KEY, $time);
+        }
+        return $time;
     }
 
     /**
