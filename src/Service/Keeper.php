@@ -56,8 +56,7 @@ class Keeper
     {
         if (!($time = $this->driver->get($key))) {
             if ($key == self::LAST_UPDATE_KEY) {
-                $time = new \DateTime();
-                $this->driver->set($key, $time);
+                $time = $this->reset();
             } else {
                 $time = $this->get(self::LAST_UPDATE_KEY);
             }
@@ -106,8 +105,7 @@ class Keeper
             $params[] = self::LAST_UPDATE_KEY;
         }
         if (!($time = $this->driver->getMax($params))) {
-            $time = new \DateTime();
-            $this->driver->set(self::LAST_UPDATE_KEY, $time);
+            $time = $this->reset();
         }
         return $time;
     }
@@ -139,5 +137,17 @@ class Keeper
         return $response
             ->setPublic()
             ->setLastModified($this->getMax($params));
+    }
+
+    /**
+     * Reset last update date
+     *
+     * @return \DateTime
+     */
+    private function reset()
+    {
+        $time = new \DateTime();
+        $this->driver->set(self::LAST_UPDATE_KEY, $time);
+        return $time;
     }
 }
