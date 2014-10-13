@@ -1,10 +1,9 @@
 [![Latest Stable Version](https://poser.pugx.org/anime-db/cache-time-keeper-bundle/v/stable.png)](https://packagist.org/packages/anime-db/cache-time-keeper-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/anime-db/cache-time-keeper-bundle/v/unstable.png)](https://packagist.org/packages/anime-db/cache-time-keeper-bundle)
 [![Build Status](https://travis-ci.org/anime-db/cache-time-keeper-bundle.svg?branch=master)](https://travis-ci.org/anime-db/cache-time-keeper-bundle)
-[![Total Downloads](https://poser.pugx.org/anime-db/cache-time-keeper-bundle/downloads.png)](https://packagist.org/packages/anime-db/cache-time-keeper-bundle)
-[![License](https://poser.pugx.org/anime-db/cache-time-keeper-bundle/license.png)](https://packagist.org/packages/anime-db/cache-time-keeper-bundle)
 [![Code Coverage](https://scrutinizer-ci.com/g/anime-db/cache-time-keeper-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/anime-db/cache-time-keeper-bundle/?branch=master)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/5a0b2639-19e0-480c-a7f6-9978c5248a85/mini.png)](https://insight.sensiolabs.com/projects/5a0b2639-19e0-480c-a7f6-9978c5248a85)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/4fa810e4-9788-470b-914c-8c09ba0d0be2/mini.png)](https://insight.sensiolabs.com/projects/4fa810e4-9788-470b-914c-8c09ba0d0be2)
+[![License](https://poser.pugx.org/anime-db/cache-time-keeper-bundle/license.png)](https://packagist.org/packages/anime-db/cache-time-keeper-bundle)
 
 # Cache time keeper bundle
 
@@ -21,7 +20,7 @@ _**Notice:** library tracks only changing patterns in general, not each one sepa
 Add the following to the `require` section of your composer.json file:
 
 ```
-"anime-db/cache-time-keeper-bundle": ">=1.0"
+"anime-db/cache-time-keeper-bundle": "1.0.*"
 ```
 
 And update your dependencies
@@ -173,14 +172,16 @@ class HomeController extends Controller
 
 In the bundle there are several the data storage drivers.
 
-- **Dummy** - stores data in a temporary variable, within the current thread of execution program.
-- **File** - stores data in a file cache.
+- **Dummy** (`cache_time_keeper.driver.dummy`) - stores data in a temporary variable, within the current thread of execution program.
+- **File** (`cache_time_keeper.driver.file`) - stores data in a file cache.
     Directory for storing files can be overridden by changing the parameter `cache_time_keeper.dir`.
-- **Shmop** - stores the data in memory using PHP extension [shmop](http://php.net/manual/en/book.shmop.php).
+- **Shmop** (`cache_time_keeper.driver.shmop`) - stores the data in memory using PHP extension [shmop](http://php.net/manual/en/book.shmop.php).
     For work of this driver, you must install `anime-db/shmop`.
-- **Multi** - driver is a wrapper for multiple drivers.
+- **Multi** (`cache_time_keeper.driver.multi`) - driver is a wrapper for multiple drivers.
     Takes the driver with quick access to the data (stored in memory) and slow (stored on the hard drive), and receives data on the possibility of fast drivers and if not luck reads data from slow.
     To change the drivers of fast and slow access to override the `cache_time_keeper.driver.multi.fast` and `cache_time_keeper.driver.multi.slow` respectively.
+
+By default used the driver **File**, to change the driver override the parameter `cache_time_keeper.driver`.
 
 ## License
 
