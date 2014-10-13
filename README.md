@@ -20,7 +20,7 @@ _**Notice:** library tracks only changing patterns in general, not each one sepa
 Add the following to the `require` section of your composer.json file:
 
 ```
-"anime-db/cache-time-keeper-bundle": ">=1.0"
+"anime-db/cache-time-keeper-bundle": "1.0.*"
 ```
 
 And update your dependencies
