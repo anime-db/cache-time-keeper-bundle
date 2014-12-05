@@ -53,38 +53,35 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     protected function getEventMock()
     {
-        $meta_mock = $this
-            ->getMockBuilder('\Doctrine\ORM\Mapping\ClassMetadata')
+        $meta = $this->getMockBuilder('\Doctrine\ORM\Mapping\ClassMetadata')
             ->disableOriginalConstructor()
             ->getMock();
-        $meta_mock
+        $meta
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('foo'));
 
-        $em_mock = $this
-            ->getMockBuilder('\Doctrine\ORM\EntityManager')
+        $em = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $em_mock
+        $em
             ->expects($this->once())
             ->method('getClassMetadata')
             ->with('stdClass')
-            ->will($this->returnValue($meta_mock));
+            ->willReturn($meta);
 
-        $args_mock = $this
-            ->getMockBuilder('\Doctrine\ORM\Event\LifecycleEventArgs')
+        $args = $this->getMockBuilder('\Doctrine\ORM\Event\LifecycleEventArgs')
             ->disableOriginalConstructor()
             ->getMock();
-        $args_mock
+        $args
             ->expects($this->once())
             ->method('getEntityManager')
-            ->will($this->returnValue($em_mock));
-        $args_mock
+            ->willReturn($em);
+        $args
             ->expects($this->once())
             ->method('getEntity')
-            ->will($this->returnValue(new \stdClass()));
-        return $args_mock;
+            ->willReturn(new \stdClass());
+        return $args;
     }
 
     /**
@@ -94,15 +91,14 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     protected function getKeeper()
     {
-        $keeper_mock = $this
-            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
+        $keeper = $this->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
             ->disableOriginalConstructor()
             ->getMock();
-        $keeper_mock
+        $keeper
             ->expects($this->once())
             ->method('set')
             ->with('foo', $this->isInstanceOf('DateTime'));
 
-        return $keeper_mock;
+        return $keeper;
     }
 }
