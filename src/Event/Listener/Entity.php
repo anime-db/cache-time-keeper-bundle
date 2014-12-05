@@ -77,18 +77,21 @@ class Entity
      */
     protected function getKeyFromEntity(LifecycleEventArgs $args)
     {
-        $parts = explode('\\', get_class($args->getEntity()));
-        $entity = array_pop($parts);
-        $namespace = implode('\\', $parts);
+        $class = get_class($args->getEntity());
+        $parts = explode('\\', $class);
+        if (count($parts) > 1) {
+            $entity = array_pop($parts);
+            $namespace = implode('\\', $parts);
 
-        $namespaces = $args->getEntityManager()->getConfiguration()->getEntityNamespaces();
-        foreach ($namespaces as $ns_alias => $ns) {
-            if ($ns == $namespace) {
-                return $ns_alias.':'.$entity;
+            $namespaces = $args->getEntityManager()->getConfiguration()->getEntityNamespaces();
+            foreach ($namespaces as $ns_alias => $ns) {
+                if ($ns == $namespace) {
+                    return $ns_alias.':'.$entity;
+                }
             }
         }
 
         // namespace is not registered
-        return $namespace.'\\'.$entity;
+        return $class;
     }
 }
