@@ -10,6 +10,7 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Demo;
 
 /**
  * Test entity event listener
@@ -20,12 +21,27 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity;
 class EntityTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Listener
+     *
+     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity
+     */
+    protected $listener;
+
+    /**
+     * (non-PHPdoc)
+     * @see PHPUnit_Framework_TestCase::setUp()
+     */
+    protected function setUp()
+    {
+        $this->listener = new Entity($this->getKeeper());
+    }
+
+    /**
      * Test post persist
      */
     public function testPostPersist()
     {
-        $obj = new Entity($this->getKeeper());
-        $obj->postPersist($this->getEventMock());
+        $this->listener->postPersist($this->getEventMock());
     }
 
     /**
@@ -33,8 +49,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testPostRemove()
     {
-        $obj = new Entity($this->getKeeper());
-        $obj->postRemove($this->getEventMock());
+        $this->listener->postRemove($this->getEventMock());
     }
 
     /**
@@ -42,8 +57,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     public function testPostUpdate()
     {
-        $obj = new Entity($this->getKeeper());
-        $obj->postUpdate($this->getEventMock());
+        $this->listener->postUpdate($this->getEventMock());
     }
 
     /**
@@ -53,22 +67,24 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     protected function getEventMock()
     {
-        $meta = $this->getMockBuilder('\Doctrine\ORM\Mapping\ClassMetadata')
+        $conf = $this->getMockBuilder('\Doctrine\ORM\Configuration')
             ->disableOriginalConstructor()
             ->getMock();
-        $meta
+        $conf
             ->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('foo'));
+            ->method('getEntityNamespaces')
+            ->willReturn([
+                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
+                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity'
+            ]);
 
         $em = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
         $em
             ->expects($this->once())
-            ->method('getClassMetadata')
-            ->with('stdClass')
-            ->willReturn($meta);
+            ->method('getConfiguration')
+            ->willReturn($conf);
 
         $args = $this->getMockBuilder('\Doctrine\ORM\Event\LifecycleEventArgs')
             ->disableOriginalConstructor()
@@ -80,7 +96,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
         $args
             ->expects($this->once())
             ->method('getEntity')
-            ->willReturn(new \stdClass());
+            ->willReturn(new Demo());
         return $args;
     }
 
@@ -97,7 +113,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
         $keeper
             ->expects($this->once())
             ->method('set')
-            ->with('foo', $this->isInstanceOf('DateTime'));
+            ->with('AnimeDbCacheTimeKeeperBundle:Demo', $this->isInstanceOf('DateTime'));
 
         return $keeper;
     }
