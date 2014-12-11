@@ -77,6 +77,15 @@ class Entity
      */
     protected function getKeyFromEntity(LifecycleEventArgs $args)
     {
-        return $args->getEntityManager()->getClassMetadata(get_class($args->getEntity()))->getName();
+        $parts = explode('\\', get_class($args->getEntity()));
+        $entity = array_pop($parts);
+        $namespace = implode('\\', $parts);
+
+        $namespaces = $args->getEntityManager()->getConfiguration()->getEntityNamespaces();
+        foreach ($namespaces as $ns_alias => $ns) {
+            if ($ns == $namespace) {
+                return $ns_alias.':'.$entity;
+            }
+        }
     }
 }
