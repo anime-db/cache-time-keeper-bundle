@@ -5,7 +5,6 @@
     "description": "Cache time keeper",
     "keywords": ["php", "cache", "shmop"],
     "homepage": "http://github.com/anime-db/cache-time-keeper-bundle",
-    "version": "1.0.6",
     "autoload": {
         "psr-4": {
             "AnimeDb\\Bundle\\CacheTimeKeeperBundle\\": "src/"
