@@ -11,6 +11,7 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\DependencyInjection;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\DependencyInjection\AnimeDbCacheTimeKeeperExtension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Test DependencyInjection
@@ -20,12 +21,12 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\DependencyInjection\AnimeDbCacheTimeKee
  */
 class AnimeDbCacheTimeKeeperExtensionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Test load
-     */
     public function testLoad()
     {
+        /* @var $container ContainerBuilder */
+        $container = $this->getMock(ContainerBuilder::class);
+
         $di = new AnimeDbCacheTimeKeeperExtension();
-        $di->load([], $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder'));
+        $di->load([], $container);
     }
 }
