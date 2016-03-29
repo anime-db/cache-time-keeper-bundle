@@ -9,8 +9,8 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Demo;
 use Doctrine\ORM\Configuration;
@@ -47,17 +47,18 @@ class EntityTest extends TestCase
 
     protected function setUp()
     {
-        $this->keeper = $this->getMockObject(Keeper::class);
+        $this->keeper = $this->getMockObject('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper');
 
-        $this->conf = $this->getMockObject(Configuration::class);
+        $this->conf = $this->getMockObject('\Doctrine\ORM\Configuration');
 
-        $em = $this->getMockObject(EntityManager::class);
+        /* @var $em \PHPUnit_Framework_MockObject_MockObject|EntityManager */
+        $em = $this->getMockObject('\Doctrine\ORM\EntityManager');
         $em
             ->expects($this->once())
             ->method('getConfiguration')
             ->will($this->returnValue($this->conf));
 
-        $this->args = $this->getMockObject(LifecycleEventArgs::class);
+        $this->args = $this->getMockObject('\Doctrine\ORM\Event\LifecycleEventArgs');
         $this->args
             ->expects($this->once())
             ->method('getEntityManager')

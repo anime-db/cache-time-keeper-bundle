@@ -24,7 +24,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends \PHPUnit_Framework_TestCase
     public function testLoad()
     {
         /* @var $container ContainerBuilder */
-        $container = $this->getMock(ContainerBuilder::class);
+        $container = $this->getMock('\Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $di = new AnimeDbCacheTimeKeeperExtension();
         $di->load([], $container);

@@ -43,8 +43,8 @@ class MultiTest extends TestCase
 
     protected function setUp()
     {
-        $this->fast_driver = $this->getMock(DriverInterface::class);
-        $this->slow_driver = $this->getMock(DriverInterface::class);
+        $this->fast_driver = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
+        $this->slow_driver = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
 
         $this->time = new \DateTime();
         $this->driver = new Multi($this->fast_driver, $this->slow_driver);

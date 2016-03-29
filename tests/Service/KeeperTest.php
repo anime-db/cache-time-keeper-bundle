@@ -40,7 +40,7 @@ class KeeperTest extends TestCase
     protected function setUp()
     {
         $this->time = new \DateTime();
-        $this->driver = $this->getMock(DriverInterface::class);
+        $this->driver = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
 
         $this->keeper = new Keeper($this->driver);
     }
@@ -167,10 +167,10 @@ class KeeperTest extends TestCase
             ->method('set')
             ->will($this->returnCallback(function ($key, $time) use ($that) {
                 $that->assertEquals(Keeper::LAST_UPDATE_KEY, $key);
-                $this->assertInstanceOf(\DateTime::class, $time);
+                $this->assertInstanceOf('\DateTime', $time);
             }));
 
-        $this->assertInstanceOf(\DateTime::class, $params ? $this->keeper->getMax($params) : $this->keeper->getMax());
+        $this->assertInstanceOf('\DateTime', $params ? $this->keeper->getMax($params) : $this->keeper->getMax());
     }
 
     public function testGetResponse()
@@ -181,7 +181,7 @@ class KeeperTest extends TestCase
             ->with(['foo', Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue($this->time));
         $lifetime = 3600;
-        $response = $this->getMock(Response::class);
+        $response = $this->getMock('\Symfony\Component\HttpFoundation\Response');
         $response
             ->expects($this->once())
             ->method('setPublic')

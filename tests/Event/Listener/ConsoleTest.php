@@ -45,9 +45,9 @@ class ConsoleTest extends TestCase
 
     protected function setUp()
     {
-        $this->keeper = $this->getMockObject(Keeper::class);
-        $this->command = $this->getMockObject(Command::class);
-        $this->event = $this->getMockObject(ConsoleTerminateEvent::class);
+        $this->keeper = $this->getMockObject('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper');
+        $this->command = $this->getMockObject('\Symfony\Component\Console\Command\Command');
+        $this->event = $this->getMockObject('\Symfony\Component\Console\Event\ConsoleTerminateEvent');
 
         $this->event
             ->expects($this->once())
