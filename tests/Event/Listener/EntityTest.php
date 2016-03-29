@@ -36,6 +36,11 @@ class EntityTest extends TestCase
     protected $args;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Configuration
+     */
+    protected $conf;
+
+    /**
      * @var Entity
      */
     protected $listener;
@@ -43,25 +48,14 @@ class EntityTest extends TestCase
     protected function setUp()
     {
         $this->keeper = $this->getMockObject(Keeper::class);
-        $this->keeper
-            ->expects($this->once())
-            ->method('set')
-            ->with('AnimeDbCacheTimeKeeperBundle:Demo', $this->isInstanceOf('DateTime'));
 
-        $conf = $this->getMockObject(Configuration::class);
-        $conf
-            ->expects($this->once())
-            ->method('getEntityNamespaces')
-            ->will($this->returnValue([
-                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
-                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity'
-            ]));
+        $this->conf = $this->getMockObject(Configuration::class);
 
         $em = $this->getMockObject(EntityManager::class);
         $em
             ->expects($this->once())
             ->method('getConfiguration')
-            ->will($this->returnValue($conf));
+            ->will($this->returnValue($this->conf));
 
         $this->args = $this->getMockObject(LifecycleEventArgs::class);
         $this->args
@@ -76,18 +70,60 @@ class EntityTest extends TestCase
         $this->listener = new Entity($this->keeper);
     }
 
-    public function testPostPersist()
+    /**
+     * @return array
+     */
+    public function getMethods()
     {
-        $this->listener->postPersist($this->args);
+        return [
+            ['postPersist'],
+            ['postRemove'],
+            ['postUpdate']
+        ];
     }
 
-    public function testPostRemove()
+    /**
+     * @dataProvider getMethods
+     *
+     * @param string $method
+     */
+    public function testHandleEvent($method)
     {
-        $this->listener->postRemove($this->args);
+        $this->keeper
+            ->expects($this->once())
+            ->method('set')
+            ->with('AnimeDbCacheTimeKeeperBundle:Demo', $this->isInstanceOf('DateTime'));
+
+        $this->conf
+            ->expects($this->once())
+            ->method('getEntityNamespaces')
+            ->will($this->returnValue([
+                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
+                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity'
+            ]));
+
+        call_user_func([$this->listener, $method], $this->args);
     }
 
-    public function testPostUpdate()
+    /**
+     * @dataProvider getMethods
+     * @expectedException \RuntimeException
+     *
+     * @param string $method
+     */
+    public function testHandleEventFailed($method)
     {
-        $this->listener->postUpdate($this->args);
+        $this->keeper
+            ->expects($this->never())
+            ->method('set');
+
+        $this->conf
+            ->expects($this->once())
+            ->method('getEntityNamespaces')
+            ->will($this->returnValue([
+                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity'
+            ]));
+
+        call_user_func([$this->listener, $method], $this->args);
     }
 }

@@ -36,6 +36,7 @@ abstract class Base implements DriverInterface
                 $params[$key] = $this->get($value);
             }
         }
+
         return max($params);
     }
 }
