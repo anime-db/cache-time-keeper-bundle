@@ -11,6 +11,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Multi;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
 
 /**
  * Test multi driver
@@ -21,14 +22,19 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Multi;
 class MultiTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_Generator
+     * @var \PHPUnit_Framework_MockObject_MockObject|DriverInterface
      */
-    protected $fast_mock;
+    protected $fast_driver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Generator
+     * @var \PHPUnit_Framework_MockObject_MockObject|DriverInterface
      */
-    protected $slow_mock;
+    protected $slow_driver;
+
+    /**
+     * @var Multi
+     */
+    protected $driver;
 
     /**
      * @var \DateTime
@@ -37,84 +43,86 @@ class MultiTest extends TestCase
 
     protected function setUp()
     {
+        $this->fast_driver = $this->getMock(DriverInterface::class);
+        $this->slow_driver = $this->getMock(DriverInterface::class);
+
         $this->time = new \DateTime();
-        $this->fast_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
-        $this->slow_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
+        $this->driver = new Multi($this->fast_driver, $this->slow_driver);
     }
 
     public function testGetFast()
     {
-        $this->fast_mock
+        $this->fast_driver
             ->expects($this->once())
             ->method('get')
             ->with('foo')
             ->will($this->returnValue($this->time));
-        $this->slow_mock
+        $this->slow_driver
             ->expects($this->never())
             ->method('get');
 
-        $this->assertEquals($this->time, $this->getDriver()->get('foo'));
+        $this->assertEquals($this->time, $this->driver->get('foo'));
     }
 
     public function testGetSlow()
     {
-        $this->fast_mock
+        $this->fast_driver
             ->expects($this->once())
             ->method('get')
             ->with('foo')
             ->will($this->returnValue(null));
-        $this->slow_mock
+        $this->slow_driver
             ->expects($this->once())
             ->method('get')
             ->will($this->returnValue($this->time));
 
-        $this->assertEquals($this->time, $this->getDriver()->get('foo'));
+        $this->assertEquals($this->time, $this->driver->get('foo'));
     }
 
     public function testSet()
     {
-        $this->fast_mock
+        $this->fast_driver
             ->expects($this->once())
             ->method('set')
             ->with('foo', $this->time)
             ->will($this->returnValue(true));
-        $this->slow_mock
+        $this->slow_driver
             ->expects($this->once())
             ->method('set')
             ->with('foo', $this->time)
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->getDriver()->set('foo', $this->time));
+        $this->assertTrue($this->driver->set('foo', $this->time));
     }
 
     public function testSetFail()
     {
-        $this->fast_mock
+        $this->fast_driver
             ->expects($this->once())
             ->method('set')
             ->with('foo', $this->time)
             ->will($this->returnValue(false));
-        $this->slow_mock
+        $this->slow_driver
             ->expects($this->never())
             ->method('set');
 
-        $this->assertFalse($this->getDriver()->set('foo', $this->time));
+        $this->assertFalse($this->driver->set('foo', $this->time));
     }
 
     public function testRemove()
     {
-        $this->fast_mock
+        $this->fast_driver
             ->expects($this->once())
             ->method('remove')
             ->with('foo')
             ->will($this->returnValue(true));
-        $this->slow_mock
+        $this->slow_driver
             ->expects($this->once())
             ->method('remove')
             ->with('foo')
             ->will($this->returnValue(true));
 
-        $this->assertTrue($this->getDriver()->remove('foo'));
+        $this->assertTrue($this->driver->remove('foo'));
     }
 
     /**
@@ -122,16 +130,16 @@ class MultiTest extends TestCase
      */
     public function testRemoveFromFastFail()
     {
-        $this->fast_mock
+        $this->fast_driver
             ->expects($this->once())
             ->method('remove')
             ->with('foo')
             ->will($this->returnValue(false));
-        $this->slow_mock
+        $this->slow_driver
             ->expects($this->never())
             ->method('remove');
 
-        $this->assertFalse($this->getDriver()->remove('foo'));
+        $this->assertFalse($this->driver->remove('foo'));
     }
 
     /**
@@ -139,25 +147,17 @@ class MultiTest extends TestCase
      */
     public function testRemoveFromSlowFail()
     {
-        $this->fast_mock
+        $this->fast_driver
             ->expects($this->once())
             ->method('remove')
             ->with('foo')
             ->will($this->returnValue(true));
-        $this->slow_mock
+        $this->slow_driver
             ->expects($this->once())
             ->method('remove')
             ->with('foo')
             ->will($this->returnValue(false));
 
-        $this->assertFalse($this->getDriver()->remove('foo'));
-    }
-
-    /**
-     * @return Multi
-     */
-    protected function getDriver()
-    {
-        return new Multi($this->fast_mock, $this->slow_mock);
+        $this->assertFalse($this->driver->remove('foo'));
     }
 }
