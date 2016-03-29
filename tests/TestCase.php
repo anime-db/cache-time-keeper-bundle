@@ -21,7 +21,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    public function getMockClass($original_class_name)
+    public function getMockObject($original_class_name)
     {
         return $this
             ->getMockBuilder($original_class_name)
