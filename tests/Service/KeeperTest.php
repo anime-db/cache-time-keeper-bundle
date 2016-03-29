@@ -11,6 +11,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -22,100 +23,101 @@ use Symfony\Component\HttpFoundation\Response;
 class KeeperTest extends TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DriverInterface
+     */
+    protected $driver;
+
+    /**
+     * @var Keeper
+     */
+    protected $keeper;
+
+    /**
      * @var \DateTime
      */
     protected $time;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $driver_mock;
-
     protected function setUp()
     {
         $this->time = new \DateTime();
-        $this->driver_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
+        $this->driver = $this->getMock(DriverInterface::class);
+
+        $this->keeper = new Keeper($this->driver);
     }
 
     public function testGet()
     {
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('get')
             ->with('foo')
             ->will($this->returnValue($this->time));
 
-        $obj = new Keeper($this->driver_mock);
-        $this->assertEquals($this->time, $obj->get('foo'));
+        $this->assertEquals($this->time, $this->keeper->get('foo'));
     }
 
     public function testGetEmptyLastUpdate()
     {
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('get')
             ->with(Keeper::LAST_UPDATE_KEY)
             ->will($this->returnValue(null));
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('set')
             ->with(Keeper::LAST_UPDATE_KEY, $this->time);
 
-        $obj = new Keeper($this->driver_mock);
-        $this->assertEquals($this->time, $obj->get(Keeper::LAST_UPDATE_KEY));
+        $this->assertEquals($this->time, $this->keeper->get(Keeper::LAST_UPDATE_KEY));
     }
 
     public function testGetEmpty()
     {
-        $this->driver_mock
+        $this->driver
             ->expects($this->at(0))
             ->method('get')
             ->with('foo')
             ->will($this->returnValue(null));
-        $this->driver_mock
+        $this->driver
             ->expects($this->at(1))
             ->method('get')
             ->with(Keeper::LAST_UPDATE_KEY)
             ->will($this->returnValue($this->time));
 
-        $obj = new Keeper($this->driver_mock);
-        $this->assertEquals($this->time, $obj->get('foo'));
+        $this->assertEquals($this->time, $this->keeper->get('foo'));
     }
 
     public function testSet()
     {
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('set')
             ->with('foo', $this->time)
             ->will($this->returnValue(true));
 
-        $obj = new Keeper($this->driver_mock);
-        $this->assertTrue($obj->set('foo', $this->time));
+        $this->assertTrue($this->keeper->set('foo', $this->time));
     }
 
     public function testRemove()
     {
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('remove')
             ->with('foo')
             ->will($this->returnValue(true));
 
-        $obj = new Keeper($this->driver_mock);
-        $this->assertTrue($obj->remove('foo'));
+        $this->assertTrue($this->keeper->remove('foo'));
     }
 
     public function testRemoveFail()
     {
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('remove')
             ->with('foo')
             ->will($this->returnValue(false));
 
-        $obj = new Keeper($this->driver_mock);
-        $this->assertFalse($obj->remove('foo'));
+        $this->assertFalse($this->keeper->remove('foo'));
     }
 
     /**
@@ -138,14 +140,13 @@ class KeeperTest extends TestCase
      */
     public function testGetMax($params)
     {
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('getMax')
             ->with($params ? ['foo', Keeper::LAST_UPDATE_KEY] : [Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue($this->time));
 
-        $obj = new Keeper($this->driver_mock);
-        $this->assertEquals($this->time, $params ? $obj->getMax($params) : $obj->getMax());
+        $this->assertEquals($this->time, $params ? $this->keeper->getMax($params) : $this->keeper->getMax());
     }
 
     /**
@@ -156,32 +157,31 @@ class KeeperTest extends TestCase
     public function testGetMaxEmptyList($params)
     {
         $that = $this;
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('getMax')
             ->with($params ? ['foo', Keeper::LAST_UPDATE_KEY] : [Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue(null));
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('set')
-            ->willReturnCallback(function ($key, $time) use ($that) {
+            ->will($this->returnCallback(function ($key, $time) use ($that) {
                 $that->assertEquals(Keeper::LAST_UPDATE_KEY, $key);
-                $this->assertInstanceOf('\DateTime', $time);
-            });
+                $this->assertInstanceOf(\DateTime::class, $time);
+            }));
 
-        $obj = new Keeper($this->driver_mock);
-        $this->assertInstanceOf('\DateTime', $params ? $obj->getMax($params) : $obj->getMax());
+        $this->assertInstanceOf(\DateTime::class, $params ? $this->keeper->getMax($params) : $this->keeper->getMax());
     }
 
     public function testGetResponse()
     {
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('getMax')
             ->with(['foo', Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue($this->time));
         $lifetime = 3600;
-        $response = $this->getMock('\Symfony\Component\HttpFoundation\Response');
+        $response = $this->getMock(Response::class);
         $response
             ->expects($this->once())
             ->method('setPublic')
@@ -207,13 +207,12 @@ class KeeperTest extends TestCase
             ->with($this->time)
             ->will($this->returnSelf());
 
-        $obj = new Keeper($this->driver_mock);
-        $this->assertEquals($response, $obj->getResponse(['foo'], $lifetime, $response));
+        $this->assertEquals($response, $this->keeper->getResponse(['foo'], $lifetime, $response));
     }
 
     public function testGetResponseEmpty()
     {
-        $this->driver_mock
+        $this->driver
             ->expects($this->once())
             ->method('getMax')
             ->with([Keeper::LAST_UPDATE_KEY])
@@ -221,7 +220,6 @@ class KeeperTest extends TestCase
         $response = new Response();
         $response->setPublic()->setLastModified($this->time);
 
-        $obj = new Keeper($this->driver_mock);
-        $this->assertEquals($response, $obj->getResponse());
+        $this->assertEquals($response, $this->keeper->getResponse());
     }
 }
