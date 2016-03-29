@@ -20,41 +20,27 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Multi;
 class MultiTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Fast mock
-     *
      * @var \PHPUnit_Framework_MockObject_Generator
      */
     protected $fast_mock;
 
     /**
-     * Fast mock
-     *
      * @var \PHPUnit_Framework_MockObject_Generator
      */
     protected $slow_mock;
 
     /**
-     * Time
-     *
      * @var \DateTime
      */
     protected $time;
 
-    /**
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
     protected function setUp()
     {
-        parent::setUp();
         $this->time = new \DateTime();
         $this->fast_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
         $this->slow_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
     }
 
-    /**
-     * Test get fast
-     */
     public function testGetFast()
     {
         $this->fast_mock
@@ -69,9 +55,6 @@ class MultiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->time, $this->getDriver()->get('foo'));
     }
 
-    /**
-     * Test get slow
-     */
     public function testGetSlow()
     {
         $this->fast_mock
@@ -87,9 +70,6 @@ class MultiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->time, $this->getDriver()->get('foo'));
     }
 
-    /**
-     * Test set
-     */
     public function testSet()
     {
         $this->fast_mock
@@ -106,9 +86,6 @@ class MultiTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->getDriver()->set('foo', $this->time));
     }
 
-    /**
-     * Test set fail
-     */
     public function testSetFail()
     {
         $this->fast_mock
@@ -123,9 +100,6 @@ class MultiTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->getDriver()->set('foo', $this->time));
     }
 
-    /**
-     * Test remove time
-     */
     public function testRemove()
     {
         $this->fast_mock
@@ -179,9 +153,7 @@ class MultiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get driver
-     *
-     * @return \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Multi
+     * @return Multi
      */
     protected function getDriver()
     {

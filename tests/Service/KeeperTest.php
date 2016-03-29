@@ -21,33 +21,21 @@ use Symfony\Component\HttpFoundation\Response;
 class KeeperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Time
-     *
      * @var \DateTime
      */
     protected $time;
 
     /**
-     * Driver mock
-     *
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $driver_mock;
 
-    /**
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
     protected function setUp()
     {
-        parent::setUp();
         $this->time = new \DateTime();
         $this->driver_mock = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
     }
 
-    /**
-     * Test get
-     */
     public function testGet()
     {
         $this->driver_mock
@@ -60,9 +48,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->time, $obj->get('foo'));
     }
 
-    /**
-     * Test get empty last update
-     */
     public function testGetEmptyLastUpdate()
     {
         $this->driver_mock
@@ -79,9 +64,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->time, $obj->get(Keeper::LAST_UPDATE_KEY));
     }
 
-    /**
-     * Test get empty
-     */
     public function testGetEmpty()
     {
         $this->driver_mock
@@ -99,9 +81,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->time, $obj->get('foo'));
     }
 
-    /**
-     * Test set
-     */
     public function testSet()
     {
         $this->driver_mock
@@ -114,9 +93,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($obj->set('foo', $this->time));
     }
 
-    /**
-     * Test remove time
-     */
     public function testRemove()
     {
         $this->driver_mock
@@ -129,9 +105,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($obj->remove('foo'));
     }
 
-    /**
-     * Test remove time fail
-     */
     public function testRemoveFail()
     {
         $this->driver_mock
@@ -145,8 +118,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get max time by keys
-     *
      * @return array
      */
     public function getMax()
@@ -160,8 +131,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get max
-     *
      * @dataProvider getMax
      *
      * @param mixed $params
@@ -179,8 +148,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get max from empty list
-     *
      * @dataProvider getMax
      *
      * @param mixed $params
@@ -205,9 +172,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\DateTime', $params ? $obj->getMax($params) : $obj->getMax());
     }
 
-    /**
-     * Test get response
-     */
     public function testGetResponse()
     {
         $this->driver_mock
@@ -246,9 +210,6 @@ class KeeperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($response, $obj->getResponse(['foo'], $lifetime, $response));
     }
 
-    /**
-     * Test get response
-     */
     public function testGetResponseEmpty()
     {
         $this->driver_mock

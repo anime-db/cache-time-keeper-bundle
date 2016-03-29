@@ -20,9 +20,6 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
  */
 class ConsoleTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Test on terminate
-     */
     public function testOnTerminate()
     {
         $keeper_mock = $this
@@ -52,9 +49,6 @@ class ConsoleTest extends \PHPUnit_Framework_TestCase
         $obj->onTerminate($event_mock);
     }
 
-    /**
-     * Test on terminate cache
-     */
     public function testOnTerminateCache()
     {
         $keeper_mock = $this

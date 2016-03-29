@@ -21,49 +21,32 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Demo;
 class EntityTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Listener
-     *
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity
+     * @var Entity
      */
     protected $listener;
 
-    /**
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
     protected function setUp()
     {
         $this->listener = new Entity($this->getKeeper());
     }
 
-    /**
-     * Test post persist
-     */
     public function testPostPersist()
     {
         $this->listener->postPersist($this->getEventMock());
     }
 
-    /**
-     * Test post remove
-     */
     public function testPostRemove()
     {
         $this->listener->postRemove($this->getEventMock());
     }
 
-    /**
-     * Test post update
-     */
     public function testPostUpdate()
     {
         $this->listener->postUpdate($this->getEventMock());
     }
 
     /**
-     * Get event mock
-     *
-     * @return \Doctrine\ORM\Event\LifecycleEventArgs
+     * @return LifecycleEventArgs
      */
     protected function getEventMock()
     {
@@ -97,13 +80,12 @@ class EntityTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getEntity')
             ->willReturn(new Demo());
+
         return $args;
     }
 
     /**
-     * Get keeper
-     *
-     * @return \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
+     * @return Keeper
      */
     protected function getKeeper()
     {

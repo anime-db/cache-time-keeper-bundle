@@ -28,28 +28,20 @@ class ShmopTest extends DriverTest
      */
     protected $salt = 'salt';
 
-    /**
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::tearDown()
-     */
     protected function setUp()
     {
         parent::setUp();
-        $sh = new BlockShmop($this->getDriver()->getIdBykey('foo'), 3);
+        $sh = new BlockShmop($this->getDriver()->getIdByKey('foo'), 3);
         $sh->delete();
     }
 
-    /**
-     * Test remove time fail
-     */
     public function testRemoveFail()
     {
         // empty memory block can always remove
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service\DriverTest::getDriver()
+     * @return Shmop
      */
     protected function getDriver()
     {

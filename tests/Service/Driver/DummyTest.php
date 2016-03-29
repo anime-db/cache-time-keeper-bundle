@@ -21,17 +21,13 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy;
 class DummyTest extends DriverTest
 {
     /**
-     * (non-PHPdoc)
-     * @see \AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service\DriverTest::getDriver()
+     * @return Dummy
      */
     protected function getDriver()
     {
         return new Dummy();
     }
 
-    /**
-     * Test sync list times
-     */
     public function testSync()
     {
         // in dummy driver a sync does not work

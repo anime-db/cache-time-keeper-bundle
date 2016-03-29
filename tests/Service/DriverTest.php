@@ -18,33 +18,20 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
 abstract class DriverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Time
-     *
      * @var \DateTime
      */
     protected $time;
 
-    /**
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
     protected function setUp()
     {
-        parent::setUp();
         $this->time = new \DateTime();
     }
 
-    /**
-     * Test get null
-     */
     public function testGetNull()
     {
         $this->assertNull($this->getDriver()->get('foo'));
     }
 
-    /**
-     * Test get
-     */
     public function testGet()
     {
         $driver = $this->getDriver();
@@ -53,9 +40,6 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals($this->time, $driver->get('foo')->modify('+1 day'));
     }
 
-    /**
-     * Test set
-     */
     public function testSet()
     {
         $driver = $this->getDriver();
@@ -63,9 +47,6 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($driver->set('foo', $this->time->modify('-1 day')));
     }
 
-    /**
-     * Test sync list times
-     */
     public function testSync()
     {
         $first = $this->getDriver();
@@ -77,8 +58,6 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get max empty params
-     *
      * @expectedException InvalidArgumentException
      */
     public function testGetMaxEmpty()
@@ -86,9 +65,6 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
         $this->getDriver()->getMax([]);
     }
 
-    /**
-     * Test remove time
-     */
     public function testRemove()
     {
         $driver = $this->getDriver();
@@ -97,17 +73,11 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($driver->get('foo'));
     }
 
-    /**
-     * Test remove time fail
-     */
     public function testRemoveFail()
     {
         $this->assertFalse($this->getDriver()->remove('foo'));
     }
 
-    /**
-     * Test get max
-     */
     public function testGetMax()
     {
         $driver = $this->getDriver();
@@ -120,9 +90,7 @@ abstract class DriverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get test driver
-     *
-     * @return \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
+     * @return Driver
      */
     abstract protected function getDriver();
 }

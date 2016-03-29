@@ -27,9 +27,6 @@ class FileTest extends DriverTest
      */
     protected $dir;
 
-    /**
-     * Construct
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -39,13 +36,8 @@ class FileTest extends DriverTest
         }
     }
 
-    /**
-     * (non-PHPdoc)
-     * @see PHPUnit_Framework_TestCase::tearDown()
-     */
     public function tearDown()
     {
-        parent::tearDown();
         if (is_dir($this->dir)) {
             foreach (scandir($this->dir) as $value) {
                 if ($value[0] != '.') {
@@ -69,8 +61,7 @@ class FileTest extends DriverTest
     }
 
     /**
-     * (non-PHPdoc)
-     * @see \AnimeDb\Bundle\CacheTimeKeeperBundle\Test\Service\DriverTest::getDriver()
+     * @return File
      */
     protected function getDriver()
     {
