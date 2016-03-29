@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8eb286a6efb09b794f887304fea5d298",
-    "content-hash": "53594833c983e22ebc0a9b22fe2293a3",
+    "hash": "3a707b81e6e9faadad2c1a2221db0162",
+    "content-hash": "c828f436afb5bdc66bb3a0153f64df77",
     "packages": [],
     "packages-dev": [
         {
@@ -1027,6 +1027,55 @@
                 }
             ],
             "description": "Symfony EventDispatcher Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-03-07 14:04:32"
+        },
+        {
+            "name": "symfony/expression-language",
+            "version": "2.8.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/expression-language.git",
+                "reference": "42ceed87ca9526f202d30153ea401ea2e95bcbc6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/expression-language/zipball/42ceed87ca9526f202d30153ea401ea2e95bcbc6",
+                "reference": "42ceed87ca9526f202d30153ea401ea2e95bcbc6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\ExpressionLanguage\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony ExpressionLanguage Component",
             "homepage": "https://symfony.com",
             "time": "2016-03-07 14:04:32"
         },
