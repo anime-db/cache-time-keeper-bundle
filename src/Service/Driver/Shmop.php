@@ -18,7 +18,7 @@ use AnimeDb\Shmop\FixedBlock as BlockShmop;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class Shmop extends Base
+class Shmop extends BaseDriver
 {
     /**
      * Cache key salt

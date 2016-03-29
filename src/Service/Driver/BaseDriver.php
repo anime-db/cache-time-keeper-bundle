@@ -16,7 +16,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-abstract class Base implements DriverInterface
+abstract class BaseDriver implements DriverInterface
 {
     /**
      * Get a list of keys or dates and chooses the max date
@@ -27,7 +27,7 @@ abstract class Base implements DriverInterface
      */
     public function getMax(array $params)
     {
-        if (!$params) {
+        if (!empty($params)) {
             throw new \InvalidArgumentException('Unknown key list');
         }
 

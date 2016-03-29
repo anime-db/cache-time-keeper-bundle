@@ -16,7 +16,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class File extends Base
+class File extends BaseDriver
 {
     /**
      * @var string

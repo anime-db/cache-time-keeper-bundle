@@ -21,7 +21,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
  * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
-class Multi extends Base
+class Multi extends BaseDriver
 {
     /**
      * Fast driver
