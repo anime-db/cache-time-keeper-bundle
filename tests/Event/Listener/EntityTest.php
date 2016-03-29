@@ -9,9 +9,13 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Demo;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
  * Test entity event listener
@@ -22,82 +26,68 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Demo;
 class EntityTest extends TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Keeper
+     */
+    protected $keeper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|LifecycleEventArgs
+     */
+    protected $args;
+
+    /**
      * @var Entity
      */
     protected $listener;
 
     protected function setUp()
     {
-        $this->listener = new Entity($this->getKeeper());
-    }
-
-    public function testPostPersist()
-    {
-        $this->listener->postPersist($this->getEventMock());
-    }
-
-    public function testPostRemove()
-    {
-        $this->listener->postRemove($this->getEventMock());
-    }
-
-    public function testPostUpdate()
-    {
-        $this->listener->postUpdate($this->getEventMock());
-    }
-
-    /**
-     * @return LifecycleEventArgs
-     */
-    protected function getEventMock()
-    {
-        $conf = $this->getMockBuilder('\Doctrine\ORM\Configuration')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $conf
-            ->expects($this->once())
-            ->method('getEntityNamespaces')
-            ->willReturn([
-                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
-                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity'
-            ]);
-
-        $em = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $em
-            ->expects($this->once())
-            ->method('getConfiguration')
-            ->willReturn($conf);
-
-        $args = $this->getMockBuilder('\Doctrine\ORM\Event\LifecycleEventArgs')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $args
-            ->expects($this->once())
-            ->method('getEntityManager')
-            ->willReturn($em);
-        $args
-            ->expects($this->once())
-            ->method('getEntity')
-            ->willReturn(new Demo());
-
-        return $args;
-    }
-
-    /**
-     * @return Keeper
-     */
-    protected function getKeeper()
-    {
-        $keeper = $this->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $keeper
+        $this->keeper = $this->getMockObject(Keeper::class);
+        $this->keeper
             ->expects($this->once())
             ->method('set')
             ->with('AnimeDbCacheTimeKeeperBundle:Demo', $this->isInstanceOf('DateTime'));
 
-        return $keeper;
+        $conf = $this->getMockObject(Configuration::class);
+        $conf
+            ->expects($this->once())
+            ->method('getEntityNamespaces')
+            ->will($this->returnValue([
+                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
+                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity'
+            ]));
+
+        $em = $this->getMockObject(EntityManager::class);
+        $em
+            ->expects($this->once())
+            ->method('getConfiguration')
+            ->will($this->returnValue($conf));
+
+        $this->args = $this->getMockObject(LifecycleEventArgs::class);
+        $this->args
+            ->expects($this->once())
+            ->method('getEntityManager')
+            ->will($this->returnValue($em));
+        $this->args
+            ->expects($this->once())
+            ->method('getEntity')
+            ->will($this->returnValue(new Demo()));
+
+        $this->listener = new Entity($this->keeper);
+    }
+
+    public function testPostPersist()
+    {
+        $this->listener->postPersist($this->args);
+    }
+
+    public function testPostRemove()
+    {
+        $this->listener->postRemove($this->args);
+    }
+
+    public function testPostUpdate()
+    {
+        $this->listener->postUpdate($this->args);
     }
 }
