@@ -10,8 +10,6 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Base;
-
 /**
  * Dummy driver
  *
@@ -39,6 +37,7 @@ class Dummy extends Base
         if (isset($this->list[$key])) {
             return clone $this->list[$key];
         }
+
         return null;
     }
 
@@ -69,6 +68,7 @@ class Dummy extends Base
             unset($this->list[$key]);
             return true;
         }
+
         return false;
     }
 }

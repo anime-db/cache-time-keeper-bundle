@@ -22,16 +22,12 @@ use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 class Console
 {
     /**
-     * Keeper
-     *
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
+     * @var Keeper
      */
     protected $keeper;
 
     /**
-     * Construct
-     *
-     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper $keeper
+     * @param Keeper $keeper
      */
     public function __construct(Keeper $keeper)
     {
@@ -39,9 +35,7 @@ class Console
     }
 
     /**
-     * On terminate command
-     *
-     * @param \Symfony\Component\Console\Event\ConsoleTerminateEvent $event
+     * @param ConsoleTerminateEvent $event
      */
     public function onTerminate(ConsoleTerminateEvent $event)
     {

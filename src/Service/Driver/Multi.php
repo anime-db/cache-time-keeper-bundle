@@ -10,9 +10,6 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Base;
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
-
 /**
  * Multi drivers
  *
@@ -29,22 +26,20 @@ class Multi extends Base
     /**
      * Fast driver
      * 
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface
+     * @var DriverInterface
      */
     protected $fast;
 
     /**
      * Slow driver
      *
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface
+     * @var DriverInterface
      */
     protected $slow;
 
     /**
-     * Construct
-     *
-     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface $fast
-     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface $slow
+     * @param DriverInterface $fast
+     * @param DriverInterface $slow
      */
     public function __construct(DriverInterface $fast, DriverInterface $slow)
     {
@@ -64,6 +59,7 @@ class Multi extends Base
         if ($time = $this->fast->get($key)) {
             return $time;
         }
+
         return $this->slow->get($key);
     }
 
@@ -80,6 +76,7 @@ class Multi extends Base
         if ($this->fast->set($key, $time)) {
             return $this->slow->set($key, $time);
         }
+
         return false;
     }
 
@@ -95,6 +92,7 @@ class Multi extends Base
         if ($this->fast->remove($key)) {
             return $this->slow->remove($key);
         }
+
         return false;
     }
 }

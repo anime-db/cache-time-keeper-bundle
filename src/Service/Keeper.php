@@ -29,16 +29,12 @@ class Keeper
     const LAST_UPDATE_KEY = 'last-update';
 
     /**
-     * Driver
-     *
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface
+     * @var DriverInterface
      */
     protected $driver;
 
     /**
-     * Construct
-     *
-     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface $driver
+     * @param DriverInterface $driver
      */
     public function __construct(DriverInterface $driver)
     {
@@ -104,9 +100,11 @@ class Keeper
         if (!in_array(self::LAST_UPDATE_KEY, $params)) {
             $params[] = self::LAST_UPDATE_KEY;
         }
+
         if (!($time = $this->driver->getMax($params))) {
             $time = $this->reset();
         }
+
         return $time;
     }
 
@@ -117,9 +115,9 @@ class Keeper
      *
      * @param mixed $params
      * @param integer $lifetime
-     * @param \Symfony\Component\HttpFoundation\Response|null $response
+     * @param Response|null $response
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function getResponse($params = [], $lifetime = -1, Response $response = null)
     {

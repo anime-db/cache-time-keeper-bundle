@@ -10,8 +10,6 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Base;
-
 /**
  * File driver
  *
@@ -21,22 +19,16 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Base;
 class File extends Base
 {
     /**
-     * Filename suffix
-     *
      * @var string
      */
     const FILENAME_SUFFIX = '.key';
 
     /**
-     * Dir
-     *
      * @var string
      */
     protected $dir;
 
     /**
-     * Construct
-     *
      * @param string $dir
      */
     public function __construct($dir)
@@ -57,6 +49,7 @@ class File extends Base
         if (file_exists($file)) {
             return new \DateTime(date('Y-m-d H:i:s', filemtime($file)));
         }
+
         return null;
     }
 
@@ -75,6 +68,7 @@ class File extends Base
         if (!file_exists($file) || $time > filemtime($file)) {
             return touch($file, $time);
         }
+
         return true;
     }
 
@@ -91,6 +85,7 @@ class File extends Base
         if (file_exists($file)) {
             return unlink($file);
         }
+
         return false;
     }
 
@@ -106,6 +101,7 @@ class File extends Base
         if (!is_dir($this->dir)) {
             mkdir($this->dir, 0755, true);
         }
+
         return $this->dir.'/'.md5($key).self::FILENAME_SUFFIX;
     }
 }

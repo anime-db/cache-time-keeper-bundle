@@ -10,8 +10,6 @@
 
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
-
 /**
  * Base driver
  *
@@ -32,6 +30,7 @@ abstract class Base implements DriverInterface
         if (!$params) {
             throw new \InvalidArgumentException('Unknown key list');
         }
+
         foreach ($params as $key => $value) {
             if (!($value instanceof \DateTime)) {
                 $params[$key] = $this->get($value);

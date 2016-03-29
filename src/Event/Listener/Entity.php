@@ -22,16 +22,12 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 class Entity
 {
     /**
-     * Keeper
-     *
-     * @var \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
+     * @var Keeper
      */
     protected $keeper;
 
     /**
-     * Construct
-     *
-     * @param \AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper $keeper
+     * @param Keeper $keeper
      */
     public function __construct(Keeper $keeper)
     {
@@ -39,9 +35,7 @@ class Entity
     }
 
     /**
-     * Post persist
-     *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $args
+     * @param LifecycleEventArgs $args
      */
     public function postPersist(LifecycleEventArgs $args)
     {
@@ -49,9 +43,7 @@ class Entity
     }
 
     /**
-     * Post remove
-     *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $args
+     * @param LifecycleEventArgs $args
      */
     public function postRemove(LifecycleEventArgs $args)
     {
@@ -59,9 +51,7 @@ class Entity
     }
 
     /**
-     * Post update
-     *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $args
+     * @param LifecycleEventArgs $args
      */
     public function postUpdate(LifecycleEventArgs $args)
     {
@@ -69,9 +59,7 @@ class Entity
     }
 
     /**
-     * Get key from entity
-     *
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $args
+     * @param LifecycleEventArgs $args
      *
      * @return string
      */
