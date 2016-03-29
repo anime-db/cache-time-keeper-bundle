@@ -7,7 +7,7 @@
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
+namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
@@ -18,7 +18,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
-abstract class DriverTest extends TestCase
+abstract class BaseDriverTest extends TestCase
 {
     /**
      * @var \DateTime

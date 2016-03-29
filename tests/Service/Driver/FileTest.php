@@ -9,7 +9,6 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\DriverTest;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File;
 
 /**
@@ -18,7 +17,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
-class FileTest extends DriverTest
+class FileTestBase extends BaseDriverTest
 {
     /**
      * Metadata dir
