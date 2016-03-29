@@ -9,6 +9,7 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 
 /**
@@ -60,7 +61,7 @@ abstract class DriverTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testGetMaxEmpty()
     {
@@ -92,7 +93,7 @@ abstract class DriverTest extends TestCase
     }
 
     /**
-     * @return Driver
+     * @return DriverInterface
      */
     abstract protected function getDriver();
 }
