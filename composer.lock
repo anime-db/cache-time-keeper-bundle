@@ -10,16 +10,16 @@
     "packages-dev": [
         {
             "name": "anime-db/shmop",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/anime-db/shmop.git",
-                "reference": "a4702435182317327c75801da9bd1a97b86bd16f"
+                "reference": "8d4dbb426316c99110a7fcf04ca4116d82ababa3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/anime-db/shmop/zipball/a4702435182317327c75801da9bd1a97b86bd16f",
-                "reference": "a4702435182317327c75801da9bd1a97b86bd16f",
+                "url": "https://api.github.com/repos/anime-db/shmop/zipball/8d4dbb426316c99110a7fcf04ca4116d82ababa3",
+                "reference": "8d4dbb426316c99110a7fcf04ca4116d82ababa3",
                 "shasum": ""
             },
             "require": {
@@ -48,7 +48,7 @@
                 "php",
                 "shmop"
             ],
-            "time": "2015-01-16 10:38:08"
+            "time": "2016-03-29 15:02:00"
         },
         {
             "name": "doctrine/annotations",
