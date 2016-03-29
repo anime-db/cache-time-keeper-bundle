@@ -9,6 +9,7 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
-class KeeperTest extends \PHPUnit_Framework_TestCase
+class KeeperTest extends TestCase
 {
     /**
      * @var \DateTime

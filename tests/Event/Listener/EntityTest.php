@@ -9,6 +9,7 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Demo;
 
@@ -18,7 +19,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Demo;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
-class EntityTest extends \PHPUnit_Framework_TestCase
+class EntityTest extends TestCase
 {
     /**
      * @var Entity

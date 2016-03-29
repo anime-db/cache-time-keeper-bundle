@@ -9,13 +9,15 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
+
 /**
  * Test driver
  *
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
-abstract class DriverTest extends \PHPUnit_Framework_TestCase
+abstract class DriverTest extends TestCase
 {
     /**
      * @var \DateTime

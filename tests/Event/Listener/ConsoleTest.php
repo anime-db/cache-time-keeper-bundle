@@ -9,6 +9,7 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 
@@ -18,7 +19,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
-class ConsoleTest extends \PHPUnit_Framework_TestCase
+class ConsoleTest extends TestCase
 {
     public function testOnTerminate()
     {

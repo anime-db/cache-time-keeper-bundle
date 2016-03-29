@@ -9,6 +9,7 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Multi;
 
 /**
@@ -17,7 +18,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Multi;
  * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver
  * @author Peter Gribanov <info@peter-gribanov.ru>
  */
-class MultiTest extends \PHPUnit_Framework_TestCase
+class MultiTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_Generator
