@@ -27,7 +27,7 @@ abstract class BaseDriver implements DriverInterface
      */
     public function getMax(array $params)
     {
-        if (!empty($params)) {
+        if (empty($params)) {
             throw new \InvalidArgumentException('Unknown key list');
         }
 
