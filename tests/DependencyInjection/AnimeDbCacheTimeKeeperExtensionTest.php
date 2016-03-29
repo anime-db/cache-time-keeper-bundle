@@ -13,6 +13,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\DependencyInjection;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\DependencyInjection\AnimeDbCacheTimeKeeperExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Test DependencyInjection
@@ -24,8 +25,24 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
 {
     public function testLoad()
     {
-        /* @var $container ContainerBuilder */
+        /* @var $shmop \PHPUnit_Framework_MockObject_MockObject|Definition */
+        $shmop = $this->getMockObject('Symfony\Component\DependencyInjection\Definition');
+        /* @var $file \PHPUnit_Framework_MockObject_MockObject|Definition */
+        $file = $this->getMockObject('Symfony\Component\DependencyInjection\Definition');
+
+        /* @var $container \PHPUnit_Framework_MockObject_MockObject|ContainerBuilder */
         $container = $this->getMock('\Symfony\Component\DependencyInjection\ContainerBuilder');
+        $container
+            ->expects($this->atLeastOnce())
+            ->method('getDefinition')
+            ->will($this->returnCallback(function($arg) use ($shmop, $file) {
+                if ($arg == 'cache_time_keeper.driver.shmop') {
+                    return $shmop;
+                } elseif ('cache_time_keeper.driver.file') {
+                    return $file;
+                }
+                return null; // error
+            }));
 
         $di = new AnimeDbCacheTimeKeeperExtension();
         $di->load([], $container);
