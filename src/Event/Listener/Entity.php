@@ -75,5 +75,7 @@ class Entity
                 return $ns_alias.':'.$entity;
             }
         }
+
+        throw new \RuntimeException(sprintf('Namespace "%s" is not supported from EntityManager', $namespace));
     }
 }
