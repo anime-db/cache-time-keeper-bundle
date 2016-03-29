@@ -12,6 +12,8 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 
 /**
  * Test console event listener
@@ -21,65 +23,62 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
  */
 class ConsoleTest extends TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Keeper
+     */
+    protected $keeper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Command
+     */
+    protected $command;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ConsoleTerminateEvent
+     */
+    protected $event;
+
+    /**
+     * @var Console
+     */
+    protected $listener;
+
+    protected function setUp()
+    {
+        $this->keeper = $this->getMockObject(Keeper::class);
+        $this->command = $this->getMockObject(Command::class);
+        $this->event = $this->getMockObject(ConsoleTerminateEvent::class);
+
+        $this->event
+            ->expects($this->once())
+            ->method('getCommand')
+            ->will($this->returnValue($this->command));
+
+        $this->listener = new Console($this->keeper);
+    }
+
     public function testOnTerminate()
     {
-        $keeper_mock = $this
-            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $command_mock = $this
-            ->getMockBuilder('\Symfony\Component\Console\Command\Command')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $command_mock
+        $this->command
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('foo'));
 
-        $event_mock = $this
-            ->getMockBuilder('\Symfony\Component\Console\Event\ConsoleTerminateEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event_mock
-            ->expects($this->once())
-            ->method('getCommand')
-            ->will($this->returnValue($command_mock));
-
-        $obj = new Console($keeper_mock);
-        $obj->onTerminate($event_mock);
+        $this->listener->onTerminate($this->event);
     }
 
     public function testOnTerminateCache()
     {
-        $keeper_mock = $this
-            ->getMockBuilder('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $keeper_mock
+        $this->keeper
             ->expects($this->once())
             ->method('set')
             ->with(Keeper::LAST_UPDATE_KEY, new \DateTime());
 
-        $command_mock = $this
-            ->getMockBuilder('\Symfony\Component\Console\Command\Command')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $command_mock
+        $this->command
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('cache:clear'));
 
-        $event_mock = $this
-            ->getMockBuilder('\Symfony\Component\Console\Event\ConsoleTerminateEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event_mock
-            ->expects($this->once())
-            ->method('getCommand')
-            ->will($this->returnValue($command_mock));
-
-        $obj = new Console($keeper_mock);
-        $obj->onTerminate($event_mock);
+        $this->listener->onTerminate($this->event);
     }
 }
