@@ -5,12 +5,12 @@ services:
 
     cache_time_keeper.driver.file:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File
-        arguments: [ '%cache_time_keeper.dir%' ]
+        arguments: [ ~ ]
         public: false
 
     cache_time_keeper.driver.shmop:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop
-        arguments: [ '%cache_time_keeper.salt%' ]
+        arguments: [ ~ ]
         public: false
 
     cache_time_keeper.driver.multi:

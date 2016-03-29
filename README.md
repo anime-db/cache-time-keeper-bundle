@@ -43,6 +43,23 @@ public function registerBundles()
 }
 ```
 
+## Configuration
+
+Example `app/config/config.yml`:
+
+```
+anime_db_cache_time_keeper:
+    use_driver: multi # Use driver multi, shmop or file
+    drivers:
+        multi:
+            fast: shmop
+            slow: file
+        shmop:
+            salt: '%secret%'
+        file:
+            path: '%kernel.root_dir%/cache/cache-time-keeper/'
+```
+
 ## Usage
 
 Getting a last modified date of the project:
