@@ -43,22 +43,36 @@ public function registerBundles()
 }
 ```
 
-## Configuration
+## Step 3: Configuration
 
-Example `app/config/config.yml`:
+Default config:
 
 ```
+# app/config/config.yml
+
 anime_db_cache_time_keeper:
-    use_driver: multi # Use driver multi, shmop or file
+    use_driver: file # Used driver (multi, shmop or file)
     drivers:
         multi:
-            fast: shmop
-            slow: file
+            fast: shmop # Use 'shmop' driver for store data in memory
+            slow: file # Use 'file' driver for store data on hard disc
         shmop:
-            salt: '%secret%'
+            salt: '%secret%' # Memory key prefix for use this bundle on shared hosting
         file:
-            path: '%kernel.root_dir%/cache/cache-time-keeper/'
+            path: '%kernel.root_dir%/cache/cache-time-keeper/' # Path for store data
 ```
+
+## Drivers
+
+In the bundle there are several the data storage drivers.
+
+- **Dummy** (`dummy`) - stores data in a temporary variable, within the current thread of execution program.
+- **File** (`file`) - stores data in a file cache *(Default driver)*.
+- **Shmop** (`shmop`) - stores the data in memory using PHP extension [shmop](http://php.net/manual/en/book.shmop.php).
+    For work of this driver, you must install [`anime-db/shmop`](https://github.com/anime-db/shmop).
+- **Multi** (`multi`) - driver is a wrapper for multiple drivers.
+    Takes the driver with quick access to the data (stored in memory) and slow (stored on hard disc), and receives data on the possibility of fast drivers and if not luck reads data from slow.
+    To change the drivers of fast and slow access to override the `cache_time_keeper.driver.multi.fast` and `cache_time_keeper.driver.multi.slow` respectively.
 
 ## Usage
 
@@ -186,21 +200,6 @@ class HomeController extends Controller
     }
 }
 ```
-
-## Drivers
-
-In the bundle there are several the data storage drivers.
-
-- **Dummy** (`cache_time_keeper.driver.dummy`) - stores data in a temporary variable, within the current thread of execution program.
-- **File** (`cache_time_keeper.driver.file`) - stores data in a file cache.
-    Directory for storing files can be overridden by changing the parameter `cache_time_keeper.dir`.
-- **Shmop** (`cache_time_keeper.driver.shmop`) - stores the data in memory using PHP extension [shmop](http://php.net/manual/en/book.shmop.php).
-    For work of this driver, you must install `anime-db/shmop`.
-- **Multi** (`cache_time_keeper.driver.multi`) - driver is a wrapper for multiple drivers.
-    Takes the driver with quick access to the data (stored in memory) and slow (stored on the hard drive), and receives data on the possibility of fast drivers and if not luck reads data from slow.
-    To change the drivers of fast and slow access to override the `cache_time_keeper.driver.multi.fast` and `cache_time_keeper.driver.multi.slow` respectively.
-
-By default used the driver **File**, to change the driver override the parameter `cache_time_keeper.driver`.
 
 ## License
 
