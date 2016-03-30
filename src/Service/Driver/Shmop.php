@@ -46,7 +46,7 @@ class Shmop extends BaseDriver
     {
         $sh = new BlockShmop($this->getIdByKey($key), 10);
         if ($time = $sh->read()) {
-            return new \DateTime(date('Y-m-d H:i:s', $time));
+            return (new \DateTime())->setTimestamp($time);
         }
 
         return null;

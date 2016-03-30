@@ -47,7 +47,7 @@ class File extends BaseDriver
     {
         $file = $this->getFilename($key);
         if (file_exists($file)) {
-            return new \DateTime(date('Y-m-d H:i:s', filemtime($file)));
+            return (new \DateTime())->setTimestamp(filemtime($file));
         }
 
         return null;
