@@ -27,11 +27,21 @@ class ShmopTestBase extends BaseDriverTest
      */
     protected $salt = 'salt';
 
+    /**
+     * @var BlockShmop
+     */
+    protected $sh;
+
     protected function setUp()
     {
         parent::setUp();
-        $sh = new BlockShmop($this->getDriver()->getIdByKey(self::TEST_DATA), strlen(self::TEST_DATA));
-        $sh->delete();
+        $this->sh = new BlockShmop($this->getDriver()->getIdByKey(self::TEST_DATA), 10);
+        $this->sh->delete();
+    }
+
+    protected function tearDown()
+    {
+        $this->sh->delete();
     }
 
     public function testRemoveFail()
