@@ -25,6 +25,7 @@
         "symfony/console": "2.8.*",
         "symfony/expression-language": "2.8.*",
         "doctrine/orm": "2.5.*",
+        "doctrine/cache": "<=1.5.x-dev",
         "anime-db/shmop": "1.0.*"
     },
     "suggest": {
