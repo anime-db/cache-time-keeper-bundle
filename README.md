@@ -21,7 +21,7 @@ _**Notice:** library tracks only changing patterns in general, not each one sepa
 
 Add the following to the `require` section of your composer.json file:
 
-```
+```json
 "anime-db/cache-time-keeper-bundle": "1.0.*"
 ```
 
@@ -47,7 +47,7 @@ public function registerBundles()
 
 Default config:
 
-```
+```yml
 # app/config/config.yml
 
 anime_db_cache_time_keeper:
