@@ -60,6 +60,11 @@ anime_db_cache_time_keeper:
             salt: '%secret%' # Memory key prefix for use this bundle on shared hosting
         file:
             path: '%kernel.root_dir%/cache/cache-time-keeper/' # Path for store data
+        memcached:
+            prefix: 'cache_time_keeper_'
+            persistent_id: 'cache_time_keeper'
+            hosts:
+                - {host: 'localhost', port: 11211, weight: 100}
 ```
 
 ## Drivers
@@ -68,6 +73,7 @@ In the bundle there are several the data storage drivers.
 
 - **Dummy** (`dummy`) - stores data in a temporary variable, within the current thread of execution program.
 - **File** (`file`) - stores data in a file cache *(Default driver)*.
+- **Memcached** (`memcached`) - stores the data in memory using PHP extension [memcached](http://php.net/manual/en/book.memcached.php).
 - **Shmop** (`shmop`) - stores the data in memory using PHP extension [shmop](http://php.net/manual/en/book.shmop.php).
     For work of this driver, you must install [`anime-db/shmop`](https://github.com/anime-db/shmop).
 - **Multi** (`multi`) - driver is a wrapper for multiple drivers.
