@@ -28,6 +28,7 @@
         "anime-db/shmop": "1.0.*"
     },
     "suggest": {
+        "ext-memcached": "Allows use a memcached cache driver",
         "anime-db/shmop": "Allows use a shmop cache driver"
     },
     "minimum-stability": "dev"
