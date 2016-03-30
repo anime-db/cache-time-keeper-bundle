@@ -53,9 +53,9 @@ class FileTestBase extends BaseDriverTest
     public function testMakeDir()
     {
         $obj = new File($this->dir.'test/');
-        $this->assertTrue($obj->set('foo', $this->time));
+        $this->assertTrue($obj->set(self::TEST_DATA, $this->time));
         $this->assertTrue(is_dir($this->dir.'test/'));
-        $this->assertTrue($obj->remove('foo'));
+        $this->assertTrue($obj->remove(self::TEST_DATA));
         rmdir($this->dir.'test/');
     }
 

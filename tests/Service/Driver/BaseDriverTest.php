@@ -25,6 +25,8 @@ abstract class BaseDriverTest extends TestCase
      */
     protected $time;
 
+    const TEST_DATA = 'foo';
+
     protected function setUp()
     {
         $this->time = new \DateTime();
@@ -32,32 +34,32 @@ abstract class BaseDriverTest extends TestCase
 
     public function testGetNull()
     {
-        $this->assertNull($this->getDriver()->get('foo'));
+        $this->assertNull($this->getDriver()->get(self::TEST_DATA));
     }
 
     public function testGet()
     {
         $driver = $this->getDriver();
-        $this->assertTrue($driver->set('foo', $this->time));
-        $this->assertEquals($this->time, $driver->get('foo'));
-        $this->assertNotEquals($this->time, $driver->get('foo')->modify('+1 day'));
+        $this->assertTrue($driver->set(self::TEST_DATA, $this->time));
+        $this->assertEquals($this->time, $driver->get(self::TEST_DATA));
+        $this->assertNotEquals($this->time, $driver->get(self::TEST_DATA)->modify('+1 day'));
     }
 
     public function testSet()
     {
         $driver = $this->getDriver();
-        $this->assertTrue($driver->set('foo', $this->time));
-        $this->assertTrue($driver->set('foo', $this->time->modify('-1 day')));
+        $this->assertTrue($driver->set(self::TEST_DATA, $this->time));
+        $this->assertTrue($driver->set(self::TEST_DATA, $this->time->modify('-1 day')));
     }
 
     public function testSync()
     {
         $first = $this->getDriver();
-        $first->set('foo', $this->time);
+        $first->set(self::TEST_DATA, $this->time);
 
         // new object
         $second = $this->getDriver();
-        $this->assertEquals($this->time, $second->get('foo'));
+        $this->assertEquals($this->time, $second->get(self::TEST_DATA));
     }
 
     /**
@@ -71,14 +73,14 @@ abstract class BaseDriverTest extends TestCase
     public function testRemove()
     {
         $driver = $this->getDriver();
-        $driver->set('foo', $this->time);
-        $this->assertTrue($driver->remove('foo'));
-        $this->assertEmpty($driver->get('foo'));
+        $driver->set(self::TEST_DATA, $this->time);
+        $this->assertTrue($driver->remove(self::TEST_DATA));
+        $this->assertEmpty($driver->get(self::TEST_DATA));
     }
 
     public function testRemoveFail()
     {
-        $this->assertFalse($this->getDriver()->remove('foo'));
+        $this->assertFalse($this->getDriver()->remove(self::TEST_DATA));
     }
 
     public function testGetMax()
@@ -88,8 +90,8 @@ abstract class BaseDriverTest extends TestCase
 
         $foo_time = new \DateTime();
         $foo_time->modify('+1 day');
-        $driver->set('foo', $foo_time);
-        $this->assertEquals($foo_time, $driver->getMax(['foo', $this->time]));
+        $driver->set(self::TEST_DATA, $foo_time);
+        $this->assertEquals($foo_time, $driver->getMax([self::TEST_DATA, $this->time]));
     }
 
     /**
