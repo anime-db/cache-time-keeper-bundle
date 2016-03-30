@@ -37,8 +37,6 @@ class File extends BaseDriver
     }
 
     /**
-     * Get time for key
-     *
      * @param string $key
      *
      * @return \DateTime|null
@@ -54,8 +52,6 @@ class File extends BaseDriver
     }
 
     /**
-     * Set time for key
-     *
      * @param string $key
      * @param \DateTime $time
      *
@@ -73,8 +69,6 @@ class File extends BaseDriver
     }
 
     /**
-     * Remove time for key
-     *
      * @param string $key
      *
      * @return boolean
@@ -90,8 +84,6 @@ class File extends BaseDriver
     }
 
     /**
-     * Get filename from key
-     *
      * @param string $key
      *
      * @return string

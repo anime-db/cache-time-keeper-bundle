@@ -24,15 +24,11 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 class Multi extends BaseDriver
 {
     /**
-     * Fast driver
-     * 
      * @var DriverInterface
      */
     protected $fast;
 
     /**
-     * Slow driver
-     *
      * @var DriverInterface
      */
     protected $slow;
@@ -48,8 +44,6 @@ class Multi extends BaseDriver
     }
 
     /**
-     * Get time for key
-     *
      * @param string $key
      *
      * @return \DateTime|null
@@ -64,8 +58,6 @@ class Multi extends BaseDriver
     }
 
     /**
-     * Set time for key
-     *
      * @param string $key
      * @param \DateTime $time
      *
@@ -81,8 +73,6 @@ class Multi extends BaseDriver
     }
 
     /**
-     * Remove time for key
-     *
      * @param string $key
      *
      * @return boolean

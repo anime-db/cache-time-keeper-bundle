@@ -36,8 +36,6 @@ class Shmop extends BaseDriver
     }
 
     /**
-     * Get time for key
-     *
      * @param string $key
      *
      * @return \DateTime|null
@@ -53,8 +51,6 @@ class Shmop extends BaseDriver
     }
 
     /**
-     * Set time for key
-     *
      * @param string $key
      * @param \DateTime $time
      *
@@ -71,8 +67,6 @@ class Shmop extends BaseDriver
     }
 
     /**
-     * Remove time for key
-     *
      * @param string $key
      *
      * @return boolean
@@ -85,8 +79,6 @@ class Shmop extends BaseDriver
     }
 
     /**
-     * Get id
-     *
      * @param string $key
      *
      * @return integer

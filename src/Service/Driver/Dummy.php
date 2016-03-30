@@ -26,8 +26,6 @@ class Dummy extends BaseDriver
     protected $list = [];
 
     /**
-     * Get time for key
-     *
      * @param string $key
      *
      * @return \DateTime|null
@@ -42,8 +40,6 @@ class Dummy extends BaseDriver
     }
 
     /**
-     * Set time for key
-     *
      * @param string $key
      * @param \DateTime $time
      *
@@ -56,8 +52,6 @@ class Dummy extends BaseDriver
     }
 
     /**
-     * Remove time for key
-     *
      * @param string $key
      *
      * @return boolean

@@ -19,8 +19,6 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 interface DriverInterface
 {
     /**
-     * Get time for key
-     *
      * @param string $key
      *
      * @return \DateTime|null
@@ -28,8 +26,6 @@ interface DriverInterface
     public function get($key);
 
     /**
-     * Set time for key
-     *
      * @param string $key
      * @param \DateTime $time
      *
@@ -38,8 +34,6 @@ interface DriverInterface
     public function set($key, \DateTime $time);
 
     /**
-     * Remove time for key
-     *
      * @param string $key
      *
      * @return boolean
