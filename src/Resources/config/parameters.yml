@@ -1,6 +1,3 @@
 parameters:
-    cache_time_keeper.driver: 'file'
-    cache_time_keeper.driver.multi.fast: 'shmop'
-    cache_time_keeper.driver.multi.slow: 'file'
     cache_time_keeper.driver.shmop.salt: '%secret%'
     cache_time_keeper.driver.file.path: '%kernel.root_dir%/cache/cache-time-keeper/'

@@ -29,28 +29,44 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $config = $this->processConfiguration(new Configuration(), $configs);
-
-        // for backward compatibility merge config from global parameters
-        $config = $this->mergeBackwardCompatibilityConfig($config, $container);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('parameters.yml');
         $loader->load('services.yml');
 
-        // merge default config
-        $config = $this->mergeConfig($config, $container);
+        $configuration = new Configuration(
+            $container->getParameter('cache_time_keeper.driver.shmop.salt'),
+            $container->getParameter('cache_time_keeper.driver.file.path')
+        );
+        $config = $this->processConfiguration($configuration, $configs);
 
-        $container->getDefinition('cache_time_keeper.driver.shmop')
-            ->setArguments([$config['drivers']['shmop']['salt']]);
-        $container->getDefinition('cache_time_keeper.driver.file')
-            ->setArguments([$config['drivers']['file']['path']]);
+        $config = $this->mergeBackwardCompatibilityConfig($config, $container);
+        $config = $this->mergeDefaultConfig($config, $container);
 
+        // configure drivers
+        $container
+            ->getDefinition('cache_time_keeper.driver.shmop')
+            ->replaceArgument(0, $config['drivers']['shmop']['salt']);
+        $container
+            ->getDefinition('cache_time_keeper.driver.file')
+            ->replaceArgument(0, $config['drivers']['file']['path']);
+        $container
+            ->getDefinition('cache_time_keeper.driver.memcached')
+            ->replaceArgument(1, $config['drivers']['memcached']['prefix']);
+
+        // configure memcached
+        $memcached = $container
+            ->getDefinition('cache_time_keeper.memcached')
+            ->replaceArgument(0, $config['drivers']['memcached']['persistent_id']);
+        foreach ($config['drivers']['memcached']['hosts'] as $host) {
+            $memcached->addMethodCall('addServer', $host);
+        }
+
+        // add service aliases
         $container->setAlias(
             'cache_time_keeper.driver',
             $this->getRealServiceName($config['use_driver'])
         );
-
         $container->setAlias(
             'cache_time_keeper.driver.multi.fast',
             $this->getRealServiceName($config['drivers']['multi']['fast'])
@@ -108,20 +124,25 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
      *
      * @return array
      */
-    protected function mergeConfig(array $config, ContainerBuilder $container)
+    protected function mergeDefaultConfig(array $config, ContainerBuilder $container)
     {
         return array_merge([
-            'use_driver' => $container->getParameter('cache_time_keeper.driver'),
+            'use_driver' => 'file',
             'drivers' => [
                 'multi' => [
-                    'fast' => $container->getParameter('cache_time_keeper.driver.multi.fast'),
-                    'slow' => $container->getParameter('cache_time_keeper.driver.multi.slow')
+                    'fast' => 'shmop',
+                    'slow' => 'file'
                 ],
                 'shmop' => [
                     'salt' => $container->getParameter('cache_time_keeper.driver.shmop.salt')
                 ],
                 'file' => [
                     'path' => $container->getParameter('cache_time_keeper.driver.file.path')
+                ],
+                'memcached' => [
+                    'prefix' => 'cache_time_keeper_',
+                    'persistent_id' => 'cache_time_keeper',
+                    'hosts' => []
                 ]
             ]
         ], $config);

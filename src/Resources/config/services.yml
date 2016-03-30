@@ -18,6 +18,16 @@ services:
         arguments: [ '@cache_time_keeper.driver.multi.fast', '@cache_time_keeper.driver.multi.slow' ]
         public: false
 
+    cache_time_keeper.driver.memcached:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Memcached
+        arguments: [ '@cache_time_keeper.memcached', ~ ]
+        public: false
+
+    cache_time_keeper.memcached:
+        class: Memcached
+        arguments: [ ~ ]
+        public: false
+
     cache_time_keeper:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
         arguments: [ '@cache_time_keeper.driver' ]
