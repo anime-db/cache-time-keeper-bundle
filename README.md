@@ -5,6 +5,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/anime-db/cache-time-keeper-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/anime-db/cache-time-keeper-bundle/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/anime-db/cache-time-keeper-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/anime-db/cache-time-keeper-bundle/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/4fa810e4-9788-470b-914c-8c09ba0d0be2/mini.png)](https://insight.sensiolabs.com/projects/4fa810e4-9788-470b-914c-8c09ba0d0be2)
+[![Dependency Status](https://www.versioneye.com/user/projects/5746f5f6ce8d0e0047372a2d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5746f5f6ce8d0e0047372a2d)
 [![License](https://poser.pugx.org/anime-db/cache-time-keeper-bundle/license.png)](https://packagist.org/packages/anime-db/cache-time-keeper-bundle)
 
 # Cache time keeper bundle
@@ -17,19 +18,13 @@ _**Notice:** library tracks only changing patterns in general, not each one sepa
 
 ## Installation
 
-### Step 1: Download the CacheTimeKeeperBundle
+Pretty simple with [Composer](http://packagist.org), run:
 
-Add the following to the `require` section of your composer.json file:
-
-```json
-"anime-db/cache-time-keeper-bundle": "1.0.*"
+```sh
+composer require anime-db/cache-time-keeper-bundle
 ```
 
-And update your dependencies
-
-### Step 2: Enable the bundle
-
-Finally, enable the bundle in the kernel:
+Add CacheTimeKeeperBundle to your application kernel
 
 ```php
 // app/appKernel.php
@@ -43,7 +38,7 @@ public function registerBundles()
 }
 ```
 
-## Step 3: Configuration
+### Configuration
 
 Default config:
 
@@ -51,7 +46,7 @@ Default config:
 # app/config/config.yml
 
 anime_db_cache_time_keeper:
-    use_driver: file # Used driver (multi, shmop or file)
+    use_driver: file # Used driver (multi, memcached, shmop, file or dummy)
     drivers:
         multi:
             fast: shmop # Use 'shmop' driver for store data in memory
@@ -78,7 +73,6 @@ In the bundle there are several the data storage drivers.
     For work of this driver, you must install [`anime-db/shmop`](https://github.com/anime-db/shmop).
 - **Multi** (`multi`) - driver is a wrapper for multiple drivers.
     Takes the driver with quick access to the data (stored in memory) and slow (stored on hard disc), and receives data on the possibility of fast drivers and if not luck reads data from slow.
-    To change the drivers of fast and slow access to override the `cache_time_keeper.driver.multi.fast` and `cache_time_keeper.driver.multi.slow` respectively.
 
 ## Usage
 
@@ -140,8 +134,8 @@ class HomeController extends Controller
         }
 
         // get entities
-        $page = $this->getDoctrine()->getManager()->find('AcmeDemoBundle:Page', $id);
-        $catalogs = $this->getDoctrine()->getManager()->getRepository('AcmeDemoBundle:Catalog')->findAll();
+        $page = $this->getDoctrine()->getRepository('AcmeDemoBundle:Page')->find($id);
+        $catalogs = $this->getDoctrine()->getRepository('AcmeDemoBundle:Catalog')->findAll();
 
         return $this->render(
             'AcmeDemoBundle:Home:index.html.twig',
@@ -154,6 +148,8 @@ class HomeController extends Controller
     }
 }
 ```
+
+## Usage configured response
 
 You can use a simplified method of configuring a response.
 
@@ -192,8 +188,8 @@ class HomeController extends Controller
         }
 
         // get entities
-        $page = $this->getDoctrine()->getManager()->find('AcmeDemoBundle:Page', $id);
-        $catalogs = $this->getDoctrine()->getManager()->getRepository('AcmeDemoBundle:Catalog')->findAll();
+        $page = $this->getDoctrine()->getRepository('AcmeDemoBundle:Page')->find($id);
+        $catalogs = $this->getDoctrine()->getRepository('AcmeDemoBundle:Catalog')->findAll();
 
         return $this->render(
             'AcmeDemoBundle:Home:index.html.twig',
