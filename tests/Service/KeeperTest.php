@@ -168,12 +168,13 @@ class KeeperTest extends TestCase
 
     public function testGetResponse()
     {
+        $lifetime = 3600;
+        $expires = (new \DateTime())->modify('+'.$lifetime.' seconds');
         $this->driver
             ->expects($this->once())
             ->method('getMax')
             ->with(['foo', Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue($this->time));
-        $lifetime = 3600;
         $response = $this->getMock(Response::class);
         $response
             ->expects($this->once())
@@ -192,8 +193,12 @@ class KeeperTest extends TestCase
         $response
             ->expects($this->once())
             ->method('setExpires')
-            ->with((new \DateTime())->modify('+'.$lifetime.' seconds'))
-            ->will($this->returnSelf());
+            ->will($this->returnCallback(function ($date) use ($response, $expires) {
+                $this->assertInstanceOf(\DateTime::class, $date);
+                $this->assertTrue($date >= $expires); // test can be run more than 1 second
+
+                return $response;
+            }));
         $response
             ->expects($this->once())
             ->method('setLastModified')
