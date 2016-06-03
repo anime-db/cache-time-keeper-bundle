@@ -40,7 +40,7 @@ class File extends BaseDriver
             return (new \DateTime())->setTimestamp(filemtime($file));
         }
 
-        return null;
+        return;
     }
 
     /**

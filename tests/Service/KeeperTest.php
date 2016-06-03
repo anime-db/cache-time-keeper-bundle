@@ -122,7 +122,7 @@ class KeeperTest extends TestCase
             [null],
             ['foo'],
             [['foo']],
-            [['foo', Keeper::LAST_UPDATE_KEY]]
+            [['foo', Keeper::LAST_UPDATE_KEY]],
         ];
     }
 

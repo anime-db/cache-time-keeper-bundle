@@ -87,7 +87,7 @@ class Keeper
      */
     public function getMax($params = [])
     {
-        $params = (array)$params;
+        $params = (array) $params;
         // always check the date of the last update of the project
         if (!in_array(self::LAST_UPDATE_KEY, $params)) {
             $params[] = self::LAST_UPDATE_KEY;
@@ -106,7 +106,7 @@ class Keeper
      * Set $lifetime as < 0 for not set max-age
      *
      * @param mixed $params
-     * @param integer $lifetime
+     * @param int $lifetime
      * @param Response|null $response
      *
      * @return Response
@@ -138,6 +138,7 @@ class Keeper
     {
         $time = new \DateTime();
         $this->driver->set(self::LAST_UPDATE_KEY, $time);
+
         return $time;
     }
 }

@@ -21,7 +21,6 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('parameters.yml');
         $loader->load('services.yml');
@@ -123,20 +122,20 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
             'drivers' => [
                 'multi' => [
                     'fast' => 'shmop',
-                    'slow' => 'file'
+                    'slow' => 'file',
                 ],
                 'shmop' => [
-                    'salt' => $container->getParameter('cache_time_keeper.driver.shmop.salt')
+                    'salt' => $container->getParameter('cache_time_keeper.driver.shmop.salt'),
                 ],
                 'file' => [
-                    'path' => $container->getParameter('cache_time_keeper.driver.file.path')
+                    'path' => $container->getParameter('cache_time_keeper.driver.file.path'),
                 ],
                 'memcached' => [
                     'prefix' => 'cache_time_keeper_',
                     'persistent_id' => 'cache_time_keeper',
-                    'hosts' => []
-                ]
-            ]
+                    'hosts' => [],
+                ],
+            ],
         ], $config);
     }
 }

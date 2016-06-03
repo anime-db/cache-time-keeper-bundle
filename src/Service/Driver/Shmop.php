@@ -39,7 +39,7 @@ class Shmop extends BaseDriver
             return (new \DateTime())->setTimestamp($time);
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -73,10 +73,10 @@ class Shmop extends BaseDriver
     /**
      * @param string $key
      *
-     * @return integer
+     * @return int
      */
     public function getIdByKey($key)
     {
-        return (int)sprintf('%u', crc32($key.$this->salt));
+        return (int) sprintf('%u', crc32($key.$this->salt));
     }
 }
