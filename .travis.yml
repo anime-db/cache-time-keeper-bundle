@@ -10,7 +10,7 @@ notifications:
     email: dev@anime-db.org
 
 before_script:
-    - echo "extension = shmop.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    - phpenv config-add .travis/php.ini
 
 install:
     - composer self-update
