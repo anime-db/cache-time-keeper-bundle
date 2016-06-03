@@ -28,7 +28,7 @@ class ShmopTestBase extends BaseDriverTest
     protected function setUp()
     {
         parent::setUp();
-        $this->sh = new BlockShmop($this->getDriver()->getIdByKey(self::TEST_DATA), 10);
+        $this->sh = new BlockShmop($this->getDriver()->getIdByKey(self::DATE_KEY), 10);
         $this->sh->delete();
     }
 
