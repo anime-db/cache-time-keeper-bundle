@@ -1,8 +1,7 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
@@ -15,12 +14,6 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 
-/**
- * Test console event listener
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener
- * @author Peter Gribanov <info@peter-gribanov.ru>
- */
 class ConsoleTest extends TestCase
 {
     /**
@@ -45,9 +38,9 @@ class ConsoleTest extends TestCase
 
     protected function setUp()
     {
-        $this->keeper = $this->getMockObject('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper');
-        $this->command = $this->getMockObject('\Symfony\Component\Console\Command\Command');
-        $this->event = $this->getMockObject('\Symfony\Component\Console\Event\ConsoleTerminateEvent');
+        $this->keeper = $this->getMockObject(Keeper::class);
+        $this->command = $this->getMockObject(Command::class);
+        $this->event = $this->getMockObject(ConsoleTerminateEvent::class);
 
         $this->event
             ->expects($this->once())

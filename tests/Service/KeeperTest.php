@@ -1,8 +1,7 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
@@ -14,12 +13,6 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Test keeper
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service
- * @author Peter Gribanov <info@peter-gribanov.ru>
- */
 class KeeperTest extends TestCase
 {
     /**
@@ -40,7 +33,7 @@ class KeeperTest extends TestCase
     protected function setUp()
     {
         $this->time = new \DateTime();
-        $this->driver = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
+        $this->driver = $this->getMock(DriverInterface::class);
 
         $this->keeper = new Keeper($this->driver);
     }
@@ -181,7 +174,7 @@ class KeeperTest extends TestCase
             ->with(['foo', Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue($this->time));
         $lifetime = 3600;
-        $response = $this->getMock('\Symfony\Component\HttpFoundation\Response');
+        $response = $this->getMock(Response::class);
         $response
             ->expects($this->once())
             ->method('setPublic')

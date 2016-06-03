@@ -1,8 +1,7 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
@@ -13,12 +12,6 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Multi;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
 
-/**
- * Test multi driver
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver
- * @author Peter Gribanov <info@peter-gribanov.ru>
- */
 class MultiTest extends TestCase
 {
     /**
@@ -43,8 +36,8 @@ class MultiTest extends TestCase
 
     protected function setUp()
     {
-        $this->fast_driver = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
-        $this->slow_driver = $this->getMock('\AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface');
+        $this->fast_driver = $this->getMock(DriverInterface::class);
+        $this->slow_driver = $this->getMock(DriverInterface::class);
 
         $this->time = new \DateTime();
         $this->driver = new Multi($this->fast_driver, $this->slow_driver);
@@ -126,7 +119,7 @@ class MultiTest extends TestCase
     }
 
     /**
-     * Test remove the time by fast driver is failed
+     * Test remove the time by fast driver is failed.
      */
     public function testRemoveFromFastFail()
     {
@@ -143,7 +136,7 @@ class MultiTest extends TestCase
     }
 
     /**
-     * Test remove the time by slow driver is failed
+     * Test remove the time by slow driver is failed.
      */
     public function testRemoveFromSlowFail()
     {

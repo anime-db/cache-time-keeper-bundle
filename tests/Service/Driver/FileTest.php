@@ -1,8 +1,7 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
@@ -11,12 +10,6 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File;
 
-/**
- * Test file driver
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver
- * @author Peter Gribanov <info@peter-gribanov.ru>
- */
 class FileTestBase extends BaseDriverTest
 {
     /**
@@ -48,7 +41,7 @@ class FileTestBase extends BaseDriverTest
     }
 
     /**
-     * Test make dir for story cache if not exists
+     * Test make dir for story cache if not exists.
      */
     public function testMakeDir()
     {
