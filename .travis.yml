@@ -9,10 +9,8 @@ php:
 notifications:
     email: dev@anime-db.org
 
-before_script:
-    - phpenv config-add .travis/php.ini
-
 install:
+    - phpenv config-add .travis/php.ini
     - composer self-update
     - composer install --prefer-source
 
