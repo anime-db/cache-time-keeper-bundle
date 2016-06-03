@@ -16,16 +16,11 @@
         }
     },
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.5.0",
+        "symfony/framework-bundle": "~2.3|~3.0",
+        "doctrine/orm": "~2.4|~2.5"
     },
     "require-dev": {
-        "symfony/dependency-injection": "2.8.*",
-        "symfony/config": "2.8.*",
-        "symfony/http-kernel": "2.8.*",
-        "symfony/console": "2.8.*",
-        "symfony/expression-language": "2.8.*",
-        "doctrine/orm": "2.5.*",
-        "doctrine/cache": "<=1.5.x-dev",
         "anime-db/shmop": "1.0.*"
     },
     "suggest": {
