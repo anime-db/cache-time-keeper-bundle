@@ -1,28 +1,20 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Keeper
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service
- * @author  Peter Gribanov <info@peter-gribanov.ru>
- */
 class Keeper
 {
     /**
-     * Key for last update of the project
+     * Key for last update of the project.
      *
      * @var string
      */
@@ -42,7 +34,7 @@ class Keeper
     }
 
     /**
-     * Get time for key
+     * Get time for key.
      *
      * @param string $key
      *
@@ -62,12 +54,12 @@ class Keeper
     }
 
     /**
-     * Set time for key
+     * Set time for key.
      *
      * @param string $key
      * @param \DateTime $time
      *
-     * @return boolean
+     * @return bool
      */
     public function set($key, \DateTime $time)
     {
@@ -75,11 +67,11 @@ class Keeper
     }
 
     /**
-     * Remove time for key
+     * Remove time for key.
      *
      * @param string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function remove($key)
     {
@@ -87,7 +79,7 @@ class Keeper
     }
 
     /**
-     * Get a list of keys or dates and chooses the max date
+     * Get a list of keys or dates and chooses the max date.
      *
      * @param mixed $params
      *
@@ -109,7 +101,7 @@ class Keeper
     }
 
     /**
-     * Get cache response
+     * Get cache response.
      *
      * Set $lifetime as < 0 for not set max-age
      *
@@ -138,7 +130,7 @@ class Keeper
     }
 
     /**
-     * Reset last update date
+     * Reset last update date.
      *
      * @return \DateTime
      */

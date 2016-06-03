@@ -1,13 +1,11 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,12 +13,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-/**
- * DependencyInjection
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\DependencyInjection
- * @author  Peter Gribanov <info@peter-gribanov.ru>
- */
 class AnimeDbCacheTimeKeeperExtension extends Extension
 {
     /**

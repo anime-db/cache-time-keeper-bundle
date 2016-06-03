@@ -1,29 +1,19 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-/**
- * Dummy driver
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
- * @author  Peter Gribanov <info@peter-gribanov.ru>
- */
 class Dummy extends BaseDriver
 {
     /**
-     * List times
-     *
      * @var array
      */
-    protected $list = [];
+    protected $times = [];
 
     /**
      * @param string $key
@@ -32,8 +22,8 @@ class Dummy extends BaseDriver
      */
     public function get($key)
     {
-        if (isset($this->list[$key])) {
-            return clone $this->list[$key];
+        if (isset($this->times[$key])) {
+            return clone $this->times[$key];
         }
 
         return null;
@@ -43,23 +33,23 @@ class Dummy extends BaseDriver
      * @param string $key
      * @param \DateTime $time
      *
-     * @return boolean
+     * @return bool
      */
     public function set($key, \DateTime $time)
     {
-        $this->list[$key] = clone $time;
+        $this->times[$key] = clone $time;
         return true;
     }
 
     /**
      * @param string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function remove($key)
     {
-        if (isset($this->list[$key])) {
-            unset($this->list[$key]);
+        if (isset($this->times[$key])) {
+            unset($this->times[$key]);
             return true;
         }
 

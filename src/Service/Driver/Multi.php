@@ -1,25 +1,20 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
 /**
- * Multi drivers
+ * Multi drivers.
  *
  * The driver is a wrapper for multiple drivers. Takes the driver with quick
  * access to the data (stored in memory) and slow (stored on the hard drive),
  * and receives data on the possibility of fast drivers and if not luck reads
  * data from slow.
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
- * @author  Peter Gribanov <info@peter-gribanov.ru>
  */
 class Multi extends BaseDriver
 {
@@ -61,7 +56,7 @@ class Multi extends BaseDriver
      * @param string $key
      * @param \DateTime $time
      *
-     * @return boolean
+     * @return bool
      */
     public function set($key, \DateTime $time)
     {
@@ -75,7 +70,7 @@ class Multi extends BaseDriver
     /**
      * @param string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function remove($key)
     {

@@ -1,21 +1,13 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-/**
- * Memcached driver
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
- * @author  Peter Gribanov <info@peter-gribanov.ru>
- */
 class Memcached extends BaseDriver
 {
     /**
@@ -37,6 +29,7 @@ class Memcached extends BaseDriver
         $this->memcached = $memcached;
         $this->prefix = $prefix;
     }
+
     /**
      * @param string $key
      *
@@ -56,7 +49,7 @@ class Memcached extends BaseDriver
      * @param string $key
      * @param \DateTime $time
      *
-     * @return boolean
+     * @return bool
      */
     public function set($key, \DateTime $time)
     {
@@ -71,7 +64,7 @@ class Memcached extends BaseDriver
     /**
      * @param string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function remove($key)
     {

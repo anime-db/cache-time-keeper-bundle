@@ -1,21 +1,13 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-/**
- * Driver
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
- * @author  Peter Gribanov <info@peter-gribanov.ru>
- */
 interface DriverInterface
 {
     /**
@@ -29,19 +21,19 @@ interface DriverInterface
      * @param string $key
      * @param \DateTime $time
      *
-     * @return boolean
+     * @return bool
      */
     public function set($key, \DateTime $time);
 
     /**
      * @param string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function remove($key);
 
     /**
-     * Get a list of keys or dates and chooses the max date
+     * Get a list of keys or dates and chooses the max date.
      *
      * @param array $params
      *

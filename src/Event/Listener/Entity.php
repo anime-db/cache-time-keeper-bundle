@@ -1,24 +1,16 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-/**
- * Entity listener
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener
- * @author  Peter Gribanov <info@peter-gribanov.ru>
- */
 class Entity
 {
     /**

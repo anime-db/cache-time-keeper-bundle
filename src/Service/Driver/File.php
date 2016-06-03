@@ -1,21 +1,13 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-/**
- * File driver
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
- * @author  Peter Gribanov <info@peter-gribanov.ru>
- */
 class File extends BaseDriver
 {
     /**
@@ -55,7 +47,7 @@ class File extends BaseDriver
      * @param string $key
      * @param \DateTime $time
      *
-     * @return boolean
+     * @return bool
      */
     public function set($key, \DateTime $time)
     {
@@ -71,7 +63,7 @@ class File extends BaseDriver
     /**
      * @param string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function remove($key)
     {

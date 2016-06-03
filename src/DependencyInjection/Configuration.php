@@ -1,24 +1,16 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * DI Configuration
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\DependencyInjection
- * @author  Peter Gribanov <info@peter-gribanov.ru>
- */
 class Configuration implements ConfigurationInterface
 {
     /**
@@ -150,8 +142,7 @@ class Configuration implements ConfigurationInterface
                         ->end() // memcached
                     ->end()
                 ->end() // drivers
-            ->end()
-        ;
+            ->end();
 
         return $treeBuilder;
     }

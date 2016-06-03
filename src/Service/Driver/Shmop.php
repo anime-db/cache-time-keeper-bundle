@@ -1,27 +1,19 @@
 <?php
 /**
- * AnimeDb package
+ * AnimeDb package.
  *
- * @package   AnimeDb
  * @author    Peter Gribanov <info@peter-gribanov.ru>
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
 use AnimeDb\Shmop\FixedBlock as BlockShmop;
 
-/**
- * Shmop driver
- *
- * @package AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver
- * @author  Peter Gribanov <info@peter-gribanov.ru>
- */
 class Shmop extends BaseDriver
 {
     /**
-     * Cache key salt
+     * Cache key salt.
      *
      * @var string
      */
@@ -54,7 +46,7 @@ class Shmop extends BaseDriver
      * @param string $key
      * @param \DateTime $time
      *
-     * @return boolean
+     * @return bool
      */
     public function set($key, \DateTime $time)
     {
@@ -69,7 +61,7 @@ class Shmop extends BaseDriver
     /**
      * @param string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function remove($key)
     {
