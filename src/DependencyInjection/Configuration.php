@@ -41,7 +41,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('anime_db_cache_time_keeper');
 
-        /**
+        /*
          * Example config:
          *
          * anime_db_cache_time_keeper:
@@ -120,7 +120,7 @@ class Configuration implements ConfigurationInterface
                                                 ->cannotBeEmpty()
                                                 ->defaultValue(11211)
                                                 ->validate()
-                                                ->ifTrue(function($v) {
+                                                ->ifTrue(function ($v) {
                                                     return !is_numeric($v);
                                                 })
                                                     ->thenInvalid('Host port must be numeric')
