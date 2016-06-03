@@ -9,6 +9,9 @@ php:
 notifications:
     email: dev@anime-db.org
 
+before_script:
+    - echo "extension = shmop.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
 install:
     - composer self-update
     - composer install --prefer-source
