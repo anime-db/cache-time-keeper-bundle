@@ -10,7 +10,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy;
 
-class DummyTestBase extends BaseDriverTest
+class DummyTest extends BaseDriverTest
 {
     /**
      * @return Dummy

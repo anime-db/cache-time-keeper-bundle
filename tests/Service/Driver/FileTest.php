@@ -10,10 +10,10 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File;
 
-class FileTestBase extends BaseDriverTest
+class FileTest extends BaseDriverTest
 {
     /**
-     * Metadata dir
+     * Metadata dir.
      *
      * @var string
      */

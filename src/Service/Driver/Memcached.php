@@ -42,7 +42,7 @@ class Memcached extends BaseDriver
             return (new \DateTime())->setTimestamp($time);
         }
 
-        return null;
+        return;
     }
 
     /**

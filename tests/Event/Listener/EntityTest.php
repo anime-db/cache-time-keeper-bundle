@@ -41,7 +41,7 @@ class EntityTest extends TestCase
     protected function setUp()
     {
         $this->keeper = $this->getMockObject(Keeper::class);
-        
+
         $this->conf = $this->getMockObject(Configuration::class);
 
         /* @var $em \PHPUnit_Framework_MockObject_MockObject|EntityManager */
@@ -72,7 +72,7 @@ class EntityTest extends TestCase
         return [
             ['postPersist'],
             ['postRemove'],
-            ['postUpdate']
+            ['postUpdate'],
         ];
     }
 
@@ -93,7 +93,7 @@ class EntityTest extends TestCase
             ->method('getEntityNamespaces')
             ->will($this->returnValue([
                 'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
-                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity'
+                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity',
             ]));
 
         call_user_func([$this->listener, $method], $this->args);
@@ -115,7 +115,7 @@ class EntityTest extends TestCase
             ->expects($this->once())
             ->method('getEntityNamespaces')
             ->will($this->returnValue([
-                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity'
+                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
             ]));
 
         call_user_func([$this->listener, $method], $this->args);

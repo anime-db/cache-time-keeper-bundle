@@ -11,7 +11,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop;
 use AnimeDb\Shmop\FixedBlock as BlockShmop;
 
-class ShmopTestBase extends BaseDriverTest
+class ShmopTest extends BaseDriverTest
 {
     /**
      * Cache key salt.

@@ -26,7 +26,7 @@ class Dummy extends BaseDriver
             return clone $this->times[$key];
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -38,6 +38,7 @@ class Dummy extends BaseDriver
     public function set($key, \DateTime $time)
     {
         $this->times[$key] = clone $time;
+
         return true;
     }
 
@@ -50,6 +51,7 @@ class Dummy extends BaseDriver
     {
         if (isset($this->times[$key])) {
             unset($this->times[$key]);
+
             return true;
         }
 
