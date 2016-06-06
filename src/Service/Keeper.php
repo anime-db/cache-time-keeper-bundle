@@ -147,18 +147,7 @@ class Keeper
      */
     public function getModifiedResponse(Request $request, $params = [], $lifetime = -1, Response $response = null)
     {
-        if (!$response) {
-            $response = new Response();
-        }
-
-        if ($lifetime > 0) {
-            $response
-                ->setMaxAge($lifetime)
-                ->setSharedMaxAge($lifetime)
-                ->setExpires((new \DateTime())->modify('+'.$lifetime.' seconds'));
-        }
-
-        $response->setLastModified($this->getMax($params));
+        $response = $this->getResponse($params, $lifetime, $response);
 
         if ($response->isNotModified($request)) {
             throw new NotModifiedException($response);
