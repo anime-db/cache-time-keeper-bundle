@@ -21,6 +21,7 @@
         "doctrine/orm": "~2.4|~2.5"
     },
     "require-dev": {
+        "ext-memcached": "*",
         "anime-db/shmop": "1.0.*"
     },
     "suggest": {
