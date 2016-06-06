@@ -117,25 +117,29 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
      */
     protected function mergeDefaultConfig(array $config, ContainerBuilder $container)
     {
-        return array_merge([
+        $config = array_merge([
             'use_driver' => 'file',
-            'drivers' => [
-                'multi' => [
-                    'fast' => 'shmop',
-                    'slow' => 'file',
-                ],
-                'shmop' => [
-                    'salt' => $container->getParameter('cache_time_keeper.driver.shmop.salt'),
-                ],
-                'file' => [
-                    'path' => $container->getParameter('cache_time_keeper.driver.file.path'),
-                ],
-                'memcache' => [
-                    'prefix' => 'cache_time_keeper_',
-                    'persistent_id' => 'cache_time_keeper',
-                    'hosts' => [],
-                ],
-            ],
+            'drivers' => [],
         ], $config);
+
+        $config['drivers'] = array_merge([
+            'multi' => [
+                'fast' => 'shmop',
+                'slow' => 'file',
+            ],
+            'shmop' => [
+                'salt' => $container->getParameter('cache_time_keeper.driver.shmop.salt'),
+            ],
+            'file' => [
+                'path' => $container->getParameter('cache_time_keeper.driver.file.path'),
+            ],
+            'memcache' => [
+                'prefix' => 'cache_time_keeper_',
+                'persistent_id' => 'cache_time_keeper',
+                'hosts' => [],
+            ],
+        ], $config['drivers']);
+
+        return $config;
     }
 }
