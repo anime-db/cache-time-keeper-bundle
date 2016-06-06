@@ -73,7 +73,8 @@ class MemcachedTest extends TestCase
         $this->memcached
             ->expects($this->once())
             ->method('set')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, $this->time->getTimestamp(), null);
+            ->with(self::KEY_PREFIX.self::DATE_KEY, $this->time->getTimestamp(), null)
+            ->will($this->returnValue(true));
 
         $this->memcached
             ->expects($this->at(3))
