@@ -94,16 +94,12 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
             $config['use_driver'] = $container->getParameter('cache_time_keeper.driver');
         }
 
-        if (empty($config['drivers']['multi']['fast']) &&
-            $container->hasParameter('cache_time_keeper.driver.multi.fast')
-        ) {
-            $config['drivers']['multi']['fast'] = $container->getParameter('cache_time_keeper.driver.multi.fast');
-        }
-
-        if (empty($config['drivers']['multi']['slow']) &&
-            $container->hasParameter('cache_time_keeper.driver.multi.slow')
-        ) {
-            $config['drivers']['multi']['slow'] = $container->getParameter('cache_time_keeper.driver.multi.slow');
+        foreach (['fast', 'slow'] as $item) {
+            if (empty($config['drivers']['multi'][$item]) &&
+                $container->hasParameter('cache_time_keeper.driver.multi.'.$item)
+            ) {
+                $config['drivers']['multi'][$item] = $container->getParameter('cache_time_keeper.driver.multi.'.$item);
+            }
         }
 
         return $config;
