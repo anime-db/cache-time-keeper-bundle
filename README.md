@@ -109,7 +109,7 @@ Remove value:
 $this->get('cache_time_keeper')->remove('foo');
 ```
 
-## Use in controllers:
+### Use in controllers:
 
 ```php
 namespace Acme\Bundle\DemoBundle\Controller;
@@ -168,7 +168,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 $response = $this->get('cache_time_keeper')->getResponse('foo', 3600, new JsonResponse());
 ```
 
-Use in controllers:
+### Use in controllers:
 
 ```php
 namespace Acme\Bundle\DemoBundle\Controller;
@@ -200,6 +200,39 @@ class HomeController extends Controller
             ],
             $response
         );
+    }
+}
+```
+
+## Usage only modified configured response in controllers
+
+```php
+namespace Acme\Bundle\DemoBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class HomeController extends Controller
+{
+    public function indexAction(Request $request, $id)
+    {
+        // cache becomes invalid if changing at least one of the pages, the catalog or the updated project
+        $response = $this->get('cache_time_keeper')->getModifiedResponse(
+            $request,
+            ['AcmeDemoBundle:Page', 'AcmeDemoBundle:Catalog'],
+            3600,
+            new JsonResponse()
+        );
+
+        // get entities
+        $page = $this->getDoctrine()->getRepository('AcmeDemoBundle:Page')->find($id);
+        $catalogs = $this->getDoctrine()->getRepository('AcmeDemoBundle:Catalog')->findAll();
+
+        return $response->setData([
+            'page' => $page,
+            'catalogs' => $catalogs
+        ]);
     }
 }
 ```

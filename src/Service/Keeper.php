@@ -8,7 +8,9 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Exception\NotModifiedException;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class Keeper
@@ -127,6 +129,46 @@ class Keeper
         return $response
             ->setPublic()
             ->setLastModified($this->getMax($params));
+    }
+
+    /**
+     * Get only modified response.
+     *
+     * Throw exception if response was not modified for this request
+     *
+     * Set $lifetime as < 0 for not set max-age
+     *
+     * @throws NotModifiedException
+     *
+     * @param Request $request
+     * @param mixed $params
+     * @param int $lifetime
+     * @param Response|null $response
+     *
+     * @return Response
+     */
+    public function getModifiedResponse(Request $request, $params = [], $lifetime = -1, Response $response = null)
+    {
+        if (!$response) {
+            $response = new Response();
+        }
+
+        if ($lifetime > 0) {
+            $response
+                ->setMaxAge($lifetime)
+                ->setSharedMaxAge($lifetime)
+                ->setExpires((new \DateTime())->modify('+'.$lifetime.' seconds'));
+        }
+
+        $response
+            ->setPublic()
+            ->setLastModified($this->getMax($params));
+
+        if ($response->isNotModified($request)) {
+            throw new NotModifiedException($response);
+        }
+
+        return $response;
     }
 
     /**

@@ -12,3 +12,8 @@ services:
         arguments: [ '@cache_time_keeper' ]
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: onTerminate }
+
+    cache_time_keeper.listener.exception:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\ExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
