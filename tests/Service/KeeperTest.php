@@ -178,10 +178,6 @@ class KeeperTest extends TestCase
         $response = $this->getMock(Response::class);
         $response
             ->expects($this->once())
-            ->method('setPublic')
-            ->will($this->returnSelf());
-        $response
-            ->expects($this->once())
             ->method('setMaxAge')
             ->with($lifetime)
             ->will($this->returnSelf());
@@ -216,7 +212,7 @@ class KeeperTest extends TestCase
             ->with([Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue($this->time));
         $response = new Response();
-        $response->setPublic()->setLastModified($this->time);
+        $response->setLastModified($this->time);
 
         $this->assertEquals($response, $this->keeper->getResponse());
     }
