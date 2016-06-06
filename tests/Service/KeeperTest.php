@@ -159,7 +159,7 @@ class KeeperTest extends TestCase
         $this->driver
             ->expects($this->once())
             ->method('set')
-            ->will($this->returnCallback(function ($key, $time)  {
+            ->will($this->returnCallback(function ($key, $time) {
                 $this->assertEquals(Keeper::LAST_UPDATE_KEY, $key);
                 $this->assertInstanceOf('\DateTime', $time);
             }));

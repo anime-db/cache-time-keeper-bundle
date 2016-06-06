@@ -60,14 +60,14 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
         $this->assertEquals([], $this->container->getDefinition('cache_time_keeper.memcache')->getMethodCalls());
 
         // service aliases
-        $this->assertEquals('custom.driver', (string)$this->container->getAlias('cache_time_keeper.driver'));
+        $this->assertEquals('custom.driver', (string) $this->container->getAlias('cache_time_keeper.driver'));
         $this->assertEquals(
             'custom.driver.fast',
-            (string)$this->container->getAlias('cache_time_keeper.driver.multi.fast')
+            (string) $this->container->getAlias('cache_time_keeper.driver.multi.fast')
         );
         $this->assertEquals(
             'custom.driver.slow',
-            (string)$this->container->getAlias('cache_time_keeper.driver.multi.slow')
+            (string) $this->container->getAlias('cache_time_keeper.driver.multi.slow')
         );
     }
 
@@ -94,17 +94,17 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
                             [
                                 'host' => '192.168.0.2',
                                 'port' => 11211,
-                                'weight' => 100
+                                'weight' => 100,
                             ],
                             [
                                 'host' => '192.168.0.3',
                                 'port' => 11211,
-                                'weight' => 200
-                            ]
+                                'weight' => 200,
+                            ],
                         ],
                     ],
                 ],
-            ]
+            ],
         ];
 
         $this->di->load($config, $this->container); // test
@@ -132,11 +132,11 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
             [
                 [
                     'addServer',
-                    $config['anime_db_cache_time_keeper']['drivers']['memcache']['hosts'][0]
+                    $config['anime_db_cache_time_keeper']['drivers']['memcache']['hosts'][0],
                 ],
                 [
                     'addServer',
-                    $config['anime_db_cache_time_keeper']['drivers']['memcache']['hosts'][1]
+                    $config['anime_db_cache_time_keeper']['drivers']['memcache']['hosts'][1],
                 ]
             ],
             $this->container->getDefinition('cache_time_keeper.memcache')->getMethodCalls()
@@ -145,15 +145,15 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
         // service aliases
         $this->assertEquals(
             'cache_time_keeper.driver.file',
-            (string)$this->container->getAlias('cache_time_keeper.driver')
+            (string) $this->container->getAlias('cache_time_keeper.driver')
         );
         $this->assertEquals(
             'cache_time_keeper.driver.shmop',
-            (string)$this->container->getAlias('cache_time_keeper.driver.multi.fast')
+            (string) $this->container->getAlias('cache_time_keeper.driver.multi.fast')
         );
         $this->assertEquals(
             'cache_time_keeper.driver.file',
-            (string)$this->container->getAlias('cache_time_keeper.driver.multi.slow')
+            (string) $this->container->getAlias('cache_time_keeper.driver.multi.slow')
         );
     }
 }
