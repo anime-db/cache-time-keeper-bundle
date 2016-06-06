@@ -34,8 +34,8 @@ abstract class BaseDriverTest extends TestCase
     {
         $driver = $this->getDriver();
         $this->assertTrue($driver->set(self::DATE_KEY, $this->time));
-        $this->assertEquals($this->time, $driver->get(self::DATE_KEY));
         $this->assertNotEquals($this->time, $driver->get(self::DATE_KEY)->modify('+1 day'));
+        $this->assertEquals($this->time, $driver->get(self::DATE_KEY));
     }
 
     public function testSet()
