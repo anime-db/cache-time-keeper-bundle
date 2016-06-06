@@ -11,7 +11,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 
-class Console
+class ConsoleListener
 {
     /**
      * @var Keeper

@@ -9,12 +9,12 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Console;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\ConsoleListener;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 
-class ConsoleTest extends TestCase
+class ConsoleListenerTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Keeper
@@ -32,7 +32,7 @@ class ConsoleTest extends TestCase
     protected $event;
 
     /**
-     * @var Console
+     * @var ConsoleListener
      */
     protected $listener;
 
@@ -47,7 +47,7 @@ class ConsoleTest extends TestCase
             ->method('getCommand')
             ->will($this->returnValue($this->command));
 
-        $this->listener = new Console($this->keeper);
+        $this->listener = new ConsoleListener($this->keeper);
     }
 
     public function testOnTerminate()

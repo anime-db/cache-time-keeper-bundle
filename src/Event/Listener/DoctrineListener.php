@@ -11,7 +11,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-class Entity
+class DoctrineListener
 {
     /**
      * @var Keeper

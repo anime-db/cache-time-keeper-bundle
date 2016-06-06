@@ -10,13 +10,13 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\Entity;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\DoctrineListener;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Demo;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-class EntityTest extends TestCase
+class DoctrineListenerTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Keeper
@@ -34,7 +34,7 @@ class EntityTest extends TestCase
     protected $conf;
 
     /**
-     * @var Entity
+     * @var DoctrineListener
      */
     protected $listener;
 
@@ -61,7 +61,7 @@ class EntityTest extends TestCase
             ->method('getEntity')
             ->will($this->returnValue(new Demo()));
 
-        $this->listener = new Entity($this->keeper);
+        $this->listener = new DoctrineListener($this->keeper);
     }
 
     /**
