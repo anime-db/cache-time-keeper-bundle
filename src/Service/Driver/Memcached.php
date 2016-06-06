@@ -42,7 +42,7 @@ class Memcached extends BaseDriver
             return (new \DateTime())->setTimestamp($time);
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -53,12 +53,7 @@ class Memcached extends BaseDriver
      */
     public function set($key, \DateTime $time)
     {
-        $key = $this->prefix.$key;
-        if (!($old_time = $this->memcached->get($key)) || $old_time < $time->getTimestamp()) {
-            $this->memcached->set($key, $time->getTimestamp());
-        }
-
-        return true;
+        return $this->memcached->set($this->prefix.$key, $time->getTimestamp());
     }
 
     /**
