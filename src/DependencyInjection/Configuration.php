@@ -49,7 +49,7 @@ class Configuration implements ConfigurationInterface
      *             salt: '%secret%'
      *         file:
      *             path: '%kernel.root_dir%/cache/cache-time-keeper/'
-     *         memcached:
+     *         memcache:
      *             prefix: 'cache_time_keeper_'
      *             persistent_id: 'cache_time_keeper'
      *             hosts:
@@ -69,7 +69,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->arrayNode('drivers')
                         ->append($this->getDriverFile())
-                        ->append($this->getDriverMemcached())
+                        ->append($this->getDriverMemcache())
                         ->append($this->getDriverMulti())
                         ->append($this->getDriverShmop())
                     ->end()
@@ -136,12 +136,12 @@ class Configuration implements ConfigurationInterface
     /**
      * @return ArrayNodeDefinition
      */
-    protected function getDriverMemcached()
+    protected function getDriverMemcache()
     {
         $tree_builder = new TreeBuilder();
 
         return $tree_builder
-            ->root('memcached')
+            ->root('memcache')
                 ->children()
                     ->scalarNode('prefix')
                         ->defaultValue('cache_time_keeper_')

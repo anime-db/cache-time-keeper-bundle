@@ -42,15 +42,15 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
             ->getDefinition('cache_time_keeper.driver.file')
             ->replaceArgument(0, $config['drivers']['file']['path']);
         $container
-            ->getDefinition('cache_time_keeper.driver.memcached')
-            ->replaceArgument(1, $config['drivers']['memcached']['prefix']);
+            ->getDefinition('cache_time_keeper.driver.memcache')
+            ->replaceArgument(1, $config['drivers']['memcache']['prefix']);
 
-        // configure memcached
-        $memcached = $container
-            ->getDefinition('cache_time_keeper.memcached')
-            ->replaceArgument(0, $config['drivers']['memcached']['persistent_id']);
-        foreach ($config['drivers']['memcached']['hosts'] as $host) {
-            $memcached->addMethodCall('addServer', $host);
+        // configure memcache
+        $memcache = $container
+            ->getDefinition('cache_time_keeper.memcache')
+            ->replaceArgument(0, $config['drivers']['memcache']['persistent_id']);
+        foreach ($config['drivers']['memcache']['hosts'] as $host) {
+            $memcache->addMethodCall('addServer', $host);
         }
 
         // add service aliases
@@ -130,7 +130,7 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
                 'file' => [
                     'path' => $container->getParameter('cache_time_keeper.driver.file.path'),
                 ],
-                'memcached' => [
+                'memcache' => [
                     'prefix' => 'cache_time_keeper_',
                     'persistent_id' => 'cache_time_keeper',
                     'hosts' => [],

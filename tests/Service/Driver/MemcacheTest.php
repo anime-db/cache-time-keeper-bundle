@@ -8,20 +8,20 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service\Driver;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Memcached;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Memcache;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 
-class MemcachedTest extends TestCase
+class MemcacheTest extends TestCase
 {
     /**
-     * @var Memcached
+     * @var Memcache
      */
     protected $driver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Memcached
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Memcache
      */
-    protected $memcached;
+    protected $memcache;
 
     /**
      * @var \DateTime
@@ -35,13 +35,13 @@ class MemcachedTest extends TestCase
     protected function setUp()
     {
         $this->time = new \DateTime();
-        $this->memcached = $this->getMock(\Memcached::class);
-        $this->driver = new Memcached($this->memcached, self::KEY_PREFIX);
+        $this->memcache = $this->getMock(\Memcache::class);
+        $this->driver = new Memcache($this->memcache, self::KEY_PREFIX);
     }
 
     public function testGetNull()
     {
-        $this->memcached
+        $this->memcache
             ->expects($this->once())
             ->method('get')
             ->with(self::KEY_PREFIX.self::DATE_KEY)
@@ -52,7 +52,7 @@ class MemcachedTest extends TestCase
 
     public function testGet()
     {
-        $this->memcached
+        $this->memcache
             ->expects($this->atLeastOnce())
             ->method('get')
             ->with(self::KEY_PREFIX.self::DATE_KEY)
@@ -64,20 +64,20 @@ class MemcachedTest extends TestCase
 
     public function testSet()
     {
-        $this->memcached
-            ->expects($this->at(1))
+        $this->memcache
+            ->expects($this->at(0))
             ->method('get')
             ->with(self::KEY_PREFIX.self::DATE_KEY)
             ->will($this->returnValue(null));
 
-        $this->memcached
+        $this->memcache
             ->expects($this->once())
             ->method('set')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, $this->time->getTimestamp(), null)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, $this->time->getTimestamp())
             ->will($this->returnValue(true));
 
-        $this->memcached
-            ->expects($this->at(3))
+        $this->memcache
+            ->expects($this->at(2))
             ->method('get')
             ->with(self::KEY_PREFIX.self::DATE_KEY)
             ->will($this->returnValue($this->time->getTimestamp()));
@@ -96,7 +96,7 @@ class MemcachedTest extends TestCase
 
     public function testRemove()
     {
-        $this->memcached
+        $this->memcache
             ->expects($this->once())
             ->method('delete')
             ->with(self::KEY_PREFIX.self::DATE_KEY)
@@ -112,7 +112,7 @@ class MemcachedTest extends TestCase
         $foo_time = new \DateTime();
         $foo_time->modify('+1 day');
 
-        $this->memcached
+        $this->memcache
             ->expects($this->once())
             ->method('get')
             ->with(self::KEY_PREFIX.self::DATE_KEY)
@@ -122,10 +122,10 @@ class MemcachedTest extends TestCase
     }
 
     /**
-     * @return Memcached
+     * @return Memcache
      */
     protected function getDriver()
     {
-        return new Memcached($this->memcached, self::KEY_PREFIX);
+        return new Memcache($this->memcache, self::KEY_PREFIX);
     }
 }

@@ -21,11 +21,11 @@
         "doctrine/orm": "~2.4|~2.5"
     },
     "require-dev": {
-        "ext-memcached": "*",
+        "ext-memcache": "*",
         "anime-db/shmop": "1.0.*"
     },
     "suggest": {
-        "ext-memcached": "Allows use a memcached cache driver",
+        "ext-memcache": "Allows use a memcache cache driver",
         "anime-db/shmop": "Allows use a shmop cache driver"
     },
     "minimum-stability": "stable"

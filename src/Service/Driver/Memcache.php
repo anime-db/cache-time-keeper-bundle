@@ -8,12 +8,12 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver;
 
-class Memcached extends BaseDriver
+class Memcache extends BaseDriver
 {
     /**
-     * @var \Memcached
+     * @var \Memcache
      */
-    protected $memcached;
+    protected $memcache;
 
     /**
      * @var string
@@ -21,12 +21,12 @@ class Memcached extends BaseDriver
     protected $prefix;
 
     /**
-     * @param \Memcached $memcached
+     * @param \Memcache $memcache
      * @param string $prefix
      */
-    public function __construct(\Memcached $memcached, $prefix)
+    public function __construct(\Memcache $memcache, $prefix)
     {
-        $this->memcached = $memcached;
+        $this->memcache = $memcache;
         $this->prefix = $prefix;
     }
 
@@ -38,7 +38,7 @@ class Memcached extends BaseDriver
     public function get($key)
     {
         $key = $this->prefix.$key;
-        if ($time = $this->memcached->get($key)) {
+        if ($time = $this->memcache->get($key)) {
             return (new \DateTime())->setTimestamp($time);
         }
 
@@ -54,8 +54,8 @@ class Memcached extends BaseDriver
     public function set($key, \DateTime $time)
     {
         $key = $this->prefix.$key;
-        if (!($old_time = $this->memcached->get($key)) || $old_time < $time->getTimestamp()) {
-            return $this->memcached->set($key, $time->getTimestamp());
+        if (!($old_time = $this->memcache->get($key)) || $old_time < $time->getTimestamp()) {
+            return $this->memcache->set($key, $time->getTimestamp());
         }
 
         return true;
@@ -68,6 +68,6 @@ class Memcached extends BaseDriver
      */
     public function remove($key)
     {
-        return $this->memcached->delete($this->prefix.$key);
+        return $this->memcache->delete($this->prefix.$key);
     }
 }
