@@ -41,13 +41,10 @@ class MemcachedTest extends TestCase
 
     public function testGetNull()
     {
-        $cache_cb = null;
-        $cas_token = null;
-        $udf_flags = null;
         $this->memcached
             ->expects($this->once())
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, $cache_cb, $cas_token, $udf_flags)
+            ->with(self::KEY_PREFIX.self::DATE_KEY)
             ->will($this->returnValue(null));
 
         $this->assertNull($this->driver->get(self::DATE_KEY));
@@ -55,16 +52,11 @@ class MemcachedTest extends TestCase
 
     public function testGet()
     {
-        $cache_cb = null;
-        $cas_token = null;
-        $udf_flags = null;
         $this->memcached
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, $cache_cb, $cas_token, $udf_flags)
-            ->will($this->returnCallback(function () {
-                return clone $this->time;
-            }));
+            ->with(self::KEY_PREFIX.self::DATE_KEY)
+            ->will($this->returnValue($this->time->getTimestamp()));
 
         $this->assertNotEquals($this->time, $this->driver->get(self::DATE_KEY)->modify('+1 day'));
         $this->assertEquals($this->time, $this->driver->get(self::DATE_KEY));
@@ -72,13 +64,10 @@ class MemcachedTest extends TestCase
 
     public function testSet()
     {
-        $cache_cb = null;
-        $cas_token = null;
-        $udf_flags = null;
         $this->memcached
             ->expects($this->at(1))
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, $cache_cb, $cas_token, $udf_flags)
+            ->with(self::KEY_PREFIX.self::DATE_KEY)
             ->will($this->returnValue(null));
 
         $this->memcached
@@ -89,10 +78,8 @@ class MemcachedTest extends TestCase
         $this->memcached
             ->expects($this->at(3))
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, $cache_cb, $cas_token, $udf_flags)
-            ->will($this->returnCallback(function () {
-                return clone $this->time;
-            }));
+            ->with(self::KEY_PREFIX.self::DATE_KEY)
+            ->will($this->returnValue($this->time->getTimestamp()));
 
         $this->assertTrue($this->driver->set(self::DATE_KEY, $this->time));
         $this->assertTrue($this->driver->set(self::DATE_KEY, $this->time->modify('-1 day')));
@@ -124,16 +111,11 @@ class MemcachedTest extends TestCase
         $foo_time = new \DateTime();
         $foo_time->modify('+1 day');
 
-        $cache_cb = null;
-        $cas_token = null;
-        $udf_flags = null;
         $this->memcached
             ->expects($this->once())
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, $cache_cb, $cas_token, $udf_flags)
-            ->will($this->returnCallback(function () use ($foo_time) {
-                return clone $foo_time;
-            }));
+            ->with(self::KEY_PREFIX.self::DATE_KEY)
+            ->will($this->returnValue($foo_time->getTimestamp()));
 
         $this->assertEquals($foo_time, $this->driver->getMax([self::DATE_KEY, $this->time]));
     }
