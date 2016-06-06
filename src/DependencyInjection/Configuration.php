@@ -35,45 +35,45 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
+     * Config tree builder.
+     *
+     * Example config:
+     *
+     * anime_db_cache_time_keeper:
+     *     use_driver: file
+     *     drivers:
+     *         multi:
+     *             fast: shmop
+     *             slow: file
+     *         shmop:
+     *             salt: '%secret%'
+     *         file:
+     *             path: '%kernel.root_dir%/cache/cache-time-keeper/'
+     *         memcached:
+     *             prefix: 'cache_time_keeper_'
+     *             persistent_id: 'cache_time_keeper'
+     *             hosts:
+     *                 - {host: 'localhost', port: 11211, weight: 100}
+     *
      * @return TreeBuilder
      */
     public function getConfigTreeBuilder()
     {
         $tree_builder = new TreeBuilder();
-        $root_node = $tree_builder->root('anime_db_cache_time_keeper');
-
-        /*
-         * Example config:
-         *
-         * anime_db_cache_time_keeper:
-         *     use_driver: file
-         *     drivers:
-         *         multi:
-         *             fast: shmop
-         *             slow: file
-         *         shmop:
-         *             salt: '%secret%'
-         *         file:
-         *             path: '%kernel.root_dir%/cache/cache-time-keeper/'
-         *         memcached:
-         *             prefix: 'cache_time_keeper_'
-         *             persistent_id: 'cache_time_keeper'
-         *             hosts:
-         *                 - {host: 'localhost', port: 11211, weight: 100}
-         */
-        $root_node
-            ->children()
-                ->scalarNode('use_driver')
-                    ->cannotBeEmpty()
-                    ->defaultValue('file')
-                ->end()
-                ->arrayNode('drivers')
-                    ->append($this->getDriverFile())
-                    ->append($this->getDriverMemcached())
-                    ->append($this->getDriverMulti())
-                    ->append($this->getDriverShmop())
-                ->end()
-            ->end();
+        $tree_builder
+            ->root('anime_db_cache_time_keeper')
+                ->children()
+                    ->scalarNode('use_driver')
+                        ->cannotBeEmpty()
+                        ->defaultValue('file')
+                    ->end()
+                    ->arrayNode('drivers')
+                        ->append($this->getDriverFile())
+                        ->append($this->getDriverMemcached())
+                        ->append($this->getDriverMulti())
+                        ->append($this->getDriverShmop())
+                    ->end()
+                ->end();
 
         return $tree_builder;
     }
