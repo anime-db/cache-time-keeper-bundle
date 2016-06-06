@@ -44,7 +44,7 @@ class MemcachedTest extends TestCase
         $this->memcached
             ->expects($this->once())
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, null, null, null)
             ->will($this->returnValue(null));
 
         $this->assertNull($this->driver->get(self::DATE_KEY));
@@ -55,7 +55,7 @@ class MemcachedTest extends TestCase
         $this->memcached
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, null, null, null)
             ->will($this->returnCallback(function () {
                 return clone $this->time;
             }));
@@ -69,18 +69,18 @@ class MemcachedTest extends TestCase
         $this->memcached
             ->expects($this->at(1))
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, null, null, null)
             ->will($this->returnValue(null));
 
         $this->memcached
             ->expects($this->once())
             ->method('set')
-            ->with($this->time);
+            ->with(self::KEY_PREFIX.self::DATE_KEY, $this->time, null);
 
         $this->memcached
             ->expects($this->at(3))
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, null, null, null)
             ->will($this->returnCallback(function () {
                 return clone $this->time;
             }));
@@ -118,7 +118,7 @@ class MemcachedTest extends TestCase
         $this->memcached
             ->expects($this->once())
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, null, null, null)
             ->will($this->returnCallback(function () use ($foo_time) {
                 return clone $foo_time;
             }));
