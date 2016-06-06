@@ -8,9 +8,11 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Exception\NotModifiedException;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class KeeperTest extends TestCase
@@ -149,7 +151,6 @@ class KeeperTest extends TestCase
      */
     public function testGetMaxEmptyList($params)
     {
-        $that = $this;
         $this->driver
             ->expects($this->once())
             ->method('getMax')
@@ -158,8 +159,8 @@ class KeeperTest extends TestCase
         $this->driver
             ->expects($this->once())
             ->method('set')
-            ->will($this->returnCallback(function ($key, $time) use ($that) {
-                $that->assertEquals(Keeper::LAST_UPDATE_KEY, $key);
+            ->will($this->returnCallback(function ($key, $time)  {
+                $this->assertEquals(Keeper::LAST_UPDATE_KEY, $key);
                 $this->assertInstanceOf('\DateTime', $time);
             }));
 
@@ -215,5 +216,116 @@ class KeeperTest extends TestCase
         $response->setLastModified($this->time);
 
         $this->assertEquals($response, $this->keeper->getResponse());
+    }
+
+    public function testGetModifiedResponseNoParams()
+    {
+        $this->driver
+            ->expects($this->once())
+            ->method('getMax')
+            ->with([Keeper::LAST_UPDATE_KEY])
+            ->will($this->returnValue($this->time));
+
+        /** @var $request \PHPUnit_Framework_MockObject_MockObject|Request */
+        $request = $this->getMock(Request::class);
+        $request
+            ->expects($this->once())
+            ->method('isMethodSafe')
+            ->will($this->returnValue(false));
+
+        $response = $this->keeper->getModifiedResponse($request);
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals($this->time, $response->getLastModified());
+    }
+
+    public function testGetModifiedResponseUseLifetime()
+    {
+        $lifetime = 3600;
+        $expires = (new \DateTime())->modify('+'.$lifetime.' seconds');
+
+        $this->driver
+            ->expects($this->once())
+            ->method('getMax')
+            ->with(['foo', Keeper::LAST_UPDATE_KEY])
+            ->will($this->returnValue($this->time));
+
+        /** @var $request \PHPUnit_Framework_MockObject_MockObject|Request */
+        $request = $this->getMock(Request::class);
+
+        /** @var $response \PHPUnit_Framework_MockObject_MockObject|Response */
+        $response = $this->getMock(Response::class);
+        $response
+            ->expects($this->once())
+            ->method('setMaxAge')
+            ->with($lifetime)
+            ->will($this->returnSelf());
+        $response
+            ->expects($this->once())
+            ->method('setSharedMaxAge')
+            ->with($lifetime)
+            ->will($this->returnSelf());
+        $response
+            ->expects($this->once())
+            ->method('setExpires')
+            ->will($this->returnCallback(function ($date) use ($response, $expires) {
+                $this->assertInstanceOf(\DateTime::class, $date);
+                $this->assertTrue($date >= $expires); // test can be run more than 1 second
+
+                return $response;
+            }));
+        $response
+            ->expects($this->once())
+            ->method('setLastModified')
+            ->with($this->time)
+            ->will($this->returnSelf());
+        $response
+            ->expects($this->once())
+            ->method('isNotModified')
+            ->with($request)
+            ->will($this->returnValue(false));
+
+        $actual = $this->keeper->getModifiedResponse($request, 'foo', $lifetime, $response);
+
+        $this->assertEquals($response, $actual);
+    }
+
+    public function testGetModifiedResponse()
+    {
+        $this->driver
+            ->expects($this->once())
+            ->method('getMax')
+            ->with(['foo', Keeper::LAST_UPDATE_KEY])
+            ->will($this->returnValue($this->time));
+
+        /** @var $request \PHPUnit_Framework_MockObject_MockObject|Request */
+        $request = $this->getMock(Request::class);
+
+        /** @var $response \PHPUnit_Framework_MockObject_MockObject|Response */
+        $response = $this->getMock(Response::class);
+        $response
+            ->expects($this->once())
+            ->method('setLastModified')
+            ->with($this->time)
+            ->will($this->returnSelf());
+        $response
+            ->expects($this->once())
+            ->method('isNotModified')
+            ->with($request)
+            ->will($this->returnValue(true));
+        $response
+            ->expects($this->atLeastOnce())
+            ->method('getStatusCode')
+            ->will($this->returnValue(Response::HTTP_NOT_MODIFIED));
+
+        try {
+            $this->keeper->getModifiedResponse($request, 'foo', -1, $response);
+            $this->assertTrue(false, 'Must throw exception');
+
+        } catch (NotModifiedException $e) {
+            $this->assertEquals($response, $e->getResponse());
+            $this->assertEquals(Response::HTTP_NOT_MODIFIED, $e->getCode());
+            $this->assertEquals(Response::$statusTexts[Response::HTTP_NOT_MODIFIED], $e->getMessage());
+        }
     }
 }
