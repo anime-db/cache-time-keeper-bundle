@@ -5,6 +5,9 @@ php:
     - 5.6
     - 7.0
 
+services:
+    - memcached
+
 notifications:
     email: dev@anime-db.org
 
