@@ -137,7 +137,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
                 [
                     'addServer',
                     $config['anime_db_cache_time_keeper']['drivers']['memcache']['hosts'][1],
-                ]
+                ],
             ],
             $this->container->getDefinition('cache_time_keeper.memcache')->getMethodCalls()
         );

@@ -321,7 +321,6 @@ class KeeperTest extends TestCase
         try {
             $this->keeper->getModifiedResponse($request, 'foo', -1, $response);
             $this->assertTrue(false, 'Must throw exception');
-
         } catch (NotModifiedException $e) {
             $this->assertEquals($response, $e->getResponse());
             $this->assertEquals(Response::HTTP_NOT_MODIFIED, $e->getCode());
