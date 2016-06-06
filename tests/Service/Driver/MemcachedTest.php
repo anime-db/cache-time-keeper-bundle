@@ -45,7 +45,7 @@ class MemcachedTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with(self::KEY_PREFIX.self::DATE_KEY)
-            ->will($this->returnValue(null));
+            ->will($this->returnValue(false));
 
         $this->assertNull($this->driver->get(self::DATE_KEY));
     }
