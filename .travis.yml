@@ -12,6 +12,7 @@ notifications:
     email: dev@anime-db.org
 
 install:
+    - pecl install memcache
     - echo "extension=memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
     - composer self-update
     - composer install --prefer-source
