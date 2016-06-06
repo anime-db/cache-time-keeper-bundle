@@ -90,23 +90,23 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
      */
     protected function mergeBackwardCompatibilityConfig(array $config, ContainerBuilder $container)
     {
-        $default_config = [];
-
         if ($container->hasParameter('cache_time_keeper.driver')) {
-            $default_config['use_driver'] = $container->getParameter('cache_time_keeper.driver');
+            $config['use_driver'] = $container->getParameter('cache_time_keeper.driver');
         }
 
-        if ($container->hasParameter('cache_time_keeper.driver.multi.fast')) {
-            $default_config['drivers']['multi']['fast'] = $container
-                ->getParameter('cache_time_keeper.driver.multi.fast');
+        if (empty($config['drivers']['multi']['fast']) &&
+            $container->hasParameter('cache_time_keeper.driver.multi.fast')
+        ) {
+            $config['drivers']['multi']['fast'] = $container->getParameter('cache_time_keeper.driver.multi.fast');
         }
 
-        if ($container->hasParameter('cache_time_keeper.driver.multi.slow')) {
-            $default_config['drivers']['multi']['slow'] = $container
-                ->getParameter('cache_time_keeper.driver.multi.slow');
+        if (empty($config['drivers']['multi']['slow']) &&
+            $container->hasParameter('cache_time_keeper.driver.multi.slow')
+        ) {
+            $config['drivers']['multi']['slow'] = $container->getParameter('cache_time_keeper.driver.multi.slow');
         }
 
-        return array_merge($default_config, $config);
+        return $config;
     }
 
     /**
