@@ -28,7 +28,7 @@ class ExceptionListenerTest extends TestCase
 
     protected function setUp()
     {
-        $this->event = $this->getMockObject(GetResponseForExceptionEvent::class);
+        $this->event = $this->getNoConstructorMock(GetResponseForExceptionEvent::class);
         $this->listener = new ExceptionListener();
     }
 
@@ -50,7 +50,7 @@ class ExceptionListenerTest extends TestCase
     {
         $response = $this->getMock(Response::class);
 
-        $exception = $this->getMockObject(NotModifiedException::class);
+        $exception = $this->getNoConstructorMock(NotModifiedException::class);
         $exception
             ->expects($this->once())
             ->method('getResponse')

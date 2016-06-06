@@ -40,18 +40,18 @@ class DoctrineListenerTest extends TestCase
 
     protected function setUp()
     {
-        $this->keeper = $this->getMockObject(Keeper::class);
+        $this->keeper = $this->getNoConstructorMock(Keeper::class);
 
-        $this->conf = $this->getMockObject(Configuration::class);
+        $this->conf = $this->getNoConstructorMock(Configuration::class);
 
         /* @var $em \PHPUnit_Framework_MockObject_MockObject|EntityManager */
-        $em = $this->getMockObject(EntityManager::class);
+        $em = $this->getNoConstructorMock(EntityManager::class);
         $em
             ->expects($this->once())
             ->method('getConfiguration')
             ->will($this->returnValue($this->conf));
 
-        $this->args = $this->getMockObject(LifecycleEventArgs::class);
+        $this->args = $this->getNoConstructorMock(LifecycleEventArgs::class);
         $this->args
             ->expects($this->once())
             ->method('getEntityManager')

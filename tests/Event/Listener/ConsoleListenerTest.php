@@ -38,9 +38,9 @@ class ConsoleListenerTest extends TestCase
 
     protected function setUp()
     {
-        $this->keeper = $this->getMockObject(Keeper::class);
-        $this->command = $this->getMockObject(Command::class);
-        $this->event = $this->getMockObject(ConsoleTerminateEvent::class);
+        $this->keeper = $this->getNoConstructorMock(Keeper::class);
+        $this->command = $this->getNoConstructorMock(Command::class);
+        $this->event = $this->getNoConstructorMock(ConsoleTerminateEvent::class);
 
         $this->event
             ->expects($this->once())

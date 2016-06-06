@@ -18,7 +18,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
     public function testLoad()
     {
         /* @var $definition \PHPUnit_Framework_MockObject_MockObject|Definition */
-        $definition = $this->getMockObject(Definition::class);
+        $definition = $this->getNoConstructorMock(Definition::class);
 
         /* @var $container \PHPUnit_Framework_MockObject_MockObject|ContainerBuilder */
         $container = $this->getMock(ContainerBuilder::class);
