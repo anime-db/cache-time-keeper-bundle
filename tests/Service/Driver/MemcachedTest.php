@@ -41,10 +41,13 @@ class MemcachedTest extends TestCase
 
     public function testGetNull()
     {
+        $cache_cb = null;
+        $cas_token = null;
+        $udf_flags = null;
         $this->memcached
             ->expects($this->once())
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, null, null, null)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, $cache_cb, $cas_token, $udf_flags)
             ->will($this->returnValue(null));
 
         $this->assertNull($this->driver->get(self::DATE_KEY));
@@ -52,10 +55,13 @@ class MemcachedTest extends TestCase
 
     public function testGet()
     {
+        $cache_cb = null;
+        $cas_token = null;
+        $udf_flags = null;
         $this->memcached
             ->expects($this->atLeastOnce())
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, null, null, null)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, $cache_cb, $cas_token, $udf_flags)
             ->will($this->returnCallback(function () {
                 return clone $this->time;
             }));
@@ -66,10 +72,13 @@ class MemcachedTest extends TestCase
 
     public function testSet()
     {
+        $cache_cb = null;
+        $cas_token = null;
+        $udf_flags = null;
         $this->memcached
             ->expects($this->at(1))
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, null, null, null)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, $cache_cb, $cas_token, $udf_flags)
             ->will($this->returnValue(null));
 
         $this->memcached
@@ -80,7 +89,7 @@ class MemcachedTest extends TestCase
         $this->memcached
             ->expects($this->at(3))
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, null, null, null)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, $cache_cb, $cas_token, $udf_flags)
             ->will($this->returnCallback(function () {
                 return clone $this->time;
             }));
@@ -115,10 +124,13 @@ class MemcachedTest extends TestCase
         $foo_time = new \DateTime();
         $foo_time->modify('+1 day');
 
+        $cache_cb = null;
+        $cas_token = null;
+        $udf_flags = null;
         $this->memcached
             ->expects($this->once())
             ->method('get')
-            ->with(self::KEY_PREFIX.self::DATE_KEY, null, null, null)
+            ->with(self::KEY_PREFIX.self::DATE_KEY, $cache_cb, $cas_token, $udf_flags)
             ->will($this->returnCallback(function () use ($foo_time) {
                 return clone $foo_time;
             }));
