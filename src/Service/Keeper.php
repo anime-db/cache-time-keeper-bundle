@@ -126,9 +126,7 @@ class Keeper
                 ->setExpires((new \DateTime())->modify('+'.$lifetime.' seconds'));
         }
 
-        return $response
-            ->setPublic()
-            ->setLastModified($this->getMax($params));
+        return $response->setLastModified($this->getMax($params));
     }
 
     /**
@@ -160,9 +158,7 @@ class Keeper
                 ->setExpires((new \DateTime())->modify('+'.$lifetime.' seconds'));
         }
 
-        $response
-            ->setPublic()
-            ->setLastModified($this->getMax($params));
+        $response->setLastModified($this->getMax($params));
 
         if ($response->isNotModified($request)) {
             throw new NotModifiedException($response);
