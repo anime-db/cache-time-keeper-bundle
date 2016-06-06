@@ -1,0 +1,29 @@
+services:
+    cache_time_keeper.driver.dummy:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Dummy
+        public: false
+
+    cache_time_keeper.driver.file:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\File
+        arguments: [ ~ ]
+        public: false
+
+    cache_time_keeper.driver.shmop:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Shmop
+        arguments: [ ~ ]
+        public: false
+
+    cache_time_keeper.driver.multi:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Multi
+        arguments: [ '@cache_time_keeper.driver.multi.fast', '@cache_time_keeper.driver.multi.slow' ]
+        public: false
+
+    cache_time_keeper.driver.memcache:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\Memcache
+        arguments: [ '@cache_time_keeper.memcache', ~ ]
+        public: false
+
+    cache_time_keeper.memcache:
+        class: Memcache
+        arguments: [ ~ ]
+        public: false
