@@ -535,12 +535,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "1c2b7c968561f2e319117d7860c88e8c0cad3c7a"
+                "reference": "3bc61d5f5e4aa75479dfe141e52326243972f530"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/1c2b7c968561f2e319117d7860c88e8c0cad3c7a",
-                "reference": "1c2b7c968561f2e319117d7860c88e8c0cad3c7a",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/3bc61d5f5e4aa75479dfe141e52326243972f530",
+                "reference": "3bc61d5f5e4aa75479dfe141e52326243972f530",
                 "shasum": ""
             },
             "require": {
@@ -606,7 +606,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2016-05-25 22:58:40"
+            "time": "2016-06-05 22:35:44"
         },
         {
             "name": "paragonie/random_compat",
@@ -1234,16 +1234,16 @@
     "packages-dev": [
         {
             "name": "anime-db/shmop",
-            "version": "v1.0.5",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/anime-db/shmop.git",
-                "reference": "8d4dbb426316c99110a7fcf04ca4116d82ababa3"
+                "reference": "0d08a6b50091c44a47f3426c51ffa6b6834bb780"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/anime-db/shmop/zipball/8d4dbb426316c99110a7fcf04ca4116d82ababa3",
-                "reference": "8d4dbb426316c99110a7fcf04ca4116d82ababa3",
+                "url": "https://api.github.com/repos/anime-db/shmop/zipball/0d08a6b50091c44a47f3426c51ffa6b6834bb780",
+                "reference": "0d08a6b50091c44a47f3426c51ffa6b6834bb780",
                 "shasum": ""
             },
             "require": {
@@ -1272,7 +1272,7 @@
                 "php",
                 "shmop"
             ],
-            "time": "2016-03-29 15:02:00"
+            "time": "2016-06-03 14:45:15"
         }
     ],
     "aliases": [],
