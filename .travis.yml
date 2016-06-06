@@ -9,6 +9,7 @@ notifications:
     email: dev@anime-db.org
 
 install:
+    - echo "extension=memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
     - composer self-update
     - composer install --prefer-source
 
