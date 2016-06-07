@@ -6,7 +6,6 @@
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Command;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
@@ -42,7 +41,7 @@ class ResetCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return integer|null
+     * @return int|null
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

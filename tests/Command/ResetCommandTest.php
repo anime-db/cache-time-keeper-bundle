@@ -61,6 +61,7 @@ class ResetCommandTest extends TestCase
                 $this->assertEquals(Keeper::LAST_UPDATE_KEY, $key);
                 $this->assertInstanceOf(\DateTime::class, $time);
                 $this->assertTrue($time >= new \DateTime('-1 second'));
+
                 return true;
             }));
 
