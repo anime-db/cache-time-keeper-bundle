@@ -8,10 +8,11 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Event\Listener;
 
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\SubNs\Bar;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\DoctrineListener;
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Demo;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Foo;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -56,10 +57,6 @@ class DoctrineListenerTest extends TestCase
             ->expects($this->once())
             ->method('getEntityManager')
             ->will($this->returnValue($em));
-        $this->args
-            ->expects($this->once())
-            ->method('getEntity')
-            ->will($this->returnValue(new Demo()));
 
         $this->listener = new DoctrineListener($this->keeper);
     }
@@ -86,7 +83,7 @@ class DoctrineListenerTest extends TestCase
         $this->keeper
             ->expects($this->once())
             ->method('set')
-            ->with('AnimeDbCacheTimeKeeperBundle:Demo', $this->isInstanceOf('DateTime'));
+            ->with('AnimeDbCacheTimeKeeperBundle:Foo', $this->isInstanceOf('DateTime'));
 
         $this->conf
             ->expects($this->once())
@@ -95,6 +92,39 @@ class DoctrineListenerTest extends TestCase
                 'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
                 'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity',
             ]));
+
+        $this->args
+            ->expects($this->once())
+            ->method('getEntity')
+            ->will($this->returnValue(new Foo()));
+
+        call_user_func([$this->listener, $method], $this->args);
+    }
+
+    /**
+     * @dataProvider getMethods
+     *
+     * @param string $method
+     */
+    public function testHandleEventSubNs($method)
+    {
+        $this->keeper
+            ->expects($this->once())
+            ->method('set')
+            ->with('AnimeDbCacheTimeKeeperBundle:Bar', $this->isInstanceOf('DateTime'));
+
+        $this->conf
+            ->expects($this->once())
+            ->method('getEntityNamespaces')
+            ->will($this->returnValue([
+                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
+                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity',
+            ]));
+
+        $this->args
+            ->expects($this->once())
+            ->method('getEntity')
+            ->will($this->returnValue(new Bar()));
 
         call_user_func([$this->listener, $method], $this->args);
     }
@@ -117,6 +147,11 @@ class DoctrineListenerTest extends TestCase
             ->will($this->returnValue([
                 'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
             ]));
+
+        $this->args
+            ->expects($this->once())
+            ->method('getEntity')
+            ->will($this->returnValue(new Foo()));
 
         call_user_func([$this->listener, $method], $this->args);
     }

@@ -6,8 +6,8 @@
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
-namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity;
+namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\SubNs;
 
-class Demo
+class Bar
 {
 }
