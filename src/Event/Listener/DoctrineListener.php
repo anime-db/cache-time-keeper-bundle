@@ -57,17 +57,14 @@ class DoctrineListener
      */
     protected function getKeyFromEntity(LifecycleEventArgs $args)
     {
-        $parts = explode('\\', get_class($args->getEntity()));
-        $entity = array_pop($parts);
-        $namespace = implode('\\', $parts);
+        $class = get_class($args->getEntity());
 
-        $namespaces = $args->getEntityManager()->getConfiguration()->getEntityNamespaces();
-        foreach ($namespaces as $ns_alias => $ns) {
-            if ($ns == $namespace) {
-                return $ns_alias.':'.$entity;
+        foreach ($args->getEntityManager()->getConfiguration()->getEntityNamespaces() as $ns_alias => $ns) {
+            if (strpos($class, $ns) === 0) {
+                return $ns_alias.':'.ltrim(str_replace($ns, '', $class), '\\');
             }
         }
 
-        throw new \RuntimeException(sprintf('Namespace "%s" is not supported from EntityManager', $namespace));
+        throw new \RuntimeException(sprintf('Entity "%s" is not supported from EntityManager', $class));
     }
 }

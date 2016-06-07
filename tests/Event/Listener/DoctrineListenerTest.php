@@ -111,7 +111,7 @@ class DoctrineListenerTest extends TestCase
         $this->keeper
             ->expects($this->once())
             ->method('set')
-            ->with('AnimeDbCacheTimeKeeperBundle:Bar', $this->isInstanceOf('DateTime'));
+            ->with('AnimeDbCacheTimeKeeperBundle:SubNs\Bar', $this->isInstanceOf('DateTime'));
 
         $this->conf
             ->expects($this->once())
