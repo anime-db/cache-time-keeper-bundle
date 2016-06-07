@@ -113,29 +113,25 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
      */
     protected function mergeDefaultConfig(array $config, ContainerBuilder $container)
     {
-        $config = array_merge([
-            'use_driver' => 'file',
-            'drivers' => [],
-        ], $config);
-
-        $config['drivers'] = array_merge([
-            'multi' => [
-                'fast' => 'shmop',
-                'slow' => 'file',
-            ],
-            'shmop' => [
-                'salt' => $container->getParameter('cache_time_keeper.driver.shmop.salt'),
-            ],
-            'file' => [
-                'path' => $container->getParameter('cache_time_keeper.driver.file.path'),
-            ],
-            'memcache' => [
-                'prefix' => 'cache_time_keeper_',
-                'persistent_id' => 'cache_time_keeper',
-                'hosts' => [],
-            ],
-        ], $config['drivers']);
-
-        return $config;
+        return [
+            'use_driver' => !empty($config['use_driver']) ? $config['use_driver'] : 'file',
+            'drivers' => array_merge([
+                'multi' => [
+                    'fast' => 'shmop',
+                    'slow' => 'file',
+                ],
+                'shmop' => [
+                    'salt' => $container->getParameter('cache_time_keeper.driver.shmop.salt'),
+                ],
+                'file' => [
+                    'path' => $container->getParameter('cache_time_keeper.driver.file.path'),
+                ],
+                'memcache' => [
+                    'prefix' => 'cache_time_keeper_',
+                    'persistent_id' => 'cache_time_keeper',
+                    'hosts' => [],
+                ],
+            ], !empty($config['drivers']) ? $config['drivers'] : []),
+        ];
     }
 }
