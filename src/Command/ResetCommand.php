@@ -35,10 +35,7 @@ class ResetCommand extends Command
         $this
             ->setName('cache:reset-cache-time-keeper')
             ->setDescription('Reset last update date of the project')
-            ->setHelp(<<<HELP
-Command only reset date of update. Not remove data from the storage. 
-HELP
-);
+            ->setHelp('Command only reset date of update. Not remove data from the storage.');
     }
 
     /**
