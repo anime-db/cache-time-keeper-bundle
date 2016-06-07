@@ -6,3 +6,9 @@ services:
     cache_time_keeper:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
         arguments: [ '@cache_time_keeper.driver' ]
+
+    cache_time_keeper.command:
+        class: AnimeDb\Bundle\CacheTimeKeeperBundle\Command\ResetCommand
+        arguments: [ '@cache_time_keeper' ]
+        tags:
+            - { name: console.command }
