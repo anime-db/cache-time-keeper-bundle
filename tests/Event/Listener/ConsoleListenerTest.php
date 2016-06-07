@@ -31,47 +31,71 @@ class ConsoleListenerTest extends TestCase
      */
     protected $event;
 
-    /**
-     * @var ConsoleListener
-     */
-    protected $listener;
-
     protected function setUp()
     {
         $this->keeper = $this->getNoConstructorMock(Keeper::class);
         $this->command = $this->getNoConstructorMock(Command::class);
         $this->event = $this->getNoConstructorMock(ConsoleTerminateEvent::class);
+    }
+
+    public function testOnTerminateNotCacheClear()
+    {
+        $track_clear_cache = true;
+
+        $this->keeper
+            ->expects($this->never())
+            ->method('set');
 
         $this->event
             ->expects($this->once())
             ->method('getCommand')
             ->will($this->returnValue($this->command));
 
-        $this->listener = new ConsoleListener($this->keeper);
-    }
-
-    public function testOnTerminate()
-    {
         $this->command
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('foo'));
 
-        $this->listener->onTerminate($this->event);
+        $listener = new ConsoleListener($this->keeper, $track_clear_cache);
+        $listener->onTerminate($this->event);
     }
 
-    public function testOnTerminateCache()
+    public function testOnTerminateNoTrack()
     {
+        $track_clear_cache = false;
+
+        $this->keeper
+            ->expects($this->never())
+            ->method('set');
+
+        $this->event
+            ->expects($this->never())
+            ->method('getCommand');
+
+        $listener = new ConsoleListener($this->keeper, $track_clear_cache);
+        $listener->onTerminate($this->event);
+    }
+
+    public function testOnTerminate()
+    {
+        $track_clear_cache = true;
+
         $this->keeper
             ->expects($this->once())
             ->method('set')
             ->with(Keeper::LAST_UPDATE_KEY, new \DateTime());
+
+        $this->event
+            ->expects($this->once())
+            ->method('getCommand')
+            ->will($this->returnValue($this->command));
 
         $this->command
             ->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('cache:clear'));
 
-        $this->listener->onTerminate($this->event);
+        $listener = new ConsoleListener($this->keeper, $track_clear_cache);
+        $listener->onTerminate($this->event);
     }
 }

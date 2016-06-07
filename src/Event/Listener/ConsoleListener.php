@@ -19,11 +19,18 @@ class ConsoleListener
     protected $keeper;
 
     /**
-     * @param Keeper $keeper
+     * @var bool
      */
-    public function __construct(Keeper $keeper)
+    protected $track_clear_cache;
+
+    /**
+     * @param Keeper $keeper
+     * @param bool $track_clear_cache
+     */
+    public function __construct(Keeper $keeper, $track_clear_cache)
     {
         $this->keeper = $keeper;
+        $this->track_clear_cache = $track_clear_cache;
     }
 
     /**
@@ -31,7 +38,7 @@ class ConsoleListener
      */
     public function onTerminate(ConsoleTerminateEvent $event)
     {
-        if ($event->getCommand()->getName() == 'cache:clear') {
+        if ($this->track_clear_cache && $event->getCommand()->getName() == 'cache:clear') {
             $this->keeper->set(Keeper::LAST_UPDATE_KEY, new \DateTime());
         }
     }
