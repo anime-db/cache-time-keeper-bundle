@@ -51,6 +51,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
             'cache_time_keeper_',
             $this->container->getDefinition('cache_time_keeper.driver.memcache')->getArgument(1)
         );
+        $this->assertTrue($this->container->getDefinition('cache_time_keeper.listener.console')->getArgument(1));
 
         // configure memcache
         $this->assertEquals(
@@ -76,6 +77,9 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
         $config = [
             'anime_db_cache_time_keeper' => [
                 'use_driver' => 'file',
+                'track' => [
+                    'clear_cache' => false,
+                ],
                 'drivers' => [
                     'multi' => [
                         'fast' => 'shmop',
@@ -122,6 +126,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
             'ctk_',
             $this->container->getDefinition('cache_time_keeper.driver.memcache')->getArgument(1)
         );
+        $this->assertFalse($this->container->getDefinition('cache_time_keeper.listener.console')->getArgument(1));
 
         // configure memcache
         $this->assertEquals(

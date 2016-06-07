@@ -41,6 +41,8 @@ class Configuration implements ConfigurationInterface
      *
      * anime_db_cache_time_keeper:
      *     use_driver: file
+     *     track:
+     *         clear_cache: true
      *     drivers:
      *         multi:
      *             fast: shmop
@@ -66,6 +68,13 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('use_driver')
                         ->cannotBeEmpty()
                         ->defaultValue('file')
+                    ->end()
+                    ->arrayNode('track')
+                        ->children()
+                            ->booleanNode('clear_cache')
+                                ->defaultTrue()
+                            ->end()
+                        ->end()
                     ->end()
                     ->arrayNode('drivers')
                         ->append($this->getDriverFile())

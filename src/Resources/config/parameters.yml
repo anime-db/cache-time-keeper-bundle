@@ -1,4 +1,3 @@
 parameters:
-    cache_time_keeper.track.clear_cache: true
     cache_time_keeper.driver.shmop.salt: '%secret%'
     cache_time_keeper.driver.file.path: '%kernel.root_dir%/cache/cache-time-keeper/'

@@ -11,7 +11,8 @@
 
 # Cache time keeper bundle
 
-The library is intended for quick get a date change entities or entire project, without reference to a database in Symfony2 projects.
+The library is intended for quick get a date change entities or entire project, without reference to a database in
+Symfony2 projects.
 
 Library tracks changes in entities and stores date modified.
 
@@ -48,6 +49,8 @@ Default config:
 
 anime_db_cache_time_keeper:
     use_driver: file # Used driver (multi, memcache, shmop, file or dummy)
+    track:
+        clear_cache: true # Disable tracking cache clearing
     drivers:
         multi:
             fast: shmop # Use 'shmop' driver for store data in memory
@@ -69,11 +72,14 @@ In the bundle there are several the data storage drivers.
 
 - **Dummy** (`dummy`) - stores data in a temporary variable, within the current thread of execution program.
 - **File** (`file`) - stores data in a file cache *(Default driver)*.
-- **Memcache** (`memcache`) - stores the data in memory using PHP extension [memcache](http://php.net/manual/en/book.memcache.php).
+- **Memcache** (`memcache`) - stores the data in memory using PHP extension
+    [memcache](http://php.net/manual/en/book.memcache.php).
 - **Shmop** (`shmop`) - stores the data in memory using PHP extension [shmop](http://php.net/manual/en/book.shmop.php).
     For work of this driver, you must install [`anime-db/shmop`](https://github.com/anime-db/shmop).
 - **Multi** (`multi`) - driver is a wrapper for multiple drivers.
-    Takes the driver with quick access to the data (stored in memory) and slow (stored on hard disc), and receives data on the possibility of fast drivers and if not luck reads data from slow.
+    Takes the driver with quick access to the data (stored in memory) and slow (stored on hard disc), and receives data
+    on the possibility of fast drivers and if not luck reads data from slow.
+- ***Custom** - see below for instructions on creating your own storage driver.*
 
 ## Usage
 

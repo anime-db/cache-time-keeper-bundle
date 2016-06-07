@@ -44,6 +44,9 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
         $container
             ->getDefinition('cache_time_keeper.driver.memcache')
             ->replaceArgument(1, $config['drivers']['memcache']['prefix']);
+        $container
+            ->getDefinition('cache_time_keeper.listener.console')
+            ->replaceArgument(1, $config['track']['clear_cache']);
 
         // configure memcache
         $memcache = $container
@@ -113,25 +116,34 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
      */
     protected function mergeDefaultConfig(array $config, ContainerBuilder $container)
     {
-        return [
-            'use_driver' => !empty($config['use_driver']) ? $config['use_driver'] : 'file',
-            'drivers' => array_merge([
-                'multi' => [
-                    'fast' => 'shmop',
-                    'slow' => 'file',
-                ],
-                'shmop' => [
-                    'salt' => $container->getParameter('cache_time_keeper.driver.shmop.salt'),
-                ],
-                'file' => [
-                    'path' => $container->getParameter('cache_time_keeper.driver.file.path'),
-                ],
-                'memcache' => [
-                    'prefix' => 'cache_time_keeper_',
-                    'persistent_id' => 'cache_time_keeper',
-                    'hosts' => [],
-                ],
-            ], !empty($config['drivers']) ? $config['drivers'] : []),
-        ];
+        $config = array_merge([
+            'use_driver' => 'file',
+            'track' => [],
+            'drivers' => [],
+        ], $config);
+
+        $config['track'] = array_merge([
+            'clear_cache' => true,
+        ], $config['track']);
+
+        $config['drivers'] = array_merge([
+            'multi' => [
+                'fast' => 'shmop',
+                'slow' => 'file',
+            ],
+            'shmop' => [
+                'salt' => $container->getParameter('cache_time_keeper.driver.shmop.salt'),
+            ],
+            'file' => [
+                'path' => $container->getParameter('cache_time_keeper.driver.file.path'),
+            ],
+            'memcache' => [
+                'prefix' => 'cache_time_keeper_',
+                'persistent_id' => 'cache_time_keeper',
+                'hosts' => [],
+            ],
+        ], $config['drivers']);
+
+        return $config;
     }
 }
