@@ -31,7 +31,7 @@ class DoctrineListener
      */
     public function postPersist(LifecycleEventArgs $args)
     {
-        $this->keeper->set($this->getKeyFromEntity($args), new \DateTime());
+        $this->keeper->set($this->getEntityAlias($args), new \DateTime());
     }
 
     /**
@@ -39,7 +39,7 @@ class DoctrineListener
      */
     public function postRemove(LifecycleEventArgs $args)
     {
-        $this->keeper->set($this->getKeyFromEntity($args), new \DateTime());
+        $this->keeper->set($this->getEntityAlias($args), new \DateTime());
     }
 
     /**
@@ -47,7 +47,7 @@ class DoctrineListener
      */
     public function postUpdate(LifecycleEventArgs $args)
     {
-        $this->keeper->set($this->getKeyFromEntity($args), new \DateTime());
+        $this->keeper->set($this->getEntityAlias($args), new \DateTime());
     }
 
     /**
@@ -55,7 +55,7 @@ class DoctrineListener
      *
      * @return string
      */
-    protected function getKeyFromEntity(LifecycleEventArgs $args)
+    protected function getEntityAlias(LifecycleEventArgs $args)
     {
         $class = get_class($args->getEntity());
 
