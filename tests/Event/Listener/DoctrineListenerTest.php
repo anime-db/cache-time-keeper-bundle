@@ -104,7 +104,7 @@ class DoctrineListenerTest extends TestCase
         $remove,
         array $ids
     ) {
-        $entity = new $entity_class;
+        $entity = new $entity_class();
 
         $this->keeper
             ->expects($this->at(0))
