@@ -104,6 +104,7 @@ class DoctrineListener
             ->getEntityManager()
             ->getClassMetadata(get_class($args->getEntity()))
             ->getIdentifierValues($args->getEntity());
+
         return $ids ? Keeper::IDENTIFIER_PREFIX.implode(Keeper::IDENTIFIER_SEPARATOR, $ids) : '';
     }
 }
