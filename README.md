@@ -170,9 +170,10 @@ class HomeController extends Controller
         // caching
         $response = new Response();
         // cache becomes invalid if changing at least one of the pages, the catalog or the updated project
-        $response->setLastModified(
-            $this->get('cache_time_keeper')->getMax(['AcmeDemoBundle:Page:'.$id, 'AcmeDemoBundle:Catalog'])
-        );
+        $response->setLastModified($this->get('cache_time_keeper')->getMax([
+            'AcmeDemoBundle:Page:'.$id,
+            'AcmeDemoBundle:Catalog',
+        ]));
 
         // response was not modified for this request
         if ($response->isNotModified($request)) {
@@ -187,9 +188,9 @@ class HomeController extends Controller
             'AcmeDemoBundle:Home:index.html.twig',
             [
                 'page' => $page,
-                'catalogs' => $catalogs
+                'catalogs' => $catalogs,
             ],
-            $response
+            $response,
         );
     }
 }
@@ -226,7 +227,10 @@ class HomeController extends Controller
     public function indexAction(Request $request, $id)
     {
         // cache becomes invalid if changing at least one of the pages, the catalog or the updated project
-        $response = $this->get('cache_time_keeper')->getResponse(['AcmeDemoBundle:Page:'.$id, 'AcmeDemoBundle:Catalog']);
+        $response = $this->get('cache_time_keeper')->getResponse([
+            'AcmeDemoBundle:Page:'.$id,
+            'AcmeDemoBundle:Catalog',
+        ]);
 
         // response was not modified for this request
         if ($response->isNotModified($request)) {
@@ -241,9 +245,9 @@ class HomeController extends Controller
             'AcmeDemoBundle:Home:index.html.twig',
             [
                 'page' => $page,
-                'catalogs' => $catalogs
+                'catalogs' => $catalogs,
             ],
-            $response
+            $response,
         );
     }
 }
@@ -267,7 +271,7 @@ class HomeController extends Controller
             $request,
             ['AcmeDemoBundle:Page', 'AcmeDemoBundle:Catalog'],
             3600,
-            new JsonResponse()
+            new JsonResponse(),
         );
 
         // get entities
@@ -276,7 +280,7 @@ class HomeController extends Controller
 
         return $response->setData([
             'page' => $page,
-            'catalogs' => $catalogs
+            'catalogs' => $catalogs,
         ]);
     }
 }
