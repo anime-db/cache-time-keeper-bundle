@@ -16,8 +16,6 @@ Symfony2 projects.
 
 Library tracks changes in entities and stores date modified.
 
-> _**Notice:** library tracks only changing patterns in general, not each one separately._
-
 ## Installation
 
 Pretty simple with [Composer](http://packagist.org), run:
@@ -102,6 +100,29 @@ Remove value:
 $this->get('cache_time_keeper')->remove('foo');
 ```
 
+### By entity name
+
+Examples for entity class: `\Acme\Bundle\DemoBundle\Entity\Page`.
+
+Get date last update any of entities:
+
+```php
+$date = $this->get('cache_time_keeper')->get('AcmeDemoBundle:Page');
+```
+
+Get date last update for entity by id `123`:
+
+```php
+$date = $this->get('cache_time_keeper')->get('AcmeDemoBundle:Page:123');
+```
+
+Get date last update for entity of composite identifier _(composite primary key)_, for example
+`id = 123` and `type = foo`.
+
+```php
+$date = $this->get('cache_time_keeper')->get('AcmeDemoBundle:Page:123|foo');
+```
+
 ### Track modify project
 
 Bundle tracks execute the clear cache command (`cache:clear`) and considers this a sign of updated project, and all
@@ -150,7 +171,7 @@ class HomeController extends Controller
         $response = new Response();
         // cache becomes invalid if changing at least one of the pages, the catalog or the updated project
         $response->setLastModified(
-            $this->get('cache_time_keeper')->getMax(['AcmeDemoBundle:Page', 'AcmeDemoBundle:Catalog'])
+            $this->get('cache_time_keeper')->getMax(['AcmeDemoBundle:Page:'.$id, 'AcmeDemoBundle:Catalog'])
         );
 
         // response was not modified for this request
@@ -205,7 +226,7 @@ class HomeController extends Controller
     public function indexAction(Request $request, $id)
     {
         // cache becomes invalid if changing at least one of the pages, the catalog or the updated project
-        $response = $this->get('cache_time_keeper')->getResponse(['AcmeDemoBundle:Page', 'AcmeDemoBundle:Catalog']);
+        $response = $this->get('cache_time_keeper')->getResponse(['AcmeDemoBundle:Page:'.$id, 'AcmeDemoBundle:Catalog']);
 
         // response was not modified for this request
         if ($response->isNotModified($request)) {
