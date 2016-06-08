@@ -16,6 +16,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity\Foo;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 class DoctrineListenerTest extends TestCase
 {
@@ -35,9 +36,9 @@ class DoctrineListenerTest extends TestCase
     protected $conf;
 
     /**
-     * @var DoctrineListener
+     * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager
      */
-    protected $listener;
+    protected $em;
 
     protected function setUp()
     {
@@ -45,20 +46,120 @@ class DoctrineListenerTest extends TestCase
 
         $this->conf = $this->getNoConstructorMock(Configuration::class);
 
-        /* @var $em \PHPUnit_Framework_MockObject_MockObject|EntityManager */
-        $em = $this->getNoConstructorMock(EntityManager::class);
-        $em
+        $this->em = $this->getNoConstructorMock(EntityManager::class);
+        $this->em
             ->expects($this->once())
             ->method('getConfiguration')
             ->will($this->returnValue($this->conf));
 
         $this->args = $this->getNoConstructorMock(LifecycleEventArgs::class);
         $this->args
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getEntityManager')
-            ->will($this->returnValue($em));
+            ->will($this->returnValue($this->em));
+    }
 
-        $this->listener = new DoctrineListener($this->keeper);
+    /**
+     * @return array
+     */
+    public function getTrackMethods()
+    {
+        return [
+            ['postPersist', Foo::class, 'Foo', false, false, []],
+            ['postRemove', Foo::class, 'Foo', false, true, []],
+            ['postUpdate', Foo::class, 'Foo', false, false, []],
+            ['postPersist', Bar::class, 'SubNs\Bar', false, false, []],
+            ['postRemove', Bar::class, 'SubNs\Bar', false, true, []],
+            ['postUpdate', Bar::class, 'SubNs\Bar', false, false, []],
+            ['postPersist', Foo::class, 'Foo', true, false, []],
+            ['postRemove', Foo::class, 'Foo', true, true, []],
+            ['postUpdate', Foo::class, 'Foo', true, false, []],
+            ['postPersist', Bar::class, 'SubNs\Bar', true, false, []],
+            ['postRemove', Bar::class, 'SubNs\Bar', true, true, []],
+            ['postUpdate', Bar::class, 'SubNs\Bar', true, false, []],
+            ['postPersist', Foo::class, 'Foo', true, false, ['id' => 123]],
+            ['postRemove', Foo::class, 'Foo', true, true, ['id' => 123]],
+            ['postUpdate', Foo::class, 'Foo', true, false, ['id' => 123]],
+            ['postPersist', Bar::class, 'SubNs\Bar', true, false, ['id' => 123, 'type' => 'foo']],
+            ['postRemove', Bar::class, 'SubNs\Bar', true, true, ['id' => 123, 'type' => 'foo']],
+            ['postUpdate', Bar::class, 'SubNs\Bar', true, false, ['id' => 123, 'type' => 'foo']],
+        ];
+    }
+
+    /**
+     * @dataProvider getTrackMethods
+     *
+     * @param string $method
+     * @param string $entity_class
+     * @param string $entity_name
+     * @param bool $track_individually_entity
+     * @param bool $remove
+     * @param array $ids
+     */
+    public function testHandleEvent(
+        $method,
+        $entity_class,
+        $entity_name,
+        $track_individually_entity,
+        $remove,
+        array $ids
+    ) {
+        $entity = new $entity_class;
+
+        $this->keeper
+            ->expects($this->at(0))
+            ->method('set')
+            ->with('AnimeDbCacheTimeKeeperBundle:'.$entity_name, $this->isInstanceOf('DateTime'));
+
+        $this->conf
+            ->expects($this->once())
+            ->method('getEntityNamespaces')
+            ->will($this->returnValue([
+                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
+                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity',
+            ]));
+
+        $this->args
+            ->expects($this->atLeastOnce())
+            ->method('getEntity')
+            ->will($this->returnValue($entity));
+
+        if ($track_individually_entity) {
+            $meta = $this->getNoConstructorMock(ClassMetadata::class);
+            $meta
+                ->expects($this->once())
+                ->method('getIdentifierValues')
+                ->with($entity)
+                ->will($this->returnValue($ids));
+
+            $this->em
+                ->expects($this->once())
+                ->method('getClassMetadata')
+                ->with($entity_class)
+                ->will($this->returnValue($meta));
+
+            if ($ids) {
+                $suffix = Keeper::IDENTIFIER_PREFIX.implode(Keeper::IDENTIFIER_SEPARATOR, $ids);
+                if ($remove) {
+                    $this->keeper
+                        ->expects($this->once())
+                        ->method('remove')
+                        ->with('AnimeDbCacheTimeKeeperBundle:'.$entity_name.$suffix);
+                } else {
+                    $this->keeper
+                        ->expects($this->at(1))
+                        ->method('set')
+                        ->with('AnimeDbCacheTimeKeeperBundle:'.$entity_name.$suffix, $this->isInstanceOf('DateTime'));
+                }
+            }
+        } else {
+            $this->em
+                ->expects($this->never())
+                ->method('getClassMetadata');
+        }
+
+        $listener = new DoctrineListener($this->keeper, $track_individually_entity);
+        call_user_func([$listener, $method], $this->args);
     }
 
     /**
@@ -71,62 +172,6 @@ class DoctrineListenerTest extends TestCase
             ['postRemove'],
             ['postUpdate'],
         ];
-    }
-
-    /**
-     * @dataProvider getMethods
-     *
-     * @param string $method
-     */
-    public function testHandleEvent($method)
-    {
-        $this->keeper
-            ->expects($this->once())
-            ->method('set')
-            ->with('AnimeDbCacheTimeKeeperBundle:Foo', $this->isInstanceOf('DateTime'));
-
-        $this->conf
-            ->expects($this->once())
-            ->method('getEntityNamespaces')
-            ->will($this->returnValue([
-                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
-                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity',
-            ]));
-
-        $this->args
-            ->expects($this->once())
-            ->method('getEntity')
-            ->will($this->returnValue(new Foo()));
-
-        call_user_func([$this->listener, $method], $this->args);
-    }
-
-    /**
-     * @dataProvider getMethods
-     *
-     * @param string $method
-     */
-    public function testHandleEventSubNs($method)
-    {
-        $this->keeper
-            ->expects($this->once())
-            ->method('set')
-            ->with('AnimeDbCacheTimeKeeperBundle:SubNs\Bar', $this->isInstanceOf('DateTime'));
-
-        $this->conf
-            ->expects($this->once())
-            ->method('getEntityNamespaces')
-            ->will($this->returnValue([
-                'AcmeDemoBundle' => 'Acme\Bundle\DemoBundle\Entity',
-                'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity',
-            ]));
-
-        $this->args
-            ->expects($this->once())
-            ->method('getEntity')
-            ->will($this->returnValue(new Bar()));
-
-        call_user_func([$this->listener, $method], $this->args);
     }
 
     /**
@@ -153,6 +198,7 @@ class DoctrineListenerTest extends TestCase
             ->method('getEntity')
             ->will($this->returnValue(new Foo()));
 
-        call_user_func([$this->listener, $method], $this->args);
+        $listener = new DoctrineListener($this->keeper, false);
+        call_user_func([$listener, $method], $this->args);
     }
 }

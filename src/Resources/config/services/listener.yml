@@ -1,7 +1,7 @@
 services:
     cache_time_keeper.listener.entity:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\DoctrineListener
-        arguments: [ '@cache_time_keeper' ]
+        arguments: [ '@cache_time_keeper', '%cache_time_keeper.track.individually_entity%' ]
         tags:
             - { name: doctrine.event_listener, event: postRemove }
             - { name: doctrine.event_listener, event: postPersist }

@@ -23,6 +23,16 @@ class Keeper
     const LAST_UPDATE_KEY = 'last-update';
 
     /**
+     * @var string
+     */
+    const IDENTIFIER_SEPARATOR = '|';
+
+    /**
+     * @var string
+     */
+    const IDENTIFIER_PREFIX = ':';
+
+    /**
      * @var DriverInterface
      */
     protected $driver;

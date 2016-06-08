@@ -19,11 +19,18 @@ class DoctrineListener
     protected $keeper;
 
     /**
-     * @param Keeper $keeper
+     * @var bool
      */
-    public function __construct(Keeper $keeper)
+    protected $track_individually_entity;
+
+    /**
+     * @param Keeper $keeper
+     * @param bool $track_individually_entity
+     */
+    public function __construct(Keeper $keeper, $track_individually_entity)
     {
         $this->keeper = $keeper;
+        $this->track_individually_entity = $track_individually_entity;
     }
 
     /**
@@ -31,7 +38,7 @@ class DoctrineListener
      */
     public function postPersist(LifecycleEventArgs $args)
     {
-        $this->keeper->set($this->getEntityAlias($args), new \DateTime());
+        $this->update($args, false);
     }
 
     /**
@@ -39,7 +46,7 @@ class DoctrineListener
      */
     public function postRemove(LifecycleEventArgs $args)
     {
-        $this->keeper->set($this->getEntityAlias($args), new \DateTime());
+        $this->update($args, true);
     }
 
     /**
@@ -47,7 +54,25 @@ class DoctrineListener
      */
     public function postUpdate(LifecycleEventArgs $args)
     {
-        $this->keeper->set($this->getEntityAlias($args), new \DateTime());
+        $this->update($args, false);
+    }
+
+    /**
+     * @param LifecycleEventArgs $args
+     * @param bool $remove
+     */
+    protected function update(LifecycleEventArgs $args, $remove)
+    {
+        $alias = $this->getEntityAlias($args);
+        $this->keeper->set($alias, new \DateTime());
+
+        if ($this->track_individually_entity && ($ids = $this->getEntityIdentifier($args))) {
+            if ($remove) {
+                $this->keeper->remove($alias.$ids);
+            } else {
+                $this->keeper->set($alias.$ids, new \DateTime());
+            }
+        }
     }
 
     /**
@@ -66,5 +91,19 @@ class DoctrineListener
         }
 
         throw new \RuntimeException(sprintf('Entity "%s" is not supported from EntityManager', $class));
+    }
+
+    /**
+     * @param LifecycleEventArgs $args
+     *
+     * @return string
+     */
+    protected function getEntityIdentifier(LifecycleEventArgs $args)
+    {
+        $ids = $args
+            ->getEntityManager()
+            ->getClassMetadata(get_class($args->getEntity()))
+            ->getIdentifierValues($args->getEntity());
+        return $ids ? Keeper::IDENTIFIER_PREFIX.implode(Keeper::IDENTIFIER_SEPARATOR, $ids) : '';
     }
 }
