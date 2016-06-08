@@ -47,6 +47,9 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
         $container
             ->getDefinition('cache_time_keeper.listener.console')
             ->replaceArgument(1, $config['track']['clear_cache']);
+        $container
+            ->getDefinition('cache_time_keeper.listener.doctrine')
+            ->replaceArgument(1, $config['track']['individually_entity']);
 
         // configure memcache
         $memcache = $container
@@ -124,6 +127,7 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
 
         $config['track'] = array_merge([
             'clear_cache' => true,
+            'individually_entity' => false,
         ], $config['track']);
 
         $config['drivers'] = array_merge([

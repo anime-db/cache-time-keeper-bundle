@@ -51,6 +51,7 @@ anime_db_cache_time_keeper:
     use_driver: file # Used driver (multi, memcache, shmop, file or dummy)
     track:
         clear_cache: true # Disable tracking cache clearing
+        individually_entity: false # Enable tracking entity individually
     drivers:
         multi:
             fast: shmop # Use 'shmop' driver for store data in memory

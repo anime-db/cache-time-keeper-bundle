@@ -43,6 +43,7 @@ class Configuration implements ConfigurationInterface
      *     use_driver: file
      *     track:
      *         clear_cache: true
+     *         individually_entity: false
      *     drivers:
      *         multi:
      *             fast: shmop
@@ -73,6 +74,9 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->booleanNode('clear_cache')
                                 ->defaultTrue()
+                            ->end()
+                            ->booleanNode('individually_entity')
+                                ->defaultFalse()
                             ->end()
                         ->end()
                     ->end()

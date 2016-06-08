@@ -52,6 +52,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
             $this->container->getDefinition('cache_time_keeper.driver.memcache')->getArgument(1)
         );
         $this->assertTrue($this->container->getDefinition('cache_time_keeper.listener.console')->getArgument(1));
+        $this->assertFalse($this->container->getDefinition('cache_time_keeper.listener.doctrine')->getArgument(1));
 
         // configure memcache
         $this->assertEquals(
@@ -79,6 +80,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
                 'use_driver' => 'file',
                 'track' => [
                     'clear_cache' => false,
+                    'individually_entity' => true,
                 ],
                 'drivers' => [
                     'multi' => [
@@ -127,6 +129,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
             $this->container->getDefinition('cache_time_keeper.driver.memcache')->getArgument(1)
         );
         $this->assertFalse($this->container->getDefinition('cache_time_keeper.listener.console')->getArgument(1));
+        $this->assertTrue($this->container->getDefinition('cache_time_keeper.listener.doctrine')->getArgument(1));
 
         // configure memcache
         $this->assertEquals(
