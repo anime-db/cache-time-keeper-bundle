@@ -11,6 +11,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Exception;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Exception\NotModifiedException;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class NotModifiedExceptionTest extends TestCase
 {
@@ -22,7 +23,7 @@ class NotModifiedExceptionTest extends TestCase
         /** @var $response \PHPUnit_Framework_MockObject_MockObject|Response */
         $response = $this->getMock(Response::class);
         $response
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getStatusCode')
             ->will($this->returnValue($status_code));
 
@@ -31,10 +32,13 @@ class NotModifiedExceptionTest extends TestCase
 
         $exception = new NotModifiedException($response, $code, $previous);
 
+        $this->assertInstanceOf(HttpExceptionInterface::class, $exception);
         $this->assertEquals(Response::$statusTexts[$status_code], $exception->getMessage());
         $this->assertEquals($code, $exception->getCode());
+        $this->assertEquals($status_code, $exception->getStatusCode());
         $this->assertEquals($previous, $exception->getPrevious());
         $this->assertEquals($response, $exception->getResponse());
+        $this->assertEquals($response->headers->all(), $exception->getHeaders());
     }
 
     public function testConstructOnlyResponse()
@@ -44,7 +48,7 @@ class NotModifiedExceptionTest extends TestCase
         /** @var $response \PHPUnit_Framework_MockObject_MockObject|Response */
         $response = $this->getMock(Response::class);
         $response
-            ->expects($this->exactly(2))
+            ->expects($this->atLeastOnce())
             ->method('getStatusCode')
             ->will($this->returnValue($status_code));
 

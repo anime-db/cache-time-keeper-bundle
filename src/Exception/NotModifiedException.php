@@ -9,8 +9,9 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Exception;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
-class NotModifiedException extends \Exception
+class NotModifiedException extends \Exception implements HttpExceptionInterface
 {
     /**
      * @var Response
@@ -39,5 +40,21 @@ class NotModifiedException extends \Exception
     public function getResponse()
     {
         return $this->response;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode()
+    {
+        return $this->response->getStatusCode();
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->response->headers->all();
     }
 }
