@@ -52,7 +52,7 @@ anime_db_cache_time_keeper:
     # Used driver (multi, memcache, shmop, file or dummy).
     # You can use 'dummy' driver for stores data in a temporary variable, within the current thread of execution
     # program.
-    # You can create custom driver. See below for instructions on creating your own storage driver.
+    # You can create a custom driver. See below for instructions on creating your own storage driver.
     use_driver: 'file'
 
     # Set of request headers that trigger "private" Cache-Control behavior on responses that don't explicitly state
@@ -60,7 +60,7 @@ anime_db_cache_time_keeper:
     private_headers: ['Authorization', 'Cookie']
 
     etag_hasher:
-        # You can create custom ETag hasher driver.
+        # You can create a custom ETag hasher driver. See below for instructions on creating your own driver.
         driver: ~
 
         # Hashing function for build ETag.
@@ -375,6 +375,73 @@ Use custom driver:
 
 anime_db_cache_time_keeper:
     use_driver: '@cache_time_keeper.custom'
+```
+
+## Custom ETag hasher driver
+
+You can create your own hasher driver. You must create service implemented interface
+**[DriverInterface](https://github.com/anime-db/cache-time-keeper-bundle/blob/master/src/Service/CacheKeyBuilder/EtagHasherInterface.php)**:
+
+```php
+namespace Acme\Bundle\DemoBundle\CacheTimeKeeper;
+
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder\EtagHasherInterface
+use FOS\UserBundle\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
+
+class CustomEtagHasher implements EtagHasherInterface
+{
+    /**
+     * @var TokenStorageInterface
+     */
+    protected $token_storage;
+
+    /**
+     * @param TokenStorageInterface $token_storage
+     */
+    public function __construct(TokenStorageInterface $token_storage)
+    {
+        $this->token_storage = $token_storage;
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     *
+     * @return string
+     */
+    public function hash(Request $request, Response $response)
+    {
+        $id = 0;
+
+        if (($token = $this->token_storage->getToken()) && ($token->getUser() instanceof User)) {
+            $id = $token->getUser()->getId();
+        }
+
+        return md5($response->getDate()->format(\DateTime::W3C).'|'.$id);
+    }
+}
+```
+
+Register custom driver as a service in `service.yml`:
+
+```yml
+services:
+    cache_time_keeper.custom_etag_hasher:
+        class: Acme\Bundle\DemoBundle\CacheTimeKeeper\CustomEtagHasher
+        arguments: [ '@security.token_storage' ]
+```
+
+Use custom driver:
+
+```yml
+# app/config/config.yml
+
+anime_db_cache_time_keeper:
+    etag_hasher:
+        driver: '@cache_time_keeper.custom_etag_hasher'
 ```
 
 ## License
