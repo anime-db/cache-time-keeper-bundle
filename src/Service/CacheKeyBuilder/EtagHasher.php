@@ -21,17 +21,12 @@ class EtagHasher implements EtagHasherInterface
     /**
      * @var string
      */
-    const DEFAULT_ETAG_ALGORITHM = 'sha256';
-
-    /**
-     * @var string
-     */
     protected $algorithm = '';
 
     /**
      * @param string $algorithm
      */
-    public function __construct($algorithm = self::DEFAULT_ETAG_ALGORITHM)
+    public function __construct($algorithm)
     {
         $this->algorithm = $algorithm;
     }
