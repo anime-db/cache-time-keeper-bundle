@@ -15,7 +15,7 @@ services:
 
     cache_time_keeper.cache_key_builder.default_etag_hasher:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder\EtagHasher
-        arguments: [ ~ ]
+        arguments: [ '@request_stack', ~ ]
         public: false
 
     cache_time_keeper.cache_key_builder:

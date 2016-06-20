@@ -8,7 +8,7 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder;
 
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
 class EtagHasher implements EtagHasherInterface
@@ -19,31 +19,38 @@ class EtagHasher implements EtagHasherInterface
     const ETAG_SEPARATOR = '|';
 
     /**
+     * @var RequestStack
+     */
+    protected $request_stack;
+
+    /**
      * @var string
      */
     protected $algorithm = '';
 
     /**
+     * @param RequestStack $request_stack
      * @param string $algorithm
      */
-    public function __construct($algorithm)
+    public function __construct(RequestStack $request_stack, $algorithm)
     {
+        $this->request_stack = $request_stack;
         $this->algorithm = $algorithm;
     }
 
     /**
-     * @param Request $request
      * @param Response $response
      *
      * @return string
      */
-    public function hash(Request $request, Response $response)
+    public function hash(Response $response)
     {
-        return hash(
-            $this->algorithm,
-            $response->getLastModified()->format(\DateTime::ISO8601).
-                self::ETAG_SEPARATOR.
-                http_build_query($request->cookies->all())
-        );
+        $suffix = '';
+        // add cookies to ETag
+        if ($this->request_stack->getMasterRequest()) {
+            $suffix = self::ETAG_SEPARATOR.http_build_query($this->request_stack->getMasterRequest()->cookies->all());
+        }
+
+        return hash($this->algorithm, $response->getLastModified()->format(\DateTime::ISO8601).$suffix);
     }
 }

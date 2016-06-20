@@ -97,7 +97,7 @@ class ResponseConfiguratorTest extends TestCase
             $this->key_builder
                 ->expects($this->once())
                 ->method('getEtag')
-                ->with($request, $response)
+                ->with($response)
                 ->will($this->returnValue($etag));
             $etag = '"'.$etag.'"';
         }

@@ -403,7 +403,6 @@ namespace Acme\Bundle\DemoBundle\CacheTimeKeeper;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder\EtagHasherInterface;
 use FOS\UserBundle\Entity\User;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
 
@@ -423,12 +422,11 @@ class CustomEtagHasher implements EtagHasherInterface
     }
 
     /**
-     * @param Request $request
      * @param Response $response
      *
      * @return string
      */
-    public function hash(Request $request, Response $response)
+    public function hash(Response $response)
     {
         $id = 0;
 

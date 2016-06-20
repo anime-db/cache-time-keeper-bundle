@@ -71,13 +71,12 @@ class CacheKeyBuilder
     }
 
     /**
-     * @param Request $request
      * @param Response $response
      *
      * @return string
      */
-    public function getEtag(Request $request, Response $response)
+    public function getEtag(Response $response)
     {
-        return $this->etag_hasher->hash($request, $response);
+        return $this->etag_hasher->hash($response);
     }
 }

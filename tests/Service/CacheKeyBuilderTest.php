@@ -126,17 +126,15 @@ class CacheKeyBuilderTest extends TestCase
     public function testGetEtag()
     {
         $etag = 'foo';
-        /** @var $request \PHPUnit_Framework_MockObject_MockObject|Request */
-        $request = $this->getNoConstructorMock(Request::class);
         /** @var $response \PHPUnit_Framework_MockObject_MockObject|Response */
         $response = $this->getNoConstructorMock(Response::class);
 
         $this->etag_hasher
             ->expects($this->once())
             ->method('hash')
-            ->with($request, $response)
+            ->with($response)
             ->will($this->returnValue($etag));
 
-        $this->assertEquals($etag, $this->builder->getEtag($request, $response));
+        $this->assertEquals($etag, $this->builder->getEtag($response));
     }
 }

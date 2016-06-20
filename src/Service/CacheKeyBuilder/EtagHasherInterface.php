@@ -8,16 +8,14 @@
  */
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 interface EtagHasherInterface
 {
     /**
-     * @param Request $request
      * @param Response $response
      *
      * @return string
      */
-    public function hash(Request $request, Response $response);
+    public function hash(Response $response);
 }

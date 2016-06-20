@@ -65,7 +65,7 @@ class ResponseConfigurator
             ->setPrivateCache($response, $request)
             ->setLastModified($response, $last_modified)
             ->setLifetime($response, $lifetime)
-            ->setEtag($response, $request);
+            ->setEtag($response);
 
         return $response;
     }
@@ -141,14 +141,13 @@ class ResponseConfigurator
      * Need set Last-Modified before ETag
      *
      * @param Response $response
-     * @param Request $request
      *
      * @return ResponseConfigurator
      */
-    protected function setEtag(Response $response, Request $request)
+    protected function setEtag(Response $response)
     {
         if (!$response->getEtag()) {
-            $response->setEtag($this->key_builder->getEtag($request, $response));
+            $response->setEtag($this->key_builder->getEtag($response));
         }
 
         return $this;

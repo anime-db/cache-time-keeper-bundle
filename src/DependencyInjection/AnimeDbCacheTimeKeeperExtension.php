@@ -55,7 +55,7 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
             ->replaceArgument(2, $config['enable']);
         $container
             ->getDefinition('cache_time_keeper.cache_key_builder.default_etag_hasher')
-            ->replaceArgument(0, $config['etag_hasher']['algorithm']);
+            ->replaceArgument(1, $config['etag_hasher']['algorithm']);
         $container
             ->getDefinition('cache_time_keeper.response_configurator')
             ->replaceArgument(2, $config['private_headers']);
