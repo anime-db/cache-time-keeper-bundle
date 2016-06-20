@@ -396,12 +396,12 @@ anime_db_cache_time_keeper:
 ## Custom ETag hasher driver
 
 You can create your own hasher driver. You must create service implemented interface
-**[DriverInterface](https://github.com/anime-db/cache-time-keeper-bundle/blob/master/src/Service/CacheKeyBuilder/EtagHasherInterface.php)**:
+**[EtagHasherInterface](https://github.com/anime-db/cache-time-keeper-bundle/blob/master/src/Service/CacheKeyBuilder/EtagHasherInterface.php)**:
 
 ```php
 namespace Acme\Bundle\DemoBundle\CacheTimeKeeper;
 
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder\EtagHasherInterface
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder\EtagHasherInterface;
 use FOS\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
