@@ -25,5 +25,4 @@ services:
 
     cache_time_keeper.memcache:
         class: Memcache
-        arguments: [ ~ ]
         public: false

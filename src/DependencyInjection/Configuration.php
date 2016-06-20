@@ -59,7 +59,6 @@ class Configuration implements ConfigurationInterface
      *             path: '%kernel.root_dir%/cache/cache-time-keeper/'
      *         memcache:
      *             prefix: 'cache_time_keeper_'
-     *             persistent_id: 'cache_time_keeper'
      *             hosts:
      *                 - {host: 'localhost', port: 11211, weight: 100}
      *
@@ -203,13 +202,6 @@ class Configuration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('prefix')
                         ->defaultValue('cache_time_keeper_')
-                    ->end()
-                    ->scalarNode('persistent_id')
-                        ->defaultValue('cache_time_keeper')
-                        ->info(
-                            'Specify to enable persistent connections. '.
-                            'All clients with the same ID share connections.'
-                        )
                     ->end()
                     ->arrayNode('hosts')
                         ->requiresAtLeastOneElement()

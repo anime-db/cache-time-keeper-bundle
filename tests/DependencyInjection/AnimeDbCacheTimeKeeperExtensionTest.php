@@ -64,10 +64,6 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
         );
 
         // configure memcache
-        $this->assertEquals(
-            ['cache_time_keeper'],
-            $this->container->getDefinition('cache_time_keeper.memcache')->getArguments()
-        );
         $this->assertEquals([], $this->container->getDefinition('cache_time_keeper.memcache')->getMethodCalls());
 
         // service aliases
@@ -118,7 +114,6 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
                     ],
                     'memcache' => [
                         'prefix' => 'ctk_',
-                        'persistent_id' => 'ctk',
                         'hosts' => [
                             [
                                 'host' => '192.168.0.2',
@@ -164,10 +159,6 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
         );
 
         // configure memcache
-        $this->assertEquals(
-            ['ctk'],
-            $this->container->getDefinition('cache_time_keeper.memcache')->getArguments()
-        );
         $this->assertEquals(
             [
                 [

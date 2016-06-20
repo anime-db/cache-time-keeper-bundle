@@ -61,9 +61,7 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
             ->replaceArgument(2, $config['private_headers']);
 
         // configure memcache
-        $memcache = $container
-            ->getDefinition('cache_time_keeper.memcache')
-            ->replaceArgument(0, $config['drivers']['memcache']['persistent_id']);
+        $memcache = $container->getDefinition('cache_time_keeper.memcache');
         foreach ($config['drivers']['memcache']['hosts'] as $host) {
             $memcache->addMethodCall('addServer', $host);
         }
@@ -161,7 +159,6 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
             ],
             'memcache' => [
                 'prefix' => 'cache_time_keeper_',
-                'persistent_id' => 'cache_time_keeper',
                 'hosts' => [],
             ],
         ], $config['drivers']);
