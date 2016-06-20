@@ -48,32 +48,40 @@ class ResponseConfigurator
      *
      * @param Response $response
      * @param \DateTime $last_modified
-     * @param $lifetime
+     * @param int $lifetime
      *
      * @return Response
      */
     public function configure(Response $response, \DateTime $last_modified, $lifetime)
     {
+        $request = $this->request_stack->getMasterRequest();
+
+        if (!($request instanceof Request)) {
+            return $response;
+        }
+
         // order is important
         $this
-            ->setPrivateCache($response)
+            ->setPrivateCache($response, $request)
             ->setLastModified($response, $last_modified)
             ->setLifetime($response, $lifetime)
-            ->setEtag($response);
+            ->setEtag($response, $request);
 
         return $response;
     }
 
     /**
      * @param Response $response
+     * @param Request $request
      *
      * @return ResponseConfigurator
      */
-    protected function setPrivateCache(Response $response)
+    protected function setPrivateCache(Response $response, Request $request)
     {
-        if ($response->headers->hasCacheControlDirective('public')) {
+        if (!$response->headers->hasCacheControlDirective('private')) {
+            $response->setPublic();
             foreach ($this->private_headers as $private_header) {
-                if ($response->headers->has($private_header)) {
+                if ($request->headers->has($private_header)) {
                     $response->setPrivate();
                     break;
                 }
@@ -104,6 +112,7 @@ class ResponseConfigurator
      * Set max-age, s-maxage and expires headers
      *
      * Set $lifetime as < 0 for not set max-age
+     * Need set Cache-Control public/private before set lifetime
      *
      * @param Response $response
      * @param int $lifetime
@@ -112,13 +121,13 @@ class ResponseConfigurator
      */
     protected function setLifetime(Response $response, $lifetime)
     {
-        if ($lifetime > 0) {
+        if ($lifetime >= 0) {
             $date = clone $response->getDate();
             $response
                 ->setMaxAge($lifetime)
                 ->setExpires($date->modify(sprintf('now +%s seconds', $lifetime)));
 
-            if ($response->headers->hasCacheControlDirective('public')) {
+            if (!$response->headers->hasCacheControlDirective('private')) {
                 $response->setSharedMaxAge($lifetime);
             }
         }
@@ -129,16 +138,16 @@ class ResponseConfigurator
     /**
      * Set ETag
      *
-     * Need set ETag after set Last-Modified
+     * Need set Last-Modified before ETag
      *
      * @param Response $response
+     * @param Request $request
      *
      * @return ResponseConfigurator
      */
-    protected function setEtag(Response $response)
+    protected function setEtag(Response $response, Request $request)
     {
-        $request = $this->request_stack->getMasterRequest();
-        if (!$response->getEtag() && $request instanceof Request) {
+        if (!$response->getEtag()) {
             $response->setEtag($this->key_builder->getEtag($request, $response));
         }
 
