@@ -46,7 +46,7 @@ Default config:
 # app/config/config.yml
 
 anime_db_cache_time_keeper:
-    # Set as false if you want disable CacheTimeKeeper and disable HTTP caching.
+    # Set as false if you want to disable CacheTimeKeeper and disable HTTP caching.
     enable: true
 
     # Used driver (multi, memcache, shmop, file or dummy).
@@ -116,7 +116,13 @@ Adding a new value:
 $this->get('cache_time_keeper')->set('foo', new \DateTime());
 ```
 
-Getting the oldest date for a set of keys, taking into account the date of the change project:
+Load saved date:
+
+```php
+$date = $this->get('cache_time_keeper')->get('foo');
+```
+
+Getting the newest date for a set of keys, taking into account the date of the change project:
 
 ```php
 $date = $this->get('cache_time_keeper')->getMax('foo');
