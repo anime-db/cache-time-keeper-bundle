@@ -34,11 +34,8 @@ class ResponseConfigurator
      * @param RequestStack $request_stack
      * @param array $private_headers
      */
-    public function __construct(
-        CacheKeyBuilder $key_builder,
-        RequestStack $request_stack,
-        array $private_headers = ['Authorization', 'Cookie']
-    ) {
+    public function __construct(CacheKeyBuilder $key_builder, RequestStack $request_stack, array $private_headers)
+    {
         $this->key_builder = $key_builder;
         $this->request_stack = $request_stack;
         $this->private_headers = $private_headers;

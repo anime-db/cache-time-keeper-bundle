@@ -58,6 +58,10 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
             'sha256',
             $this->container->getDefinition('cache_time_keeper.cache_key_builder.default_etag_hasher')->getArgument(0)
         );
+        $this->assertEquals(
+            ['Authorization', 'Cookie'],
+            $this->container->getDefinition('cache_time_keeper.response_configurator')->getArgument(2)
+        );
 
         // configure memcache
         $this->assertEquals(
@@ -92,6 +96,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
             'anime_db_cache_time_keeper' => [
                 'enable' => false,
                 'use_driver' => 'file',
+                'private_headers' => ['X-Custom-Header'],
                 'etag_hasher' => [
                     'driver' => 'custom_etag_hasher',
                     'algorithm' => 'md5',
@@ -152,6 +157,10 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
         $this->assertEquals(
             'md5',
             $this->container->getDefinition('cache_time_keeper.cache_key_builder.default_etag_hasher')->getArgument(0)
+        );
+        $this->assertEquals(
+            ['X-Custom-Header'],
+            $this->container->getDefinition('cache_time_keeper.response_configurator')->getArgument(2)
         );
 
         // configure memcache

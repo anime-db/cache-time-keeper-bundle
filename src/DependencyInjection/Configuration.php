@@ -42,6 +42,7 @@ class Configuration implements ConfigurationInterface
      * anime_db_cache_time_keeper:
      *     enable: true
      *     use_driver: 'file'
+     *     private_headers: ['Authorization', 'Cookie']
      *     etag_hasher:
      *         driver: 'cache_time_keeper.cache_key_builder.default_etag_hasher'
      *         algorithm: sha256
@@ -76,6 +77,11 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('use_driver')
                         ->cannotBeEmpty()
                         ->defaultValue('file')
+                    ->end()
+                    ->arrayNode('private_headers')
+                        ->treatNullLike([])
+                        ->prototype('scalar')->end()
+                        ->defaultValue(['Authorization', 'Cookie'])
                     ->end()
                     ->append($this->getEtagHasher())
                     ->append($this->getTrack())
