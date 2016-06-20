@@ -117,7 +117,7 @@ class CacheKeyBuilderTest extends TestCase
 
         $prefix = null;
         if ($ids) {
-            $prefix = CacheKeyBuilder::IDENTIFIER_PREFIX . implode(CacheKeyBuilder::IDENTIFIER_SEPARATOR, $ids);
+            $prefix = CacheKeyBuilder::IDENTIFIER_PREFIX.implode(CacheKeyBuilder::IDENTIFIER_SEPARATOR, $ids);
         }
 
         $this->assertEquals($prefix, $this->builder->getEntityIdentifier($entity, $this->em));

@@ -31,7 +31,6 @@ class ResponseConfiguratorTest extends TestCase
     {
         $this->key_builder = $this->getNoConstructorMock(CacheKeyBuilder::class);
         $this->request_stack = $this->getMock(RequestStack::class);
-
     }
 
     /**
@@ -45,7 +44,7 @@ class ResponseConfiguratorTest extends TestCase
                 new Request(),
                 -1,
                 [],
-                true
+                true,
             ],
             [
                 (new Response())
@@ -54,21 +53,21 @@ class ResponseConfiguratorTest extends TestCase
                 new Request(),
                 0,
                 [],
-                false
+                false,
             ],
             [
                 new Response(),
                 new Request([], [], [], [], [], ['HTTP_X_PRIVATE' => '']),
                 600, // 10 minute
                 ['X-Private'],
-                false
+                false,
             ],
             [ // test s-maxage
                 new Response(),
                 new Request(),
                 600, // 10 minute
                 [],
-                true
+                true,
             ],
         ];
     }

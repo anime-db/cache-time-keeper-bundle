@@ -42,7 +42,7 @@ class ResponseConfigurator
     }
 
     /**
-     * Configure response
+     * Configure response.
      *
      * Set $lifetime as < 0 for not set max-age
      *
@@ -109,7 +109,7 @@ class ResponseConfigurator
     }
 
     /**
-     * Set max-age, s-maxage and expires headers
+     * Set max-age, s-maxage and expires headers.
      *
      * Set $lifetime as < 0 for not set max-age
      * Need set Cache-Control public/private before set lifetime
@@ -136,7 +136,7 @@ class ResponseConfigurator
     }
 
     /**
-     * Set ETag
+     * Set ETag.
      *
      * Need set Last-Modified before ETag
      *

@@ -10,7 +10,6 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Exception\NotModifiedException;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
-use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -51,7 +50,7 @@ class Keeper
     /**
      * @param DriverInterface $driver
      * @param ResponseConfigurator $configurator
-     * @param boolean $enable
+     * @param bool $enable
      */
     public function __construct(DriverInterface $driver, ResponseConfigurator $configurator, $enable)
     {
