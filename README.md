@@ -188,6 +188,16 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 $date = $this->get('cache_time_keeper')->get(Keeper::LAST_UPDATE_KEY);
 ```
 
+You can disable tracks execute the clear cache command (`cache:clear`) from config:
+
+```yml
+# app/config/config.yml
+
+anime_db_cache_time_keeper:
+    track:
+        clear_cache: false
+```
+
 ### Use CacheTimeKeeper in controllers:
 
 ```php
