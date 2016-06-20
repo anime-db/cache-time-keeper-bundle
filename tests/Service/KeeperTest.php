@@ -9,6 +9,7 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Service;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Exception\NotModifiedException;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\ResponseConfigurator;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
@@ -23,10 +24,14 @@ class KeeperTest extends TestCase
     protected $driver;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ResponseConfigurator
+     */
+    protected $configurator;
+
+    /**
      * @var Keeper
      */
     protected $keeper;
-
     /**
      * @var \DateTime
      */
@@ -36,8 +41,9 @@ class KeeperTest extends TestCase
     {
         $this->time = new \DateTime();
         $this->driver = $this->getMock(DriverInterface::class);
+        $this->configurator = $this->getNoConstructorMock(ResponseConfigurator::class);
 
-        $this->keeper = new Keeper($this->driver);
+        $this->keeper = new Keeper($this->driver, $this->configurator, true);
     }
 
     public function testGet()
@@ -167,42 +173,36 @@ class KeeperTest extends TestCase
         $this->assertInstanceOf('\DateTime', $params ? $this->keeper->getMax($params) : $this->keeper->getMax());
     }
 
+    public function testGetMaxDisabled()
+    {
+        $this->driver
+            ->expects($this->never())
+            ->method('getMax');
+
+        $this->keeper = new Keeper($this->driver, $this->configurator, false);
+
+        $this->assertInstanceOf('\DateTime', $this->keeper->getMax(['foo', 'bar']));
+    }
+
     public function testGetResponse()
     {
         $lifetime = 3600;
-        $expires = (new \DateTime())->modify('+'.$lifetime.' seconds');
         $this->driver
             ->expects($this->once())
             ->method('getMax')
             ->with(['foo', Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue($this->time));
+
         $response = $this->getMock(Response::class);
-        $response
-            ->expects($this->once())
-            ->method('setMaxAge')
-            ->with($lifetime)
-            ->will($this->returnSelf());
-        $response
-            ->expects($this->once())
-            ->method('setSharedMaxAge')
-            ->with($lifetime)
-            ->will($this->returnSelf());
-        $response
-            ->expects($this->once())
-            ->method('setExpires')
-            ->will($this->returnCallback(function ($date) use ($response, $expires) {
-                $this->assertInstanceOf(\DateTime::class, $date);
-                $this->assertTrue($date >= $expires); // test can be run more than 1 second
+        $configured_response = $this->getMock(Response::class);
 
-                return $response;
-            }));
-        $response
+        $this->configurator
             ->expects($this->once())
-            ->method('setLastModified')
-            ->with($this->time)
-            ->will($this->returnSelf());
+            ->method('configure')
+            ->with($response, $this->time, $lifetime)
+            ->will($this->returnValue($configured_response));
 
-        $this->assertEquals($response, $this->keeper->getResponse(['foo'], $lifetime, $response));
+        $this->assertEquals($configured_response, $this->keeper->getResponse(['foo'], $lifetime, $response));
     }
 
     public function testGetResponseEmpty()
@@ -212,8 +212,49 @@ class KeeperTest extends TestCase
             ->method('getMax')
             ->with([Keeper::LAST_UPDATE_KEY])
             ->will($this->returnValue($this->time));
+
         $response = new Response();
-        $response->setLastModified($this->time);
+
+        $configured_response = new Response();
+        $configured_response->setLastModified($this->time);
+
+        $this->configurator
+            ->expects($this->once())
+            ->method('configure')
+            ->with($response, $this->time)
+            ->will($this->returnValue($configured_response));
+
+        $this->assertEquals($configured_response, $this->keeper->getResponse());
+    }
+
+    public function testGetResponseDisabled()
+    {
+        $this->driver
+            ->expects($this->never())
+            ->method('getMax');
+
+        $this->configurator
+            ->expects($this->never())
+            ->method('configure');
+
+        $this->keeper = new Keeper($this->driver, $this->configurator, false);
+        $response = new Response();
+
+        $this->assertEquals($response, $this->keeper->getResponse(['foo'], 3600));
+    }
+
+    public function testGetResponseDisabledEmpty()
+    {
+        $this->driver
+            ->expects($this->never())
+            ->method('getMax');
+
+        $this->configurator
+            ->expects($this->never())
+            ->method('configure');
+
+        $this->keeper = new Keeper($this->driver, $this->configurator, false);
+        $response = new Response();
 
         $this->assertEquals($response, $this->keeper->getResponse());
     }
@@ -233,16 +274,25 @@ class KeeperTest extends TestCase
             ->method('isMethodSafe')
             ->will($this->returnValue(false));
 
+        $response = new Response();
+
+        $configured_response = new Response();
+        $configured_response->setLastModified($this->time);
+
+        $this->configurator
+            ->expects($this->once())
+            ->method('configure')
+            ->with($response, $this->time)
+            ->will($this->returnValue($configured_response));
+
         $response = $this->keeper->getModifiedResponse($request);
 
-        $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals($this->time, $response->getLastModified());
+        $this->assertEquals($configured_response, $response);
     }
 
     public function testGetModifiedResponseUseLifetime()
     {
         $lifetime = 3600;
-        $expires = (new \DateTime())->modify('+'.$lifetime.' seconds');
 
         $this->driver
             ->expects($this->once())
@@ -255,39 +305,24 @@ class KeeperTest extends TestCase
 
         /** @var $response \PHPUnit_Framework_MockObject_MockObject|Response */
         $response = $this->getMock(Response::class);
-        $response
-            ->expects($this->once())
-            ->method('setMaxAge')
-            ->with($lifetime)
-            ->will($this->returnSelf());
-        $response
-            ->expects($this->once())
-            ->method('setSharedMaxAge')
-            ->with($lifetime)
-            ->will($this->returnSelf());
-        $response
-            ->expects($this->once())
-            ->method('setExpires')
-            ->will($this->returnCallback(function ($date) use ($response, $expires) {
-                $this->assertInstanceOf(\DateTime::class, $date);
-                $this->assertTrue($date >= $expires); // test can be run more than 1 second
 
-                return $response;
-            }));
-        $response
-            ->expects($this->once())
-            ->method('setLastModified')
-            ->with($this->time)
-            ->will($this->returnSelf());
-        $response
+        /** @var $configured_response \PHPUnit_Framework_MockObject_MockObject|Response */
+        $configured_response = $this->getMock(Response::class);
+        $configured_response
             ->expects($this->once())
             ->method('isNotModified')
             ->with($request)
             ->will($this->returnValue(false));
 
-        $actual = $this->keeper->getModifiedResponse($request, 'foo', $lifetime, $response);
+        $this->configurator
+            ->expects($this->once())
+            ->method('configure')
+            ->with($response, $this->time)
+            ->will($this->returnValue($configured_response));
 
-        $this->assertEquals($response, $actual);
+        $response = $this->keeper->getModifiedResponse($request, 'foo', $lifetime, $response);
+
+        $this->assertEquals($configured_response, $response);
     }
 
     public function testGetModifiedResponse()
@@ -303,26 +338,30 @@ class KeeperTest extends TestCase
 
         /** @var $response \PHPUnit_Framework_MockObject_MockObject|Response */
         $response = $this->getMock(Response::class);
-        $response
-            ->expects($this->once())
-            ->method('setLastModified')
-            ->with($this->time)
-            ->will($this->returnSelf());
-        $response
+
+        /** @var $configured_response \PHPUnit_Framework_MockObject_MockObject|Response */
+        $configured_response = $this->getMock(Response::class);
+        $configured_response
             ->expects($this->once())
             ->method('isNotModified')
             ->with($request)
             ->will($this->returnValue(true));
-        $response
+        $configured_response
             ->expects($this->atLeastOnce())
             ->method('getStatusCode')
             ->will($this->returnValue(Response::HTTP_NOT_MODIFIED));
+
+        $this->configurator
+            ->expects($this->once())
+            ->method('configure')
+            ->with($response, $this->time)
+            ->will($this->returnValue($configured_response));
 
         try {
             $this->keeper->getModifiedResponse($request, 'foo', -1, $response);
             $this->assertTrue(false, 'Must throw exception');
         } catch (NotModifiedException $e) {
-            $this->assertEquals($response, $e->getResponse());
+            $this->assertEquals($configured_response, $e->getResponse());
             $this->assertEquals(Response::HTTP_NOT_MODIFIED, $e->getCode());
             $this->assertEquals(Response::$statusTexts[Response::HTTP_NOT_MODIFIED], $e->getMessage());
         }

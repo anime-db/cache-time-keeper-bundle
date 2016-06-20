@@ -53,6 +53,11 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
         );
         $this->assertTrue($this->container->getDefinition('cache_time_keeper.listener.console')->getArgument(1));
         $this->assertFalse($this->container->getDefinition('cache_time_keeper.listener.doctrine')->getArgument(1));
+        $this->assertTrue($this->container->getDefinition('cache_time_keeper')->getArgument(2));
+        $this->assertEquals(
+            'sha256',
+            $this->container->getDefinition('cache_time_keeper.cache_key_builder.default_etag_hasher')->getArgument(0)
+        );
 
         // configure memcache
         $this->assertEquals(
@@ -71,13 +76,26 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
             'custom.driver.slow',
             (string) $this->container->getAlias('cache_time_keeper.driver.multi.slow')
         );
+        $this->assertEquals(
+            'cache_time_keeper.cache_key_builder.default_etag_hasher',
+            (string) $this->container->getAlias('cache_time_keeper.cache_key_builder.etag_hasher')
+        );
+        $this->assertEquals(
+            'cache_time_keeper.cache_key_builder.default_etag_hasher',
+            (string) $this->container->getAlias('cache_time_keeper.cache_key_builder.etag_hasher')
+        );
     }
 
     public function testLoad()
     {
         $config = [
             'anime_db_cache_time_keeper' => [
+                'enable' => false,
                 'use_driver' => 'file',
+                'etag_hasher' => [
+                    'driver' => 'custom_etag_hasher',
+                    'algorithm' => 'md5',
+                ],
                 'track' => [
                     'clear_cache' => false,
                     'individually_entity' => true,
@@ -130,6 +148,11 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
         );
         $this->assertFalse($this->container->getDefinition('cache_time_keeper.listener.console')->getArgument(1));
         $this->assertTrue($this->container->getDefinition('cache_time_keeper.listener.doctrine')->getArgument(1));
+        $this->assertFalse($this->container->getDefinition('cache_time_keeper')->getArgument(2));
+        $this->assertEquals(
+            'md5',
+            $this->container->getDefinition('cache_time_keeper.cache_key_builder.default_etag_hasher')->getArgument(0)
+        );
 
         // configure memcache
         $this->assertEquals(
@@ -162,6 +185,10 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
         $this->assertEquals(
             'cache_time_keeper.driver.file',
             (string) $this->container->getAlias('cache_time_keeper.driver.multi.slow')
+        );
+        $this->assertEquals(
+            'custom_etag_hasher',
+            (string) $this->container->getAlias('cache_time_keeper.cache_key_builder.etag_hasher')
         );
     }
 }
