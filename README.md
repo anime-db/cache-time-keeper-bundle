@@ -46,39 +46,67 @@ Default config:
 # app/config/config.yml
 
 anime_db_cache_time_keeper:
-    use_driver: file # Used driver (multi, memcache, shmop, file or dummy)
+    # Set as false if you want disable CacheTimeKeeper and disable HTTP caching.
+    enable: true
+
+    # Used driver (multi, memcache, shmop, file or dummy).
+    # You can use 'dummy' driver for stores data in a temporary variable, within the current thread of execution
+    # program.
+    # You can create custom driver. See below for instructions on creating your own storage driver.
+    use_driver: 'file'
+
+    # Set of request headers that trigger "private" Cache-Control behavior on responses that don't explicitly state
+    # whether the response is public or private via a Cache-Control directive.
+    private_headers: ['Authorization', 'Cookie']
+
+    etag_hasher:
+        # You can create custom ETag hasher driver.
+        driver: ~
+
+        # Hashing function for build ETag.
+        # See http://php.net/manual/en/function.hash.php for more details.
+        algorithm: 'sha256'
+
     track:
-        clear_cache: true # Disable tracking cache clearing
-        individually_entity: false # Enable tracking entity individually
+        # Disable tracking cache clearing
+        clear_cache: true
+
+        # Enable tracking entity individually
+        individually_entity: false
+
     drivers:
+        # Multi driver is a wrapper for multiple drivers. Takes the driver with quick access to the data (stored in
+        # memory) and slow (stored on hard disc), and receives data on the possibility of fast drivers and if not luck
+        # reads data from slow.
         multi:
-            fast: shmop # Use 'shmop' driver for store data in memory
-            slow: file # Use 'file' driver for store data on hard disc
+            # Use 'shmop' driver for store data in memory.
+            fast: 'shmop'
+
+            # Use 'file' driver for store data on hard disc.
+            slow: 'file'
+
+        # Shmop driver is stores the data in memory using PHP extension Shmop.
+        # For work of this driver, you must install 'anime-db/shmop' composer dependence.
+        # See http://php.net/manual/en/book.shmop.php and https://github.com/anime-db/shmop for more details.
         shmop:
-            salt: '%secret%' # Memory key prefix for use this bundle on shared hosting
+            # Memory key prefix for use this bundle on shared hosting.
+            salt: '%secret%'
+
+        # File driver is store data in a cache dirrectory.
         file:
-            path: '%kernel.root_dir%/cache/cache-time-keeper/' # Path for store data
+            # Path for store data.
+            path: '%kernel.root_dir%/cache/cache-time-keeper/'
+
+        # Memcache driver is stores the data in memory using PHP extension 'memcache'.
+        # See http://php.net/manual/en/book.memcache.php for more details.
         memcache:
+            # Cache key prefix
             prefix: 'cache_time_keeper_'
-            persistent_id: 'cache_time_keeper'
+
+            # Add a memcached server to connection pool
             hosts:
                 - {host: 'localhost', port: 11211, weight: 100}
 ```
-
-## Drivers
-
-In the bundle there are several the data storage drivers.
-
-- **Dummy** (`dummy`) - stores data in a temporary variable, within the current thread of execution program.
-- **File** (`file`) - stores data in a file cache *(Default driver)*.
-- **Memcache** (`memcache`) - stores the data in memory using PHP extension
-    [memcache](http://php.net/manual/en/book.memcache.php).
-- **Shmop** (`shmop`) - stores the data in memory using PHP extension [shmop](http://php.net/manual/en/book.shmop.php).
-    For work of this driver, you must install [`anime-db/shmop`](https://github.com/anime-db/shmop).
-- **Multi** (`multi`) - driver is a wrapper for multiple drivers.
-    Takes the driver with quick access to the data (stored in memory) and slow (stored on hard disc), and receives data
-    on the possibility of fast drivers and if not luck reads data from slow.
-- ***Custom** - see below for instructions on creating your own storage driver.*
 
 ## Usage
 
