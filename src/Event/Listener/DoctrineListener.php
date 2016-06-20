@@ -76,7 +76,7 @@ class DoctrineListener
 
         if ($this->track_individually_entity) {
             $ids = $this->builder->getEntityIdentifier($args->getEntity(), $args->getEntityManager());
-            if ($ids) {
+            if ($ids !== null) {
                 if ($remove) {
                     $this->keeper->remove($alias.$ids);
                 } else {
