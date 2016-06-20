@@ -10,6 +10,7 @@ namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Exception\NotModifiedException;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Driver\DriverInterface;
+use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,12 +26,12 @@ class Keeper
     /**
      * @var string
      */
-    const IDENTIFIER_SEPARATOR = '|';
+    const IDENTIFIER_SEPARATOR = CacheKeyBuilder::IDENTIFIER_SEPARATOR;
 
     /**
      * @var string
      */
-    const IDENTIFIER_PREFIX = ':';
+    const IDENTIFIER_PREFIX = CacheKeyBuilder::IDENTIFIER_PREFIX;
 
     /**
      * @var DriverInterface
@@ -38,11 +39,25 @@ class Keeper
     protected $driver;
 
     /**
-     * @param DriverInterface $driver
+     * @var ResponseConfigurator
      */
-    public function __construct(DriverInterface $driver)
+    protected $configurator;
+
+    /**
+     * @var bool
+     */
+    protected $enable = true;
+
+    /**
+     * @param DriverInterface $driver
+     * @param ResponseConfigurator $configurator
+     * @param boolean $enable
+     */
+    public function __construct(DriverInterface $driver, ResponseConfigurator $configurator, $enable)
     {
         $this->driver = $driver;
+        $this->configurator = $configurator;
+        $this->enable = $enable;
     }
 
     /**
@@ -99,6 +114,10 @@ class Keeper
      */
     public function getMax($params = [])
     {
+        if (!$this->enable) {
+            return new \DateTime();
+        }
+
         $params = (array) $params;
         // always check the date of the last update of the project
         if (!in_array(self::LAST_UPDATE_KEY, $params)) {
@@ -129,14 +148,11 @@ class Keeper
             $response = new Response();
         }
 
-        if ($lifetime > 0) {
-            $response
-                ->setMaxAge($lifetime)
-                ->setSharedMaxAge($lifetime)
-                ->setExpires((new \DateTime())->modify('+'.$lifetime.' seconds'));
+        if (!$this->enable) {
+            return $response;
         }
 
-        return $response->setLastModified($this->getMax($params));
+        return $this->configurator->configure($response, $this->getMax($params), $lifetime);
     }
 
     /**

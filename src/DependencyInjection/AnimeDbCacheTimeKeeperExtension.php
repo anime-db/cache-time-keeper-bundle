@@ -50,6 +50,12 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
         $container
             ->getDefinition('cache_time_keeper.listener.doctrine')
             ->replaceArgument(1, $config['track']['individually_entity']);
+        $container
+            ->getDefinition('cache_time_keeper')
+            ->replaceArgument(2, $config['enable']);
+        $container
+            ->getDefinition('cache_time_keeper.cache_key_builder.default_etag_hasher')
+            ->replaceArgument(0, $config['etag_hasher']['algorithm']);
 
         // configure memcache
         $memcache = $container
@@ -72,6 +78,7 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
             'cache_time_keeper.driver.multi.slow',
             $this->getRealServiceName($config['drivers']['multi']['slow'])
         );
+        $container->setAlias('cache_time_keeper.cache_key_builder.etag_hasher', $config['etag_hasher']['driver']);
     }
 
     /**
@@ -120,10 +127,17 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
     protected function mergeDefaultConfig(array $config, ContainerBuilder $container)
     {
         $config = array_merge([
+            'enable' => true,
             'use_driver' => 'file',
+            'etag_hasher' => [],
             'track' => [],
             'drivers' => [],
         ], $config);
+
+        $config['etag_hasher'] = array_merge([
+            'driver' => 'cache_time_keeper.cache_key_builder.default_etag_hasher',
+            'algorithm' => 'sha256',
+        ], $config['etag_hasher']);
 
         $config['track'] = array_merge([
             'clear_cache' => true,

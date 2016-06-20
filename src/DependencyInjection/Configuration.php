@@ -40,14 +40,18 @@ class Configuration implements ConfigurationInterface
      * Example config:
      *
      * anime_db_cache_time_keeper:
-     *     use_driver: file
+     *     enable: true
+     *     use_driver: 'file'
+     *     etag_hasher:
+     *         driver: 'cache_time_keeper.cache_key_builder.default_etag_hasher'
+     *         algorithm: sha256
      *     track:
      *         clear_cache: true
      *         individually_entity: false
      *     drivers:
      *         multi:
-     *             fast: shmop
-     *             slow: file
+     *             fast: 'shmop'
+     *             slow: 'file'
      *         shmop:
      *             salt: '%secret%'
      *         file:
@@ -66,20 +70,15 @@ class Configuration implements ConfigurationInterface
         $tree_builder
             ->root('anime_db_cache_time_keeper')
                 ->children()
+                    ->booleanNode('enable')
+                        ->defaultTrue()
+                    ->end()
                     ->scalarNode('use_driver')
                         ->cannotBeEmpty()
                         ->defaultValue('file')
                     ->end()
-                    ->arrayNode('track')
-                        ->children()
-                            ->booleanNode('clear_cache')
-                                ->defaultTrue()
-                            ->end()
-                            ->booleanNode('individually_entity')
-                                ->defaultFalse()
-                            ->end()
-                        ->end()
-                    ->end()
+                    ->append($this->getEtagHasher())
+                    ->append($this->getTrack())
                     ->arrayNode('drivers')
                         ->append($this->getDriverFile())
                         ->append($this->getDriverMemcache())
@@ -89,6 +88,46 @@ class Configuration implements ConfigurationInterface
                 ->end();
 
         return $tree_builder;
+    }
+
+    /**
+     * @return ArrayNodeDefinition
+     */
+    protected function getEtagHasher()
+    {
+        $tree_builder = new TreeBuilder();
+
+        return $tree_builder
+            ->root('etag_hasher')
+                ->children()
+                    ->scalarNode('driver')
+                        ->cannotBeEmpty()
+                        ->defaultValue('cache_time_keeper.cache_key_builder.default_etag_hasher')
+                    ->end()
+                    ->scalarNode('algorithm')
+                        ->cannotBeEmpty()
+                        ->defaultValue('sha256')
+                    ->end()
+                ->end();
+    }
+
+    /**
+     * @return ArrayNodeDefinition
+     */
+    protected function getTrack()
+    {
+        $tree_builder = new TreeBuilder();
+
+        return $tree_builder
+            ->root('track')
+                ->children()
+                    ->booleanNode('clear_cache')
+                        ->defaultTrue()
+                    ->end()
+                    ->booleanNode('individually_entity')
+                        ->defaultFalse()
+                    ->end()
+                ->end();
     }
 
     /**
