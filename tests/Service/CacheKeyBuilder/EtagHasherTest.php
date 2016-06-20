@@ -22,7 +22,7 @@ class EtagHasherTest extends TestCase
     {
         return [
             ['sha256', []],
-            ['md5', ['foo' => 'bar']]
+            ['md5', ['foo' => 'bar']],
         ];
     }
 
