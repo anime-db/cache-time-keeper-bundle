@@ -22,7 +22,7 @@ services:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder
         arguments: [ '@cache_time_keeper.cache_key_builder.etag_hasher' ]
         calls:
-            - [ setEntityManager, [ '@doctrine.orm.default_entity_manager' ] ]
+            - [ setDoctrine, [ '@doctrine' ] ]
         public: false
 
     cache_time_keeper.response_configurator:

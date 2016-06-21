@@ -16,6 +16,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class CacheKeyBuilderTest extends TestCase
@@ -24,6 +25,11 @@ class CacheKeyBuilderTest extends TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|EtagHasherInterface
      */
     protected $etag_hasher;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
+     */
+    protected $doctrine;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|EntityManagerInterface
@@ -38,10 +44,11 @@ class CacheKeyBuilderTest extends TestCase
     protected function setUp()
     {
         $this->etag_hasher = $this->getMock(EtagHasherInterface::class);
+        $this->doctrine = $this->getMock(RegistryInterface::class);
         $this->em = $this->getMock(EntityManagerInterface::class);
 
         $this->builder = new CacheKeyBuilder($this->etag_hasher);
-        $this->builder->setEntityManager($this->em);
+        $this->builder->setDoctrine($this->doctrine);
     }
 
     /**
@@ -73,12 +80,24 @@ class CacheKeyBuilderTest extends TestCase
                 'AnimeDbCacheTimeKeeperBundle' => 'AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Entity',
             ]));
 
+        $this->doctrine
+            ->expects($this->once())
+            ->method('getEntityManager')
+            ->will($this->returnValue($this->em));
+
         $this->em
             ->expects($this->once())
             ->method('getConfiguration')
             ->will($this->returnValue($conf));
 
         $this->assertEquals($alias, $this->builder->getEntityAlias($entity));
+    }
+
+    public function testGetEntityAliasNoDoctrine()
+    {
+        $this->builder = new CacheKeyBuilder($this->etag_hasher);
+
+        $this->assertNull($this->builder->getEntityAlias(new Foo()));
     }
 
     /**
@@ -109,6 +128,11 @@ class CacheKeyBuilderTest extends TestCase
             ->with($entity)
             ->will($this->returnValue($ids));
 
+        $this->doctrine
+            ->expects($this->once())
+            ->method('getEntityManager')
+            ->will($this->returnValue($this->em));
+
         $this->em
             ->expects($this->once())
             ->method('getClassMetadata')
@@ -123,7 +147,7 @@ class CacheKeyBuilderTest extends TestCase
         $this->assertEquals($prefix, $this->builder->getEntityIdentifier($entity));
     }
 
-    public function testGetEntityIdentifierNoEntityManager()
+    public function testGetEntityIdentifierNoDoctrine()
     {
         $this->builder = new CacheKeyBuilder($this->etag_hasher);
 
@@ -143,14 +167,5 @@ class CacheKeyBuilderTest extends TestCase
             ->will($this->returnValue($etag));
 
         $this->assertEquals($etag, $this->builder->getEtag($response));
-    }
-
-    public function testGetEtagNoEntityManager()
-    {
-        /** @var $response \PHPUnit_Framework_MockObject_MockObject|Response */
-        $response = $this->getNoConstructorMock(Response::class);
-        $this->builder = new CacheKeyBuilder($this->etag_hasher);
-
-        $this->assertNull($this->builder->getEtag($response));
     }
 }

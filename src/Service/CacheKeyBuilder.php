@@ -9,7 +9,7 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder\EtagHasherInterface;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class CacheKeyBuilder
@@ -30,9 +30,9 @@ class CacheKeyBuilder
     protected $etag_hasher;
 
     /**
-     * @var EntityManagerInterface|null
+     * @var RegistryInterface|null
      */
-    protected $em;
+    protected $doctrine;
 
     /**
      * @param EtagHasherInterface $etag_hasher
@@ -43,13 +43,13 @@ class CacheKeyBuilder
     }
 
     /**
-     * @param EntityManagerInterface $em
+     * @param RegistryInterface $doctrine
      *
      * @return CacheKeyBuilder
      */
-    public function setEntityManager(EntityManagerInterface $em)
+    public function setDoctrine(RegistryInterface $doctrine)
     {
-        $this->em = $em;
+        $this->doctrine = $doctrine;
 
         return $this;
     }
@@ -61,13 +61,19 @@ class CacheKeyBuilder
      */
     public function getEntityAlias($entity)
     {
-        if (!($this->em instanceof EntityManagerInterface)) {
+        if (!($this->doctrine instanceof RegistryInterface)) {
             return null;
         }
 
         $class = get_class($entity);
 
-        foreach ($this->em->getConfiguration()->getEntityNamespaces() as $ns_alias => $ns) {
+        $namespaces = $this
+            ->doctrine
+            ->getEntityManager()
+            ->getConfiguration()
+            ->getEntityNamespaces();
+
+        foreach ($namespaces as $ns_alias => $ns) {
             if (strpos($class, $ns) === 0) {
                 return $ns_alias.':'.ltrim(str_replace($ns, '', $class), '\\');
             }
@@ -83,11 +89,15 @@ class CacheKeyBuilder
      */
     public function getEntityIdentifier($entity)
     {
-        if (!($this->em instanceof EntityManagerInterface)) {
+        if (!($this->doctrine instanceof RegistryInterface)) {
             return null;
         }
 
-        $ids = $this->em->getClassMetadata(get_class($entity))->getIdentifierValues($entity);
+        $ids = $this
+            ->doctrine
+            ->getEntityManager()
+            ->getClassMetadata(get_class($entity))
+            ->getIdentifierValues($entity);
 
         return $ids ? self::IDENTIFIER_PREFIX.implode(self::IDENTIFIER_SEPARATOR, $ids) : null;
     }
