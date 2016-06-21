@@ -71,11 +71,11 @@ class DoctrineListener
      */
     protected function update(LifecycleEventArgs $args, $remove)
     {
-        $alias = $this->builder->getEntityAlias($args->getEntity(), $args->getEntityManager());
+        $alias = $this->builder->getEntityAlias($args->getEntity());
         $this->keeper->set($alias, new \DateTime());
 
         if ($this->track_individually_entity) {
-            $ids = $this->builder->getEntityIdentifier($args->getEntity(), $args->getEntityManager());
+            $ids = $this->builder->getEntityIdentifier($args->getEntity());
             if ($ids !== null) {
                 if ($remove) {
                     $this->keeper->remove($alias.$ids);

@@ -12,7 +12,6 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper;
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\DoctrineListener;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class DoctrineListenerTest extends TestCase
@@ -33,11 +32,6 @@ class DoctrineListenerTest extends TestCase
     protected $args;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager
-     */
-    protected $em;
-
-    /**
      * @var \stdClass
      */
     protected $entity;
@@ -48,13 +42,8 @@ class DoctrineListenerTest extends TestCase
 
         $this->keeper = $this->getNoConstructorMock(Keeper::class);
         $this->builder = $this->getNoConstructorMock(CacheKeyBuilder::class);
-        $this->em = $this->getNoConstructorMock(EntityManager::class);
 
         $this->args = $this->getNoConstructorMock(LifecycleEventArgs::class);
-        $this->args
-            ->expects($this->atLeastOnce())
-            ->method('getEntityManager')
-            ->will($this->returnValue($this->em));
         $this->args
             ->expects($this->atLeastOnce())
             ->method('getEntity')
@@ -99,7 +88,7 @@ class DoctrineListenerTest extends TestCase
         $this->builder
             ->expects($this->once())
             ->method('getEntityAlias')
-            ->with($this->entity, $this->em)
+            ->with($this->entity)
             ->will($this->returnValue($alias));
 
         if ($track_individually) {
@@ -107,7 +96,7 @@ class DoctrineListenerTest extends TestCase
             $this->builder
                 ->expects($this->once())
                 ->method('getEntityIdentifier')
-                ->with($this->entity, $this->em)
+                ->with($this->entity)
                 ->will($this->returnValue($suffix));
 
             if ($suffix) {

@@ -16,7 +16,6 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CacheKeyBuilderTest extends TestCase
@@ -42,6 +41,7 @@ class CacheKeyBuilderTest extends TestCase
         $this->em = $this->getMock(EntityManagerInterface::class);
 
         $this->builder = new CacheKeyBuilder($this->etag_hasher);
+        $this->builder->setEntityManager($this->em);
     }
 
     /**
@@ -78,7 +78,7 @@ class CacheKeyBuilderTest extends TestCase
             ->method('getConfiguration')
             ->will($this->returnValue($conf));
 
-        $this->assertEquals($alias, $this->builder->getEntityAlias($entity, $this->em));
+        $this->assertEquals($alias, $this->builder->getEntityAlias($entity));
     }
 
     /**
@@ -120,7 +120,14 @@ class CacheKeyBuilderTest extends TestCase
             $prefix = CacheKeyBuilder::IDENTIFIER_PREFIX.implode(CacheKeyBuilder::IDENTIFIER_SEPARATOR, $ids);
         }
 
-        $this->assertEquals($prefix, $this->builder->getEntityIdentifier($entity, $this->em));
+        $this->assertEquals($prefix, $this->builder->getEntityIdentifier($entity));
+    }
+
+    public function testGetEntityIdentifierNoEntityManager()
+    {
+        $this->builder = new CacheKeyBuilder($this->etag_hasher);
+
+        $this->assertNull($this->builder->getEntityIdentifier(new Bar()));
     }
 
     public function testGetEtag()
@@ -136,5 +143,14 @@ class CacheKeyBuilderTest extends TestCase
             ->will($this->returnValue($etag));
 
         $this->assertEquals($etag, $this->builder->getEtag($response));
+    }
+
+    public function testGetEtagNoEntityManager()
+    {
+        /** @var $response \PHPUnit_Framework_MockObject_MockObject|Response */
+        $response = $this->getNoConstructorMock(Response::class);
+        $this->builder = new CacheKeyBuilder($this->etag_hasher);
+
+        $this->assertNull($this->builder->getEtag($response));
     }
 }
