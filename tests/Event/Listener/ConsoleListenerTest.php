@@ -83,7 +83,7 @@ class ConsoleListenerTest extends TestCase
         $this->keeper
             ->expects($this->once())
             ->method('set')
-            ->with(Keeper::LAST_UPDATE_KEY, new \DateTime());
+            ->with(Keeper::LAST_UPDATE_KEY, $this->isInstanceOf(\DateTime::class));
 
         $this->event
             ->expects($this->once())
