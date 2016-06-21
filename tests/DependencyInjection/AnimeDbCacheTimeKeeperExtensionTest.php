@@ -52,7 +52,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
             $this->container->getDefinition('cache_time_keeper.driver.memcache')->getArgument(1)
         );
         $this->assertTrue($this->container->getDefinition('cache_time_keeper.listener.console')->getArgument(1));
-        $this->assertFalse($this->container->getDefinition('cache_time_keeper.listener.doctrine')->getArgument(1));
+        $this->assertFalse($this->container->getDefinition('cache_time_keeper.listener.doctrine')->getArgument(2));
         $this->assertTrue($this->container->getDefinition('cache_time_keeper')->getArgument(2));
         $this->assertEquals(
             'sha256',
@@ -147,7 +147,7 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
             $this->container->getDefinition('cache_time_keeper.driver.memcache')->getArgument(1)
         );
         $this->assertFalse($this->container->getDefinition('cache_time_keeper.listener.console')->getArgument(1));
-        $this->assertTrue($this->container->getDefinition('cache_time_keeper.listener.doctrine')->getArgument(1));
+        $this->assertTrue($this->container->getDefinition('cache_time_keeper.listener.doctrine')->getArgument(2));
         $this->assertFalse($this->container->getDefinition('cache_time_keeper')->getArgument(2));
         $this->assertEquals(
             'md5',

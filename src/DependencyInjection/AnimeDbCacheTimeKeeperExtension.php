@@ -49,7 +49,7 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
             ->replaceArgument(1, $config['track']['clear_cache']);
         $container
             ->getDefinition('cache_time_keeper.listener.doctrine')
-            ->replaceArgument(1, $config['track']['individually_entity']);
+            ->replaceArgument(2, $config['track']['individually_entity']);
         $container
             ->getDefinition('cache_time_keeper')
             ->replaceArgument(2, $config['enable']);
