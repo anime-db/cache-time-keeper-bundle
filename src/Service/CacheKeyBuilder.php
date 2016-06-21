@@ -50,6 +50,7 @@ class CacheKeyBuilder
     public function setEntityManager(EntityManagerInterface $em)
     {
         $this->em = $em;
+
         return $this;
     }
 
