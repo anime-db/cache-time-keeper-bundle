@@ -380,7 +380,7 @@ Register custom driver as a service in `service.yml`:
 
 ```yml
 services:
-    cache_time_keeper.custom:
+    cache_time_keeper.driver.custom:
         class: Acme\Bundle\DemoBundle\CacheTimeKeeper\CustomDriver
 ```
 
@@ -390,7 +390,7 @@ Use custom driver:
 # app/config/config.yml
 
 anime_db_cache_time_keeper:
-    use_driver: '@cache_time_keeper.custom'
+    use_driver: 'cache_time_keeper.driver.custom'
 ```
 
 ## Custom ETag hasher driver
@@ -443,7 +443,7 @@ Register custom driver as a service in `service.yml`:
 
 ```yml
 services:
-    cache_time_keeper.custom_etag_hasher:
+    cache_time_keeper.etag_hasher.custom:
         class: Acme\Bundle\DemoBundle\CacheTimeKeeper\CustomEtagHasher
         arguments: [ '@security.token_storage' ]
 ```
@@ -455,7 +455,7 @@ Use custom driver:
 
 anime_db_cache_time_keeper:
     etag_hasher:
-        driver: '@cache_time_keeper.custom_etag_hasher'
+        driver: 'cache_time_keeper.etag_hasher.custom'
 ```
 
 ## License
