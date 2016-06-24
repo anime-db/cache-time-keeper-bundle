@@ -16,7 +16,7 @@ use AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\TestCase;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\HttpFoundation\Response;
 
 class CacheKeyBuilderTest extends TestCase
@@ -27,7 +27,7 @@ class CacheKeyBuilderTest extends TestCase
     protected $etag_hasher;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|Registry
      */
     protected $doctrine;
 
@@ -44,8 +44,11 @@ class CacheKeyBuilderTest extends TestCase
     protected function setUp()
     {
         $this->etag_hasher = $this->getMock(EtagHasherInterface::class);
-        $this->doctrine = $this->getMock(RegistryInterface::class);
         $this->em = $this->getMock(EntityManagerInterface::class);
+        $this->doctrine = $this
+            ->getMockBuilder(Registry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->builder = new CacheKeyBuilder($this->etag_hasher);
         $this->builder->setDoctrine($this->doctrine);
@@ -82,7 +85,7 @@ class CacheKeyBuilderTest extends TestCase
 
         $this->doctrine
             ->expects($this->once())
-            ->method('getEntityManager')
+            ->method('getManager')
             ->will($this->returnValue($this->em));
 
         $this->em
@@ -130,7 +133,7 @@ class CacheKeyBuilderTest extends TestCase
 
         $this->doctrine
             ->expects($this->once())
-            ->method('getEntityManager')
+            ->method('getManager')
             ->will($this->returnValue($this->em));
 
         $this->em

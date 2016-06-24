@@ -9,7 +9,7 @@
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Service;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder\EtagHasherInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\HttpFoundation\Response;
 
 class CacheKeyBuilder
@@ -30,7 +30,7 @@ class CacheKeyBuilder
     protected $etag_hasher;
 
     /**
-     * @var RegistryInterface|null
+     * @var Registry|null
      */
     protected $doctrine;
 
@@ -43,11 +43,11 @@ class CacheKeyBuilder
     }
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param Registry $doctrine
      *
      * @return CacheKeyBuilder
      */
-    public function setDoctrine(RegistryInterface $doctrine)
+    public function setDoctrine(Registry $doctrine)
     {
         $this->doctrine = $doctrine;
 
@@ -61,7 +61,7 @@ class CacheKeyBuilder
      */
     public function getEntityAlias($entity)
     {
-        if (!($this->doctrine instanceof RegistryInterface)) {
+        if (!($this->doctrine instanceof Registry)) {
             return null;
         }
 
@@ -69,7 +69,7 @@ class CacheKeyBuilder
 
         $namespaces = $this
             ->doctrine
-            ->getEntityManager()
+            ->getManager()
             ->getConfiguration()
             ->getEntityNamespaces();
 
@@ -89,13 +89,13 @@ class CacheKeyBuilder
      */
     public function getEntityIdentifier($entity)
     {
-        if (!($this->doctrine instanceof RegistryInterface)) {
+        if (!($this->doctrine instanceof Registry)) {
             return null;
         }
 
         $ids = $this
             ->doctrine
-            ->getEntityManager()
+            ->getManager()
             ->getClassMetadata(get_class($entity))
             ->getIdentifierValues($entity);
 
