@@ -67,9 +67,9 @@ class KeeperTest extends TestCase
         $this->driver
             ->expects($this->once())
             ->method('set')
-            ->with(Keeper::LAST_UPDATE_KEY, $this->time);
+            ->with(Keeper::LAST_UPDATE_KEY, $this->isInstanceOf(\DateTime::class));
 
-        $this->assertEquals($this->time, $this->keeper->get(Keeper::LAST_UPDATE_KEY));
+        $this->assertInstanceOf(\DateTime::class, $this->keeper->get(Keeper::LAST_UPDATE_KEY));
     }
 
     public function testGetEmpty()
