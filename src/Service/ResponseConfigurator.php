@@ -101,7 +101,6 @@ class ResponseConfigurator
     {
         $response
             ->setLastModified($last_modified)
-            ->setDate($last_modified)
             ->headers
             ->addCacheControlDirective('must-revalidate', true);
 
