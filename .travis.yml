@@ -1,5 +1,7 @@
 language: php
 
+sudo: false
+
 php:
     - 5.5
     - 5.6
@@ -7,14 +9,17 @@ php:
 notifications:
     email: dev@anime-db.org
 
-install:
+before_install:
     - echo "extension=memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
     - composer self-update
-    - composer install --prefer-source
+    - 'if [[ -n "$GH_TOKEN" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;'
+    - mkdir build
+
+install:
+    - composer install --prefer-dist --no-interaction --no-progress
 
 script:
-    - phpunit --verbose --coverage-clover=coverage.clover
+    - vendor/bin/phpunit
 
 after_script:
-    - wget https://scrutinizer-ci.com/ocular.phar
-    - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+    - vendor/bin/ocular code-coverage:upload --format=php-clover build/coverage-clover.xml
