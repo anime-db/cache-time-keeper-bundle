@@ -120,7 +120,6 @@ class ResponseConfiguratorTest extends TestCase
 
         $this->assertEquals($response, $configured_response);
         $this->assertEquals($last_modified, $response->getLastModified());
-        $this->assertEquals($last_modified, $response->getDate());
         $this->assertEquals($etag, $response->getEtag());
         $this->assertTrue($response->headers->hasCacheControlDirective('must-revalidate'));
         $this->assertTrue($response->headers->hasCacheControlDirective($expected_public ? 'public' : 'private'));
