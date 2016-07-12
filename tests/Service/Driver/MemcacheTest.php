@@ -34,6 +34,10 @@ class MemcacheTest extends TestCase
 
     protected function setUp()
     {
+        if (!extension_loaded('memcache')) {
+            $this->markTestSkipped('PHP extension memcache is not installed');
+        }
+
         $this->time = new \DateTime();
         $this->memcache = $this->getMock(\Memcache::class);
         $this->driver = new Memcache($this->memcache, self::KEY_PREFIX);
