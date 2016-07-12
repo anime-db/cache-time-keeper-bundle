@@ -11,9 +11,9 @@ notifications:
     email: dev@anime-db.org
 
 before_install:
-    - echo "extension=memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-    - composer self-update
+    - 'if [[ "$TRAVIS_PHP_VERSION" != "7.0 ]]; then echo "extension=memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ; fi;'
     - 'if [[ -n "$GH_TOKEN" ]]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;'
+    - composer self-update
     - mkdir build
 
 install:
