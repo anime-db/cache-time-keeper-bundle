@@ -22,7 +22,6 @@
         "doctrine/doctrine-bundle": "~1.4"
     },
     "require-dev": {
-        "ext-memcache": "*",
         "anime-db/shmop": "1.0.*",
         "phpunit/phpunit": "4.8.*",
         "scrutinizer/ocular": "1.3.*",
