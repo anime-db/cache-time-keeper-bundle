@@ -6,6 +6,7 @@
  * @copyright Copyright (c) 2014, Peter Gribanov
  * @license   http://opensource.org/licenses/MIT
  */
+
 namespace AnimeDb\Bundle\CacheTimeKeeperBundle\Tests\Exception;
 
 use AnimeDb\Bundle\CacheTimeKeeperBundle\Exception\NotModifiedException;
@@ -26,7 +27,6 @@ class NotModifiedExceptionTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('getStatusCode')
             ->will($this->returnValue($status_code));
-
 
         $previous = $this->getMock(\Exception::class);
 
@@ -51,7 +51,6 @@ class NotModifiedExceptionTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('getStatusCode')
             ->will($this->returnValue($status_code));
-
 
         $exception = new NotModifiedException($response);
 
