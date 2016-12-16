@@ -46,12 +46,15 @@ class EtagHasher implements EtagHasherInterface
      */
     public function hash(Response $response)
     {
-        $suffix = '';
+        $params = [
+            $response->getLastModified()->format(\DateTime::ISO8601),
+        ];
+
         // add cookies to ETag
         if ($this->request_stack->getMasterRequest()) {
-            $suffix = self::ETAG_SEPARATOR.http_build_query($this->request_stack->getMasterRequest()->cookies->all());
+            $params[] = http_build_query($this->request_stack->getMasterRequest()->cookies->all());
         }
 
-        return hash($this->algorithm, $response->getLastModified()->format(\DateTime::ISO8601).$suffix);
+        return hash($this->algorithm, implode(self::ETAG_SEPARATOR, $params));
     }
 }
