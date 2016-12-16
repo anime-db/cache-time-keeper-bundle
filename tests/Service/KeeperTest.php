@@ -270,10 +270,6 @@ class KeeperTest extends TestCase
 
         /** @var $request \PHPUnit_Framework_MockObject_MockObject|Request */
         $request = $this->getMock(Request::class);
-        $request
-            ->expects($this->once())
-            ->method('isMethodSafe')
-            ->will($this->returnValue(false));
 
         $response = new Response();
 
