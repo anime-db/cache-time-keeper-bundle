@@ -5,7 +5,10 @@ imports:
 services:
     cache_time_keeper:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\Keeper
-        arguments: [ '@cache_time_keeper.driver', '@cache_time_keeper.response_configurator', ~ ]
+        arguments:
+            - '@cache_time_keeper.driver'
+            - '@cache_time_keeper.response_configurator'
+            - '%cache_time_keeper.enable%'
 
     cache_time_keeper.command:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Command\ResetCommand
@@ -15,7 +18,7 @@ services:
 
     cache_time_keeper.cache_key_builder.default_etag_hasher:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\CacheKeyBuilder\EtagHasher
-        arguments: [ '@request_stack', ~ ]
+        arguments: [ '@request_stack', '%cache_time_keeper.etag.algorithm%' ]
         public: false
 
     cache_time_keeper.cache_key_builder:
@@ -27,5 +30,5 @@ services:
 
     cache_time_keeper.response_configurator:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Service\ResponseConfigurator
-        arguments: [ '@cache_time_keeper.cache_key_builder', '@request_stack', ~ ]
+        arguments: [ '@cache_time_keeper.cache_key_builder', '@request_stack', '%cache_time_keeper.private_headers%' ]
         public: false

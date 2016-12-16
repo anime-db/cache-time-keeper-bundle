@@ -1,7 +1,10 @@
 services:
     cache_time_keeper.listener.doctrine:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\DoctrineListener
-        arguments: [ '@cache_time_keeper', '@cache_time_keeper.cache_key_builder', ~ ]
+        arguments:
+            - '@cache_time_keeper'
+            - '@cache_time_keeper.cache_key_builder'
+            - '%cache_time_keeper.track.individually%'
         tags:
             - { name: doctrine.event_listener, event: postRemove }
             - { name: doctrine.event_listener, event: postPersist }
@@ -9,7 +12,7 @@ services:
 
     cache_time_keeper.listener.console:
         class: AnimeDb\Bundle\CacheTimeKeeperBundle\Event\Listener\ConsoleListener
-        arguments: [ '@cache_time_keeper', ~ ]
+        arguments: [ '@cache_time_keeper', '%cache_time_keeper.track.clear_cache%' ]
         tags:
             - { name: kernel.event_listener, event: console.terminate, method: onTerminate }
 

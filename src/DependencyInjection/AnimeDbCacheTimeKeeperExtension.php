@@ -35,31 +35,15 @@ class AnimeDbCacheTimeKeeperExtension extends Extension
         $config = $this->mergeBackwardCompatibilityConfig($config, $container);
         $config = $this->mergeDefaultConfig($config, $container);
 
-        // configure drivers
-        $container
-            ->getDefinition('cache_time_keeper.driver.shmop')
-            ->replaceArgument(0, $config['drivers']['shmop']['salt']);
-        $container
-            ->getDefinition('cache_time_keeper.driver.file')
-            ->replaceArgument(0, $config['drivers']['file']['path']);
-        $container
-            ->getDefinition('cache_time_keeper.driver.memcache')
-            ->replaceArgument(1, $config['drivers']['memcache']['prefix']);
-        $container
-            ->getDefinition('cache_time_keeper.listener.console')
-            ->replaceArgument(1, $config['track']['clear_cache']);
-        $container
-            ->getDefinition('cache_time_keeper.listener.doctrine')
-            ->replaceArgument(2, $config['track']['individually_entity']);
-        $container
-            ->getDefinition('cache_time_keeper')
-            ->replaceArgument(2, $config['enable']);
-        $container
-            ->getDefinition('cache_time_keeper.cache_key_builder.default_etag_hasher')
-            ->replaceArgument(1, $config['etag_hasher']['algorithm']);
-        $container
-            ->getDefinition('cache_time_keeper.response_configurator')
-            ->replaceArgument(2, $config['private_headers']);
+        // set params from config
+        $container->setParameter('cache_time_keeper.enable', $config['enable']);
+        $container->setParameter('cache_time_keeper.etag.algorithm', $config['etag_hasher']['algorithm']);
+        $container->setParameter('cache_time_keeper.private_headers', $config['private_headers']);
+        $container->setParameter('cache_time_keeper.track.clear_cache', $config['track']['clear_cache']);
+        $container->setParameter('cache_time_keeper.track.individually', $config['track']['individually_entity']);
+        $container->setParameter('cache_time_keeper.driver.shmop.salt', $config['drivers']['shmop']['salt']);
+        $container->setParameter('cache_time_keeper.driver.file.path', $config['drivers']['file']['path']);
+        $container->setParameter('cache_time_keeper.driver.memcache.prefix', $config['drivers']['memcache']['prefix']);
 
         // configure memcache
         $memcache = $container->getDefinition('cache_time_keeper.memcache');

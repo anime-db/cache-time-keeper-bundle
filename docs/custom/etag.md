@@ -31,13 +31,20 @@ class CustomEtagHasher implements EtagHasherInterface
     private $token_storage;
 
     /**
+     * @var string
+     */
+    private $algorithm = '';
+
+    /**
      * @param RequestStack $request_stack
      * @param TokenStorageInterface $token_storage
+     * @param string $algorithm
      */
-    public function __construct(RequestStack $request_stack, TokenStorageInterface $token_storage)
+    public function __construct(RequestStack $request_stack, TokenStorageInterface $token_storage, $algorithm)
     {
         $this->request_stack = $request_stack;
         $this->token_storage = $token_storage;
+        $this->algorithm = $algorithm;
     }
 
     /**
@@ -61,7 +68,7 @@ class CustomEtagHasher implements EtagHasherInterface
             $params[] = $token->getUser()->getId();
         }
 
-        return hash('sha256', implode(self::ETAG_SEPARATOR, $params));
+        return hash($this->algorithm, implode(self::ETAG_SEPARATOR, $params));
     }
 }
 ```
@@ -72,7 +79,7 @@ Register custom driver as a service in `service.yml`:
 services:
     cache_time_keeper.etag_hasher.custom:
         class: Acme\Bundle\DemoBundle\CacheTimeKeeper\CustomEtagHasher
-        arguments: [ '@request_stack', '@security.token_storage' ]
+        arguments: [ '@request_stack', '@security.token_storage', '%cache_time_keeper.etag.algorithm%' ]
 ```
 
 Use custom driver:

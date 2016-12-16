@@ -39,30 +39,21 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
 
         $this->di->load([], $this->container); // test
 
-        // configure drivers
+        // test params from config
+        $this->assertEquals('%secret%', $this->container->getParameter('cache_time_keeper.driver.shmop.salt'));
         $this->assertEquals(
-            ['%secret%'],
-            $this->container->getDefinition('cache_time_keeper.driver.shmop')->getArguments()
-        );
-        $this->assertEquals(
-            ['%kernel.root_dir%/cache/cache-time-keeper/'],
-            $this->container->getDefinition('cache_time_keeper.driver.file')->getArguments()
+            '%kernel.root_dir%/cache/cache-time-keeper/',
+            $this->container->getParameter('cache_time_keeper.driver.file.path')
         );
         $this->assertEquals(
             'cache_time_keeper_',
-            $this->container->getDefinition('cache_time_keeper.driver.memcache')->getArgument(1)
+            $this->container->getParameter('cache_time_keeper.driver.memcache.prefix')
         );
-        $this->assertTrue($this->container->getDefinition('cache_time_keeper.listener.console')->getArgument(1));
-        $this->assertFalse($this->container->getDefinition('cache_time_keeper.listener.doctrine')->getArgument(2));
-        $this->assertTrue($this->container->getDefinition('cache_time_keeper')->getArgument(2));
-        $this->assertEquals(
-            'sha256',
-            $this->container->getDefinition('cache_time_keeper.cache_key_builder.default_etag_hasher')->getArgument(1)
-        );
-        $this->assertEquals(
-            ['Authorization', 'Cookie'],
-            $this->container->getDefinition('cache_time_keeper.response_configurator')->getArgument(2)
-        );
+        $this->assertTrue($this->container->getParameter('cache_time_keeper.track.clear_cache'));
+        $this->assertFalse($this->container->getParameter('cache_time_keeper.track.individually'));
+        $this->assertTrue($this->container->getParameter('cache_time_keeper.enable'));
+        $this->assertEquals('sha256', $this->container->getParameter('cache_time_keeper.etag.algorithm'));
+        $this->assertEquals(['Authorization', 'Cookie'], $this->container->getParameter('cache_time_keeper.private_headers'));
 
         // configure memcache
         $this->assertEquals([], $this->container->getDefinition('cache_time_keeper.memcache')->getMethodCalls());
@@ -134,30 +125,18 @@ class AnimeDbCacheTimeKeeperExtensionTest extends TestCase
 
         $this->di->load($config, $this->container); // test
 
-        // configure drivers
+        // test params from config
+        $this->assertEquals('foo', $this->container->getParameter('cache_time_keeper.driver.shmop.salt'));
         $this->assertEquals(
-            ['foo'],
-            $this->container->getDefinition('cache_time_keeper.driver.shmop')->getArguments()
+            'cache/cache_time_keeper',
+            $this->container->getParameter('cache_time_keeper.driver.file.path')
         );
-        $this->assertEquals(
-            ['cache/cache_time_keeper'],
-            $this->container->getDefinition('cache_time_keeper.driver.file')->getArguments()
-        );
-        $this->assertEquals(
-            'ctk_',
-            $this->container->getDefinition('cache_time_keeper.driver.memcache')->getArgument(1)
-        );
-        $this->assertFalse($this->container->getDefinition('cache_time_keeper.listener.console')->getArgument(1));
-        $this->assertTrue($this->container->getDefinition('cache_time_keeper.listener.doctrine')->getArgument(2));
-        $this->assertFalse($this->container->getDefinition('cache_time_keeper')->getArgument(2));
-        $this->assertEquals(
-            'md5',
-            $this->container->getDefinition('cache_time_keeper.cache_key_builder.default_etag_hasher')->getArgument(1)
-        );
-        $this->assertEquals(
-            ['X-Custom-Header'],
-            $this->container->getDefinition('cache_time_keeper.response_configurator')->getArgument(2)
-        );
+        $this->assertEquals('ctk_', $this->container->getParameter('cache_time_keeper.driver.memcache.prefix'));
+        $this->assertFalse($this->container->getParameter('cache_time_keeper.track.clear_cache'));
+        $this->assertTrue($this->container->getParameter('cache_time_keeper.track.individually'));
+        $this->assertFalse($this->container->getParameter('cache_time_keeper.enable'));
+        $this->assertEquals('md5', $this->container->getParameter('cache_time_keeper.etag.algorithm'));
+        $this->assertEquals(['X-Custom-Header'], $this->container->getParameter('cache_time_keeper.private_headers'));
 
         // configure memcache
         $this->assertEquals(
