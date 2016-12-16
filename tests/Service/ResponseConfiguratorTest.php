@@ -39,36 +39,37 @@ class ResponseConfiguratorTest extends TestCase
      */
     public function getConfigureParams()
     {
+        $not_private_response = new Response();
+        $not_private_response->headers->removeCacheControlDirective('private');
+
         return [
             [
                 new Response(),
                 new Request(),
                 -1,
                 [],
-                null,
-            ],
-            [
-                (new Response())->setPublic(),
-                new Request(),
-                -1,
-                [],
                 'public',
             ],
-            [
-                (new Response())
-                    ->setEtag('foo')
-                    ->setPrivate(),
-                new Request(),
-                0,
-                [],
-                'private',
+            [ // has private headers but not set response as private
+                (new Response())->setPublic(),
+                new Request([], [], [], [], [], ['HTTP_X_PRIVATE' => '']),
+                -1,
+                ['X-Private'],
+                'public',
             ],
-            [
-                new Response(),
+            [ // set response as private
+                $not_private_response,
                 new Request([], [], [], [], [], ['HTTP_X_PRIVATE' => '']),
                 600, // 10 minute
                 ['X-Private'],
                 'private',
+            ],
+            [
+                (new Response())->setEtag('foo')->setPrivate(),
+                new Request(),
+                0,
+                [],
+                'public',
             ],
             [ // test s-maxage
                 new Response(),

@@ -79,8 +79,9 @@ class ResponseConfigurator
      */
     protected function setPrivateCache(Response $response, Request $request)
     {
-        if (!$response->headers->hasCacheControlDirective('public') &&
-            !$response->headers->hasCacheControlDirective('private')
+        if (
+            !$response->headers->hasCacheControlDirective('public') ||
+            $response->headers->hasCacheControlDirective('private')
         ) {
             $response->setPublic();
             foreach ($this->private_headers as $private_header) {
@@ -130,7 +131,7 @@ class ResponseConfigurator
                 ->setExpires($date->modify(sprintf('now +%s seconds', $lifetime)));
 
             if (!$response->headers->hasCacheControlDirective('private')) {
-                $response->setSharedMaxAge($lifetime);
+                $response->setPublic()->setSharedMaxAge($lifetime);
             }
         }
 
