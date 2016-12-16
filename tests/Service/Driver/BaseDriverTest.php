@@ -23,7 +23,7 @@ abstract class BaseDriverTest extends TestCase
 
     protected function setUp()
     {
-        $this->time = new \DateTime();
+        $this->time = new \DateTime('2016-12-16 16:29:13');
     }
 
     public function testGetNull()
@@ -82,7 +82,7 @@ abstract class BaseDriverTest extends TestCase
         $driver = $this->getDriver();
         $this->assertEquals($this->time, $driver->getMax([$this->time]));
 
-        $foo_time = new \DateTime();
+        $foo_time = clone $this->time;
         $foo_time->modify('+1 day');
         $driver->set(self::DATE_KEY, $foo_time);
         $this->assertEquals($foo_time, $driver->getMax([self::DATE_KEY, $this->time]));

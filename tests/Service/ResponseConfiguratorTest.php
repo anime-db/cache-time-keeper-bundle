@@ -97,7 +97,7 @@ class ResponseConfiguratorTest extends TestCase
         array $private_headers,
         $access
     ) {
-        $last_modified = new \DateTime();
+        $last_modified = new \DateTime('2016-12-16 16:29:13');
 
         if ($response->getEtag()) {
             $etag = $response->getEtag();
