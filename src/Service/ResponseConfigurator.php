@@ -128,7 +128,7 @@ class ResponseConfigurator
             $date = clone $response->getDate();
             $response
                 ->setMaxAge($lifetime)
-                ->setExpires($date->modify(sprintf('now +%s seconds', $lifetime)));
+                ->setExpires($date->modify(sprintf('+%s seconds', $lifetime)));
 
             if (!$response->headers->hasCacheControlDirective('private')) {
                 $response->setPublic()->setSharedMaxAge($lifetime);

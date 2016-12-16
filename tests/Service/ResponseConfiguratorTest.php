@@ -118,8 +118,8 @@ class ResponseConfiguratorTest extends TestCase
 
         $expires = null;
         if ($lifetime >= 0) {
-            $expires = clone $last_modified;
-            $expires->modify(sprintf('now +%s seconds', $lifetime));
+            $expires = clone $response->getDate();
+            $expires->modify(sprintf('+%s seconds', $lifetime));
         }
 
         $configurator = new ResponseConfigurator($this->key_builder, $this->request_stack, $private_headers);
