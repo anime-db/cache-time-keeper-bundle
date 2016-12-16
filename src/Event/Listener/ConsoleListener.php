@@ -17,12 +17,20 @@ class ConsoleListener
     /**
      * @var Keeper
      */
-    protected $keeper;
+    private $keeper;
 
     /**
      * @var bool
      */
-    protected $track_clear_cache;
+    private $track_clear_cache;
+
+    /**
+     * @var array
+     */
+    private $commands = [
+        'cache:clear',
+        'cache:warmup',
+    ];
 
     /**
      * @param Keeper $keeper
@@ -39,7 +47,7 @@ class ConsoleListener
      */
     public function onTerminate(ConsoleTerminateEvent $event)
     {
-        if ($this->track_clear_cache && $event->getCommand()->getName() == 'cache:clear') {
+        if ($this->track_clear_cache && in_array($event->getCommand()->getName(), $this->commands)) {
             $this->keeper->set(Keeper::LAST_UPDATE_KEY, new \DateTime());
         }
     }

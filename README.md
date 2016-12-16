@@ -159,7 +159,7 @@ $date = $this->get('cache_time_keeper')->get('AcmeDemoBundle:Page:123|foo');
 
 ### Track modify project
 
-Bundle tracks execute the clear cache command (`cache:clear`) and considers this a sign of updated project, and all
+Bundle tracks execute the clear cache command (`cache:clear` or `cache:warmup`) and considers this a sign of updated project, and all
 cache invalidated. You can reset the date manually by running the command:
 
 ```
