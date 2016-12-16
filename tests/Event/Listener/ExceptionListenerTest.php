@@ -49,13 +49,8 @@ class ExceptionListenerTest extends TestCase
 
     public function testOnKernelException()
     {
-        $response = $this->getMock(Response::class);
-
-        $exception = $this->getNoConstructorMock(NotModifiedException::class);
-        $exception
-            ->expects($this->once())
-            ->method('getResponse')
-            ->will($this->returnValue($response));
+        $response = new Response();
+        $exception = new NotModifiedException($response, 132, new \Exception());
 
         $this->event
             ->expects($this->once())

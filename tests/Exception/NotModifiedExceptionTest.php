@@ -28,7 +28,7 @@ class NotModifiedExceptionTest extends TestCase
             ->method('getStatusCode')
             ->will($this->returnValue($status_code));
 
-        $previous = $this->getMock(\Exception::class);
+        $previous = new \Exception();
 
         $exception = new NotModifiedException($response, $code, $previous);
 
