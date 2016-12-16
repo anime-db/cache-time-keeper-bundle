@@ -20,7 +20,7 @@ Library tracks changes in entities and stores date modified.
 
  * [Installation](docs/installation.md)
  * [Configuration](docs/configuration.md)
- * [Usage](dosc/usage.md)
+ * [Usage](docs/usage.md)
    * [Base usage in controllers](docs/usage/base.md)
    * [Configure response](docs/usage/configure.md)
    * [Usage only modified response](docs/usage/modified.md)
