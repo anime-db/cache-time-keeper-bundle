@@ -28,6 +28,10 @@ class ShmopTest extends BaseDriverTest
 
     protected function setUp()
     {
+        if (!extension_loaded('shmop')) {
+            $this->markTestSkipped('PHP extension "shmop" is not loaded.');
+        }
+
         parent::setUp();
         $this->sh = new BlockShmop($this->getDriver()->getIdByKey(self::DATE_KEY), 10);
         $this->sh->delete();
