@@ -27,8 +27,6 @@ matrix:
           env: DOCTRINE_VERSION=2.4.*
         - php: 5.6
           env: DOCTRINE_VERSION=2.5.*
-        - php: 5.6
-          env: DOCTRINE_VERSION=2.6.*
     allow_failures:
         - php: hhvm
 

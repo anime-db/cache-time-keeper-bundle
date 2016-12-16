@@ -32,6 +32,5 @@
     "suggest": {
         "ext-memcache": "Allows use a \"memcache\" cache driver",
         "anime-db/shmop": "Allows use a \"shmop\" cache driver"
-    },
-    "minimum-stability": "dev"
+    }
 }
