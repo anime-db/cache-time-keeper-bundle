@@ -45,7 +45,14 @@ class ResponseConfiguratorTest extends TestCase
                 new Request(),
                 -1,
                 [],
-                true,
+                null,
+            ],
+            [
+                (new Response())->setPublic(),
+                new Request(),
+                -1,
+                [],
+                'public',
             ],
             [
                 (new Response())
@@ -54,21 +61,21 @@ class ResponseConfiguratorTest extends TestCase
                 new Request(),
                 0,
                 [],
-                false,
+                'private',
             ],
             [
                 new Response(),
                 new Request([], [], [], [], [], ['HTTP_X_PRIVATE' => '']),
                 600, // 10 minute
                 ['X-Private'],
-                false,
+                'private',
             ],
             [ // test s-maxage
                 new Response(),
                 new Request(),
                 600, // 10 minute
                 [],
-                true,
+                'public',
             ],
         ];
     }
@@ -80,14 +87,14 @@ class ResponseConfiguratorTest extends TestCase
      * @param Request $request
      * @param int $lifetime
      * @param array $private_headers
-     * @param bool $expected_public
+     * @param string|null $access
      */
     public function testConfigure(
         Response $response,
         Request $request,
         $lifetime,
         array $private_headers,
-        $expected_public
+        $access
     ) {
         $last_modified = new \DateTime();
 
@@ -123,12 +130,14 @@ class ResponseConfiguratorTest extends TestCase
         $this->assertEquals($last_modified, $response->getLastModified());
         $this->assertEquals($etag, $response->getEtag());
         $this->assertTrue($response->headers->hasCacheControlDirective('must-revalidate'));
-        $this->assertTrue($response->headers->hasCacheControlDirective($expected_public ? 'public' : 'private'));
+        if ($access) {
+            $this->assertTrue($response->headers->hasCacheControlDirective($access));
+        }
 
         if ($lifetime >= 0) {
             $this->assertEquals($lifetime, $response->headers->getCacheControlDirective('max-age'));
             $this->assertEquals($expires, $response->getExpires());
-            if ($expected_public) {
+            if ($access == 'public') {
                 $this->assertEquals($lifetime, $response->headers->getCacheControlDirective('s-maxage'));
             }
         }
